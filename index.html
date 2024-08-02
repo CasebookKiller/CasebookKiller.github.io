@@ -7,6 +7,7 @@
     <style>
       body {
         background-color:   #383c45;
+        font-family:          "Open Sans", sans-serif;
       }
       /* BloodFont */
       @font-face {
@@ -49,6 +50,16 @@
         font-weight:          900;
         text-transform:       uppercase;
       }
+
+      .piWhite {
+        color:              #ffffff;
+        font-weight:          900;
+      }
+      .piBlue {
+        color:               #009dea;
+        font-weight:          900;
+      }
+
       .FS-1{
         font-size:            10px;
       }
@@ -76,7 +87,38 @@
       .FS-9{
         font-size:            64px;
       }
-
+      .blockquote-8 {
+          position: relative;
+          padding: 16px 24px;
+          margin: 16px 46px;    
+          font-size: 16px;
+          text-align: center;
+          max-width: 800px;
+      }
+      .blockquote-8:before,
+      .blockquote-8:after {
+          position: absolute;
+          color: #009dea;
+          font-size: 100px;
+          font-family: "Open Sans", sans-serif;    
+          line-height: 100px;    
+      }
+      .blockquote-8:before {
+          content: '“';
+          left: -30px;
+          top: -10px;
+      }
+      .blockquote-8:after {
+          content: '”';
+          right: -30px;
+          bottom: -10px;
+      }
+      .blockquote-8 cite {
+          color: #009dea;
+          font-size: 15px;
+          padding-top: 10px;
+          display: block;
+      }
     </style>
   </head>
   <body>
@@ -86,12 +128,18 @@
     <script type="text/babel">
       function Header() {
         return ( 
+          <>
           <div>
             <span className="piLogoWhite FS-9">casebook</span>
             <span className="piLogoBlue FS-9">{'{'}</span>
             <span className="piLogoRed FS-9">killer</span>
             <span className="piLogoBlue FS-9">{'}'}</span>
           </div>
+          <blockquote className="blockquote-8">
+            <p className="piWhite">Программирование - это такой же навык, как завязывание шнурков, письмо шариковой ручкой или вождение автомобиля, который даёт его обладателю преимущество в любой другой профессиональной деятельности...</p>
+            <cite className="piBlue">Автор проекта</cite>
+          </blockquote>
+          </>
         );
       }
 
