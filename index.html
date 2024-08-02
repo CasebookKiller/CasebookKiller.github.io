@@ -18,28 +18,36 @@
      
       .piLogo {
         color:                 #0d0628;
-        font:                  16px "BloodFont";
+        font-family:                  "BloodFont";
       }
       .piLogoWhite {
         color:                 #ffffff;
-        font:                  16px "BloodFont";
+        font-family:           "BloodFont";
+        font-weight:           900;
+      }
+      .piLogoDark {
+        color:                 #383c45;
+        font-family:           "BloodFont";
         font-weight:           900;
       }
       .piHighlight {
         color:                 #009dea;
-        font:                  16px "BloodFont";
+        font-family:           "BloodFont";
         font-weight:           900;
       }
       .piLogoRed {
         color:                 indianred;
-        font:                  16px "BloodFont";
+        font-family:           "BloodFont";
         font-weight:           900;
         position:              relative;
       }
       .piHeader {
-        font:                   16px "Open Sans", sans-serif;
+        font-family:           "Open Sans", sans-serif;
         font-weight:            900;
         text-transform:         uppercase;
+      }
+      .piFS-4{
+        font:                  16px;
       }
     </style>
   </head>
@@ -51,10 +59,10 @@
       function Header() {
         return ( 
           <div>
-            <span class="piLogoWhite">casebook</span>
-            <span class="piLogoRed">{'{'}</span>
-            <span class="piHighlight">killer</span>
-            <span class="piLogoRed">{'}'}</span>
+            <span class="piLogoDark piFS-4">casebook</span>
+            <span class="piLogoRed piFS-4">{'{'}</span>
+            <span class="piHighlight piFS-4">killer</span>
+            <span class="piLogoRed piFS-4">{'}'}</span>
           </div>
         );
       }
