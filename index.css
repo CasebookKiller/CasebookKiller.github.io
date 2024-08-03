@@ -76,11 +76,11 @@ body {
   font-size:            100px;
 }
 
-ul#objectives {
+ul.list {
 	list-style-type: circle;
 }
 
-ul#objectives li::marker {
+ul.list li::marker {
 	color: #009dea;
 }
 
@@ -156,7 +156,7 @@ a:hover {
     min-width: 300px;
   }
   .FS-LOGO {
-    font-size:          20px;
+    font-size:          18px;
     text-align:         center;
   }
 }
