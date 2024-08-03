@@ -136,13 +136,13 @@ a:hover {
 @media (min-width: 460px) and (max-width: 650px)
 { 
   #Container {
-    position: relative;
-    padding: 16px 24px;
-    margin: 0 auto;    
-    min-width: 300px;
+    position:           relative;
+    padding:            16px 24px;
+    margin:             0 auto;    
+    min-width:          300px;
   }
   .FS-LOGO {
-    font-size:          20px;
+    font-size:          28px;
     text-align:         center;
   }
 }
@@ -156,22 +156,21 @@ a:hover {
     min-width: 300px;
   }
   .FS-LOGO {
-    font-size:          16px;
+    font-size:          20px;
     text-align:         center;
   }
 }
 
-
-@media (max-width: 400px)
-{ 
+/* (портретный режим) */
+@media only screen and (orientation: portrait) and (min-device-width: 390px) {
   #Container {
     position: relative;
-    padding: 12px 24px;
+    padding: 14px 24px;
     margin: 0 auto;    
     min-width: 300px;
   }
   .FS-LOGO {
-    font-size:          12px;
+    font-size:          14px;
     text-align:         center;
   }
 }
