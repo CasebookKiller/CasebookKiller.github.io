@@ -85,20 +85,20 @@ ul#objectives li::marker {
 }
 
 a:link { 
-  text-decoration: none; /* Убирает подчеркивание для ссылок */
-  color: #009dea; 
+  text-decoration: none!important; /* Убирает подчеркивание для ссылок */
+  color: #009dea!important; 
 } 
 a:visited { 
-  text-decoration: none; 
-  color: #009dea; 
+  text-decoration: none!important; 
+  color: #009dea!important; 
 } 
 a:active { 
-  text-decoration: none;
-  color: #009dea; 
+  text-decoration: none!important;
+  color: #009dea!important; 
 }
 a:hover {
-  text-decoration: none; /* Делает ссылку подчеркнутой при наведении на нее курсора */
-  color: indianred; /* Цвет ссылки */
+  text-decoration: none!important; /* Делает ссылку подчеркнутой при наведении на нее курсора */
+  color: indianred!important; /* Цвет ссылки */
 } 
 
 /* media */
