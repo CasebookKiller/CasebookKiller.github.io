@@ -162,7 +162,7 @@ a:hover {
 }
 
 /* (портретный режим) */
-@media only screen and (orientation: portrait) and (min-device-width: 390px) {
+@media only screen and (orientation: portrait) and (max-device-width: 400px) {
   #Container {
     position: relative;
     padding: 12px 24px;
