@@ -1,6 +1,7 @@
 body {
   background-color:   #383c45;
   font-family:          "Open Sans", sans-serif;
+  color:                #ffffff;
 }
 .piLogo {
   color:              #0d0628;
@@ -71,18 +72,31 @@ body {
   font-size:            64px;
 }
 
+.FS-LOGO-LARGE {
+  font-size:            100px;
+}
+
+ul#objectives {
+	list-style-type: circle;
+}
+
+ul#objectives li::marker {
+	color: #009dea;
+}
+
+/* media */
 @media (min-width: 800px)
 { 
   #Container {
     position: relative;
     padding: 16px 24px;
     margin: 0 auto;    
-    text-align: center;
     max-width: 800px;
     min-width: 300px;
   }
   .FS-LOGO {
     font-size:          48px;
+    text-align:         center;
   }
 }
 
@@ -92,13 +106,13 @@ body {
     position: relative;
     padding: 16px 24px;
     margin: 0 auto;    
-    text-align: center;
     max-width: 800px;
     min-width: 300px;
   }
 
   .FS-LOGO {
     font-size:          36px;
+    text-align:         center;
   }
 }
 
@@ -108,11 +122,11 @@ body {
     position: relative;
     padding: 16px 24px;
     margin: 0 auto;    
-    text-align: center;
     min-width: 300px;
   }
   .FS-LOGO {
     font-size:          24px;
+    text-align:         center;
   }
 }
 
@@ -122,10 +136,10 @@ body {
     position: relative;
     padding: 16px 24px;
     margin: 0 auto;    
-    text-align: center;
     min-width: 300px;
   }
   .FS-LOGO {
     font-size:          20px;
+    text-align:         center;
   }
 }

@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
   <head>
     <title>casebook{killer}</title>
     <!--<meta http-equiv="Permissions-Policy" content="interest-cohort=(), user-id=()" />-->
-    <meta charset="utf-8" />
     <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
     <link rel="stylesheet" type="text/css" href="./bloodfont.css" />
@@ -19,8 +18,6 @@
     <!-- Your custom script here -->
     <script type="text/babel">
       function Header() {
-        const [quote, setQuote] = React.useState('Программирование - это такой же навык, как завязывание шнурков, письмо шариковой ручкой или вождение автомобиля. Навык, который даёт его обладателю преимущество в любой другой профессиональной деятельности...');
-        // Заголовок
         return ( 
           <>
           <div className="FS-LOGO">
@@ -29,37 +26,20 @@
             <span className="piLogoRed">killer</span>
             <span className="piLogoBlue">{'}'}</span>
           </div>
-          <blockquote className="blockquote-header">
-            <p className="piWhite">{quote}</p>
-            <cite className="piBlue">Автор проекта</cite>
-          </blockquote>
+          <div className="FS-LOGO-LARGE"><p></p></div>
+          <div className="FS-LOGO-LARGE">
+            <span className="piLogoWhite">c</span>
+            <span className="piLogoBlue">{'{'}</span>
+            <span className="piLogoRed">k</span>
+            <span className="piLogoBlue">{'}'}</span>
+          </div>
           </>
         );
       }
 
-      function Objectives() {
-        // Цели
-        return (
-          <>
-          <div className="">
-            <h4>Цели проекта:</h4>
-            <ul id="objectives">
-              <li>Создание скриптов, упрощающих сбор и анализ информации о судебных дел;</li>
-              <li>Распространение созданной библиотеки на безвозмедной основе.</li>
-            </ul>
-          </div>
-          </>
-        )
-      }
-
       const container = document.getElementById('Container');
       const root = ReactDOM.createRoot(container);
-      root.render(
-        <>
-          <Header />
-          <Objectives />
-        </>
-      );
+      root.render(<Header />)
     </script>
 
   </body>
