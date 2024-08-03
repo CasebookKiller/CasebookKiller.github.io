@@ -1,0 +1,131 @@
+body {
+  background-color:   #383c45;
+  font-family:          "Open Sans", sans-serif;
+}
+.piLogo {
+  color:              #0d0628;
+  font-family:          "BloodFont";
+}
+.piLogoWhite {
+  color:              #ffffff;
+  font-family:          "BloodFont";
+  font-weight:          900;
+}
+.piLogoDark {
+  color:               #383c45;
+  font-family:          "BloodFont";
+  font-weight:          900;
+}
+.piLogoBlue {
+  color:               #009dea;
+  font-family:          "BloodFont";
+  font-weight:          900;
+}
+.piLogoRed {
+  color:               indianred;
+  font-family:          "BloodFont";
+  font-weight:          900;
+  position:             relative;
+}
+.piHeader {
+  font-family:          "Open Sans", sans-serif;
+  font-weight:          900;
+  text-transform:       uppercase;
+}
+
+.piWhite {
+  color:              #ffffff;
+  font-weight:          900;
+}
+.piBlue {
+  color:               #009dea;
+  font-weight:          900;
+}
+
+
+.FS-1{
+  font-size:            10px;
+}
+.FS-2{
+  font-size:            12px;
+}
+.FS-3{
+  font-size:            14px;
+}
+.FS-4{
+  font-size:            16px;
+}
+.FS-5{
+  font-size:            20px;
+}
+.FS-6{
+  font-size:            24px;
+}
+.FS-7{
+  font-size:            36px;
+}
+.FS-8{
+  font-size:            48px;
+}
+.FS-9{
+  font-size:            64px;
+}
+
+@media (min-width: 800px)
+{ 
+  #Container {
+    position: relative;
+    padding: 16px 24px;
+    margin: 0 auto;    
+    text-align: center;
+    max-width: 800px;
+    min-width: 300px;
+  }
+  .FS-LOGO {
+    font-size:          48px;
+  }
+}
+
+@media (min-width: 650px) and (max-width: 800px)
+{ 
+  #Container {
+    position: relative;
+    padding: 16px 24px;
+    margin: 0 auto;    
+    text-align: center;
+    max-width: 800px;
+    min-width: 300px;
+  }
+
+  .FS-LOGO {
+    font-size:          36px;
+  }
+}
+
+@media (min-width: 460px) and (max-width: 650px)
+{ 
+  #Container {
+    position: relative;
+    padding: 16px 24px;
+    margin: 0 auto;    
+    text-align: center;
+    min-width: 300px;
+  }
+  .FS-LOGO {
+    font-size:          24px;
+  }
+}
+
+@media (max-width: 460px)
+{ 
+  #Container {
+    position: relative;
+    padding: 16px 24px;
+    margin: 0 auto;    
+    text-align: center;
+    min-width: 300px;
+  }
+  .FS-LOGO {
+    font-size:          20px;
+  }
+}
