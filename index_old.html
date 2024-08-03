@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <title>casebook{killer}</title>
+    <!--<meta http-equiv="Permissions-Policy" content="interest-cohort=(), user-id=()" />-->
+    <link rel="icon" type="image/x-icon" href="./favicon.ico">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" type="text/css" href="./bloodfont.css" />
+    <link rel="stylesheet" type="text/css" href="./blockquote.css" />
+    <link rel="stylesheet" type="text/css" href="./index.css" />
+  </head>
+  <body>
+
+    <div id="Container"></div>
+    <!-- Load Babel -->
+    <!-- v6 <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script> -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Your custom script here -->
+    <script type="text/babel">
+      function Header() {
+        const [quote, setQuote] = React.useState('Программирование - это такой же навык, как завязывание шнурков, письмо шариковой ручкой или вождение автомобиля. Навык, который даёт его обладателю преимущество в любой другой профессиональной деятельности...');
+        // Заголовок
+        return ( 
+          <>
+          <div className="FS-LOGO">
+            <span className="piLogoWhite">casebook</span>
+            <span className="piLogoBlue">{'{'}</span>
+            <span className="piLogoRed">killer</span>
+            <span className="piLogoBlue">{'}'}</span>
+          </div>
+          <blockquote className="blockquote-header">
+            <p className="piWhite">{quote}</p>
+            <cite className="piBlue">Автор проекта</cite>
+          </blockquote>
+          </>
+        );
+      }
+
+      function Objectives() {
+        // Цели
+        return (
+          <>
+          <div className="FS-3">
+            <h4>Цели проекта:</h4>
+            <ul className="list">
+              <li>Создание скриптов, упрощающих сбор и анализ информации о судебных дел.</li>
+              <li>Распространение созданной библиотеки на безвозмедной основе.</li>
+            </ul>
+          </div>
+          </>
+        )
+      }
+
+      function HowToInstall() {
+        // Установка
+        return (
+          <>
+          <div className="FS-3">
+            <h4>Установка:</h4>
+            <ul className="list">
+              <li>Для работы скриптов необходимо предварительно установить в браузер расширение <a href="https://www.tampermonkey.net/">Tampermonkey</a>.</li>
+              <li>Для корректной работы перегрузить браузер.</li>
+              <li>Выбрать скрипт из списка.</li>
+            </ul>
+          </div>
+          </>
+        )
+      }
+
+      function Scripts() {
+        // Скрипты
+        return (
+          <>
+          <div className="FS-3">
+            <h4>Скрипты:</h4>
+            <p>
+              В процессе создания...
+            </p>
+            <p>{'Ширина: ' + window.screen.width}</p>
+          </div>
+          </>
+        )
+      }
+
+      const container = document.getElementById('Container');
+      const root = ReactDOM.createRoot(container);
+      root.render(
+        <>
+          <Header />
+          <Objectives />
+          <HowToInstall />
+          <Scripts />
+        </>
+      );
+    </script>
+
+  </body>
+</html>

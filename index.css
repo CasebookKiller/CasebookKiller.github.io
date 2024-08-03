@@ -83,9 +83,9 @@ ul.list {
 ul.list li::marker {
 	color: #009dea;
 }
-
+/*
 a:link { 
-  text-decoration: none!important; /* Убирает подчеркивание для ссылок */
+  text-decoration: none!important;
   color: #009dea!important; 
 } 
 a:visited { 
@@ -97,19 +97,19 @@ a:active {
   color: #009dea!important; 
 }
 a:hover {
-  text-decoration: none!important; /* Делает ссылку подчеркнутой при наведении на нее курсора */
-  color: indianred!important; /* Цвет ссылки */
-} 
+  text-decoration: none!important;
+  color: indianred!important;
+}*/ 
 
 /* media */
-@media (min-width: 800px)
+@media (min-width: 920px)
 { 
   #Container {
-    position: relative;
-    padding: 16px 24px;
-    margin: 0 auto;    
-    max-width: 800px;
-    min-width: 300px;
+    position:           relative;
+    padding:            16px 24px;
+    margin:             0 auto;    
+    max-width:          800px;
+    min-width:          300px;
   }
   .FS-LOGO {
     font-size:          48px;
@@ -117,23 +117,65 @@ a:hover {
   }
 }
 
-@media (min-width: 650px) and (max-width: 800px)
+@media (min-width: 830px) and (max-width: 920px)
 { 
   #Container {
-    position: relative;
-    padding: 16px 24px;
-    margin: 0 auto;    
-    max-width: 800px;
-    min-width: 300px;
+    position:           relative;
+    padding:            16px 24px;
+    margin:             0 auto;    
+    max-width:          800px;
+    min-width:          300px;
   }
 
   .FS-LOGO {
-    font-size:          36px;
+    font-size:          42px;
     text-align:         center;
   }
 }
 
-@media (min-width: 460px) and (max-width: 650px)
+@media (min-width: 750px) and (max-width: 830px)
+{ 
+  #Container {
+    position:           relative;
+    padding:            16px 24px;
+    margin:             0 auto;    
+    min-width:          300px;
+  }
+  .FS-LOGO {
+    font-size:          38px;
+    text-align:         center;
+  }
+}
+
+@media (min-width: 700px) and (max-width: 750px)
+{ 
+  #Container {
+    position:           relative;
+    padding:            16px 24px;
+    margin:             0 auto;    
+    min-width:          300px;
+  }
+  .FS-LOGO {
+    font-size:          32px;
+    text-align:         center;
+  }
+}
+
+@media (min-width: 660px) and (max-width: 700px)
+{ 
+  #Container {
+    position:           relative;
+    padding:            16px 24px;
+    margin:             0 auto;    
+    min-width:          300px;
+  }
+  .FS-LOGO {
+    font-size:          30px;
+    text-align:         center;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 660px)
 { 
   #Container {
     position:           relative;
@@ -147,22 +189,36 @@ a:hover {
   }
 }
 
-@media (min-width: 300px) and (max-width: 460px)
+@media (min-width: 600px) and (max-width: 640px)
 { 
   #Container {
-    position: relative;
-    padding: 16px 24px;
-    margin: 0 auto;    
-    min-width: 300px;
+    position:           relative;
+    padding:            16px 24px;
+    margin:             0 auto;    
+    min-width:          300px;
   }
   .FS-LOGO {
-    font-size:          22px;
+    font-size:          26px;
     text-align:         center;
   }
 }
 
-/* (портретный режим) */
-@media only screen and (orientation: portrait) and (max-device-width: 400px) {
+@media (min-width: 470px) and (max-width: 600px)
+{ 
+  #Container {
+    position:           relative;
+    padding:            16px 24px;
+    margin:             0 auto;    
+    min-width:          300px;
+  }
+  .FS-LOGO {
+    font-size:          24px;
+    text-align:         center;
+  }
+}
+
+@media (min-width: 440px) and (max-width: 470px)
+{ 
   #Container {
     position:           relative;
     padding:            16px 24px;
@@ -174,3 +230,86 @@ a:hover {
     text-align:         center;
   }
 }
+
+@media (min-width: 420px) and (max-width: 440px)
+{ 
+  #Container {
+    position:           relative;
+    padding:            16px 24px;
+    margin:             0 auto;    
+    min-width:          300px;
+  }
+  .FS-LOGO {
+    font-size:          20px;
+    text-align:         center;
+  }
+}
+
+@media (min-width: 400px) and (max-width: 420px)
+{ 
+  #Container {
+    position:           relative;
+    padding:            16px 24px;
+    margin:             0 auto;    
+    min-width:          300px;
+  }
+  .FS-LOGO {
+    font-size:          18px;
+    text-align:         center;
+  }
+}
+
+@media (min-width: 360px) and (max-width: 400px)
+{ 
+  #Container {
+    position:           relative;
+    padding:            16px 24px;
+    margin:             0 auto;    
+    min-width:          300px;
+  }
+  .FS-LOGO {
+    font-size:          16px;
+    text-align:         center;
+  }
+}
+
+@media (min-width: 320px) and (max-width: 360px)
+{ 
+  #Container {
+    position:           relative;
+    padding:            12px 24px;
+    margin:             0 auto;    
+    min-width:          300px;
+  }
+  .FS-LOGO {
+    font-size:          14px;
+    text-align:         center;
+  }
+}
+
+@media (max-width: 320px)
+{ 
+  #Container {
+    position:           relative;
+    padding:            10px 24px;
+    margin:             0 auto;    
+    min-width:          200px;
+  }
+  .FS-LOGO {
+    font-size:          12px;
+    text-align:         center;
+  }
+}
+/* (портретный режим) */
+/*@media only screen and (orientation: portrait) and (max-device-width: 400px) {
+  #Container {
+    position:           relative;
+    padding:            16px 24px;
+    margin:             0 auto;    
+    min-width:          300px;
+  }
+  .FS-LOGO {
+    font-size:          22px;
+    text-align:         center;
+  }
+}*/
