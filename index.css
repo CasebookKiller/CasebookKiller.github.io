@@ -1,8 +1,25 @@
 body {
-  background-color:   #383c45;
-  font-family:          "Open Sans", sans-serif;
-  color:                #ffffff;
+  background-color:    #383c45;
+  color:               #ffffff;
 }
+body, h1,h2,h3,h4,h5,h6 {
+  font-family:          "Open Sans", sans-serif;
+}
+.w3-black {
+  background-color:    #383c45!important;
+}
+.w3-row-padding img {
+  margin-bottom:        12px
+}
+.w3-sidebar {
+  width:                120px;
+  background:         #2d3138;
+}
+#main {
+  margin-left:          120px
+}
+@media only screen and (max-width: 600px) {#main {margin-left: 0}}
+
 .piLogo {
   color:              #0d0628;
   font-family:          "BloodFont";
