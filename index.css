@@ -84,6 +84,23 @@ ul#objectives li::marker {
 	color: #009dea;
 }
 
+a:link { 
+  text-decoration: none; /* Убирает подчеркивание для ссылок */
+  color: #009dea; 
+} 
+a:visited { 
+  text-decoration: none; 
+  color: #009dea; 
+} 
+a:active { 
+  text-decoration: none;
+  color: #009dea; 
+}
+a:hover {
+  text-decoration: none; /* Делает ссылку подчеркнутой при наведении на нее курсора */
+  color: indianred; /* Цвет ссылки */
+} 
+
 /* media */
 @media (min-width: 800px)
 { 

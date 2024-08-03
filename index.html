@@ -3,6 +3,7 @@
   <head>
     <title>casebook{killer}</title>
     <!--<meta http-equiv="Permissions-Policy" content="interest-cohort=(), user-id=()" />-->
+    <link rel="icon" type="image/x-icon" href="./favicon.ico">
     <meta charset="utf-8" />
     <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
@@ -52,12 +53,27 @@
         )
       }
 
+      function HowToInstall() {
+        // Установка
+        return (
+          <>
+          <div className="">
+            <h4>Установка:</h4>
+            <p>
+              Для работы скриптов необходимо предварительно установить в браузер расширение <a href="https://www.tampermonkey.net/">Tampermonkey</a>.
+            </p>
+          </div>
+          </>
+        )
+      }
+
       const container = document.getElementById('Container');
       const root = ReactDOM.createRoot(container);
       root.render(
         <>
           <Header />
           <Objectives />
+          <HowToInstall />
         </>
       );
     </script>
