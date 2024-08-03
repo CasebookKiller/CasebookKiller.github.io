@@ -4,6 +4,7 @@
 <title>W3.CSS Template</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/x-icon" href="./favicon.ico">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -67,25 +68,16 @@
 <div class="w3-padding-large" id="main">
   <div id="Container"></div>
 
-  <!-- Footer -->
+  <!-- Подвал -->
   <footer class="w3-content w3-padding-64 w3-text-grey w3-xlarge">
-    <i class="fa fa-facebook-official w3-hover-opacity"></i>
-    <i class="fa fa-instagram w3-hover-opacity"></i>
-    <i class="fa fa-snapchat w3-hover-opacity"></i>
-    <i class="fa fa-pinterest-p w3-hover-opacity"></i>
-    <i class="fa fa-twitter w3-hover-opacity"></i>
-    <i class="fa fa-linkedin w3-hover-opacity"></i>
-    <p class="w3-medium">Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank" class="w3-hover-text-green">w3.css</a></p>
-  <!-- End footer -->
+    <a href="https://t.me/casebookkiller" target="_blank" class="w3-hover-text-white"><i class="fa fa-telegram w3-hover-opacity"></i></a>
   </footer>
 
 <!-- END PAGE CONTENT -->
 </div>
 
 <!-- Load Babel -->
-<!-- v6 <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script> -->
 <script src="https://unpkg.com/@babel/standalone@7.25.3/babel.min.js"></script>
-<!-- Your custom script here -->
 <script type="text/babel">
   navigator.saysWho = (() => {
     const { userAgent } = navigator;
@@ -112,8 +104,6 @@
     }
     return match.join(' ');
   })();
-  console.log(navigator.saysWho); // outputs: `Chrome 124`
-  
   const browser = navigator.saysWho.split(" ")[0];
 
   function Header() {
@@ -154,6 +144,14 @@
 
   function HowToInstall() {
     // Установка
+    console.log(browser.toLowerCase());
+    const icon = browser.toLowerCase() === 'chrome'||'firefox'||'opera'||'edge' ? 
+    'fa-' + browser.toLowerCase() : 'fa-download'; 
+    console.log(icon);
+    const domain = 'https://www.tampermonkey.net/index.php';
+    const url = browser.toLowerCase() === 'chrome'||'firefox'||'opera'||'edge' ? 
+      domain + '?browser=' + browser.toLowerCase() : domain;
+
     return (
       <>
         <div className="w3-content w3-justify w3-text-light-grey w3-padding-64" id="install">
@@ -162,13 +160,10 @@
           <p>Для запуска скриптов casebook{'{killer}'} необходимо предварительно установить расширение для браузера <a href="https://www.tampermonkey.net/">Tampermonkey</a>, перегрузить браузер и выбрать необходимый скрипт.    </p>
 
           <button className="w3-button w3-light-grey w3-padding-large w3-section" onClick={()=>{
-            console.log(browser.toLowerCase());
-            const domain = 'https://www.tampermonkey.net/index.php';
-            const url = browser.toLowerCase() === 'chrome'|'firefox'|'opera'|'edge' ? 
-              domain + '?browser=' + browser.toLowerCase() : domain;
+            
             const tab = window.open(url, '_blank')
           }}>
-            <i className="fa fa-download"></i> Установить Tampermonkey
+            <i className={"fa " + icon}></i> Установить Tampermonkey
           </button>
         </div>
       </>
@@ -185,8 +180,7 @@
         <p>
           В процессе создания...
         </p>
-        <p>{'Ширина: ' + window.screen.width}</p>
-        <div className="w3-row-padding" style={{margin:"0 -16px"}}>
+        {/*<div className="w3-row-padding" style={{margin:"0 -16px"}}>
           <div className="w3-half">
             <img src="https://www.w3schools.com/w3images/wedding.jpg" style={{width:"100%"}}/>
             <img src="https://www.w3schools.com/w3images/rocks.jpg" style={{width:"100%"}}/>
@@ -199,7 +193,7 @@
             <img src="https://www.w3schools.com/w3images/wedding.jpg" style={{width:"100%"}}/>
             <img src="https://www.w3schools.com/w3images/p6.jpg" style={{width:"100%"}}/>
           </div>
-        </div>
+        </div>*/}
       </div>
       
       </>
