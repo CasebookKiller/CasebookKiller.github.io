@@ -160,3 +160,18 @@ a:hover {
     text-align:         center;
   }
 }
+
+
+@media (max-width: 400px)
+{ 
+  #Container {
+    position: relative;
+    padding: 14px 24px;
+    margin: 0 auto;    
+    min-width: 300px;
+  }
+  .FS-LOGO {
+    font-size:          14px;
+    text-align:         center;
+  }
+}
