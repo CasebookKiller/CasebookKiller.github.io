@@ -165,12 +165,12 @@ a:hover {
 @media only screen and (orientation: portrait) and (max-device-width: 400px) {
   #Container {
     position: relative;
-    padding: 12px 24px;
+    padding: 16px 24px;
     margin: 0 auto;    
     min-width: 300px;
   }
   .FS-LOGO {
-    font-size:          12px;
+    font-size:          16px;
     text-align:         center;
   }
 }
