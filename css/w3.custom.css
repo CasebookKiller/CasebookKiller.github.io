@@ -13,7 +13,23 @@
 .w3-open-sans{
   font-family:          'Open Sans';
 }
-
 .w3-blood{
   font-family:          'BloodFont';
 }
+
+/* colors */
+.piWhite {
+  color:              #ffffff;
+}
+.piBlue {
+  color:              #009dea;
+}
+.piRed {
+  color:              indianred;
+}
+.w3-red,.w3-hover-red:hover{color:#fff!important;background-color:indianred!important}
+.w3-text-red,.w3-hover-text-red:hover{color:indianred!important}
+.w3-border-red,.w3-hover-border-red:hover{border-color:indianred!important}
+.w3-blue,.w3-hover-blue:hover{color:#fff!important;background-color:#009dea!important}
+.w3-text-blue,.w3-hover-text-blue:hover{color:#009dea!important}
+.w3-border-blue,.w3-hover-border-blue:hover{border-color:#009dea!important}
