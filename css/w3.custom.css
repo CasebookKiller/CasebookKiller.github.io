@@ -1,0 +1,19 @@
+.w3-black {
+  background-color:   #383c45!important;
+}
+.w3-row-padding img {
+  margin-bottom:        12px
+}
+.w3-sidebar {
+  width:                120px;
+  background:         #2d3138;
+}
+
+/* fonts */
+.w3-open-sans{
+  font-family:          'Open Sans';
+}
+
+.w3-blood{
+  font-family:          'BloodFont';
+}
