@@ -1,5 +1,5 @@
 /* W3.CSS 4.15 December 2020 by Jan Egil and Borge Refsnes */
-html{box-sizing:border-box}*,*:before,*:after{box-sizing:inherit}
+/*html{box-sizing:border-box}*,*:before,*:after{box-sizing:inherit}*/
 
 /* Extract from normalize.css by Nicolas Gallagher and Jonathan Neal git.io/normalize */
 /*html{-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}
@@ -40,7 +40,7 @@ h6{font-size:16px}*/
 .w3-cursive{font-family:cursive}
 .w3-monospace{font-family:monospace}
 
-h1,h2,h3,h4,h5,h6{font-family:"Segoe UI",Arial,sans-serif;font-weight:400;margin:10px 0}
+/*h1,h2,h3,h4,h5,h6{font-family:"Segoe UI",Arial,sans-serif;font-weight:400;margin:10px 0}*/
 .w3-wide{letter-spacing:4px}
 
 hr{border:0;border-top:1px solid #eee;margin:20px 0}
