@@ -90,16 +90,31 @@
 
     return ( 
       <>
-      <div className="w3-container w3-padding-32 w3-center w3-black FS-LOGO" id="home">
+      {/*<div className="w3-container w3-padding-32 w3-center w3-black FS-LOGO w3-border" id="home">
           <span className="piLogoWhite">casebook</span>
           <span className="piLogoBlue">{'{'}</span>
           <span className="piLogoRed">killer</span>
           <span className="piLogoBlue">{'}'}</span>
+      </div>*/}
+      <div className="w3-padding-32 w3-black w3-xxlarge">
+        <div className="w3-row w3-left-align">
+          <div className="w3-col m8 l5 piLogoWhite">casebook</div>
+          <div className="w3-col m6 l7 piLogoWhite">
+            <span className="piLogoBlue">{'{'}</span>
+            <span className="piLogoRed">killer</span>
+            <span className="piLogoBlue">{'}'}</span>
+          </div>
+        </div>
       </div>
-      <blockquote className="blockquote-header">
+      {/*<blockquote className="blockquote-header">
         <p className="piWhite">{quote}</p>
         <cite className="piBlue">Автор проекта</cite>
-      </blockquote>
+      </blockquote>*/}
+      <div className="w3-panel w3-leftbar w3-dark">
+        <p className="w3-large"><i>"{quote}"</i></p>
+        <p className="piBlue">Автор проекта</p>
+      </div>
+      <div className=" w3-padding-64"/>
       </>
     );
   }
