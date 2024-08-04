@@ -16,6 +16,9 @@
 .w3-blood{
   font-family:          'BloodFont';
 }
+.w3-weight-900{
+  font-weight:          900;
+}
 
 /* colors */
 .piWhite {
