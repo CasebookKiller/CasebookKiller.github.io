@@ -58,6 +58,16 @@
 <!-- Load Babel -->
 <script src="https://unpkg.com/@babel/standalone@7.25.3/babel.min.js"></script>
 <script type="text/babel">
+  
+  function operatingSytem() {
+      let OSName = navigator.appVersion;
+      if (navigator.appVersion.indexOf("Win") != -1) OSName = "Windows";
+      if (navigator.appVersion.indexOf("Mac") != -1) OSName = "MacOS";
+      if (navigator.appVersion.indexOf("X11") != -1) OSName = "UNIX";
+      if (navigator.appVersion.indexOf("Linux") != -1) OSName = "Linux";
+      return (OSName);
+    }
+  const OSName = operatingSytem();
   navigator.saysWho = (() => {
     const { userAgent } = navigator;
     let match = userAgent.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
@@ -197,6 +207,51 @@
     )
   }
 
+  function DeviceInfo() {
+    const { userAgent, platform } = navigator;
+    console.log(navigator);    
+    console.log(userAgent);
+    let isMobile = false;
+
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+      isMobile = true;
+    } else {
+      isMobile = false;
+    }
+
+    
+    return (
+      <>
+      <div className="w3-padding-32 w3-content w3-opacity" id="deviceinfo">
+        <p>
+          Вход выполнен {isMobile ? 'с мобильного устройства.': 'со стационарного компьютера.'}<br/>
+          {'Операционная система: ' + OSName}.<br/>
+          {'Браузер: ' + browser + ' или совместимый.'}
+        </p>
+        <p>
+          {userAgent}
+        </p>
+        
+        {/*<div className="w3-row-padding" style={{margin:"0 -16px"}}>
+          <div className="w3-half">
+            <img src="https://www.w3schools.com/w3images/wedding.jpg" style={{width:"100%"}}/>
+            <img src="https://www.w3schools.com/w3images/rocks.jpg" style={{width:"100%"}}/>
+            <img src="https://www.w3schools.com/w3images/sailboat.jpg" style={{width:"100%"}}/>
+          </div>
+
+          <div className="w3-half">
+            <img src="https://www.w3schools.com/w3images/underwater.jpg" style={{width:"100%"}}/>
+            <img src="https://www.w3schools.com/w3images/chef.jpg" style={{width:"100%"}}/>
+            <img src="https://www.w3schools.com/w3images/wedding.jpg" style={{width:"100%"}}/>
+            <img src="https://www.w3schools.com/w3images/p6.jpg" style={{width:"100%"}}/>
+          </div>
+        </div>*/}
+      </div>
+      
+      </>
+    );
+  }
+
   const container = document.getElementById('Container');
   const root = ReactDOM.createRoot(container);
   root.render(
@@ -205,6 +260,7 @@
       <Objectives />
       <HowToInstall />
       <Scripts />
+      <DeviceInfo />
     </>
   );
 </script>
