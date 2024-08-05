@@ -58,16 +58,33 @@
 <!-- Load Babel -->
 <script src="https://unpkg.com/@babel/standalone@7.25.3/babel.min.js"></script>
 <script type="text/babel">
-  
+  function getMobileOS () {
+    const useragent = navigator.userAgent;
+    if (/android|Android/i.test(useragent)) {
+      return "Android";
+    } else if (/iPad|iPhone|iPod/.test(useragent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) {
+      return "iOS";
+    } else if (/webOS/i.test(useragent)) {
+      return "webOS";
+    } else if (/BlackBerry/i.test(useragent)) {
+      return "BlackBerry";
+    } else if (/Windows Phone/i.test(useragent)) {
+      return "Windows Phone";
+    } 
+    return "Other";
+  }
+  const OSMobile = getMobileOS();
+
   function operatingSytem() {
-      let OSName = navigator.appVersion;
-      if (navigator.appVersion.indexOf("Win") != -1) OSName = "Windows";
-      if (navigator.appVersion.indexOf("Mac") != -1) OSName = "MacOS";
-      if (navigator.appVersion.indexOf("X11") != -1) OSName = "UNIX";
-      if (navigator.appVersion.indexOf("Linux") != -1) OSName = "Linux";
-      return (OSName);
-    }
+    let OSName = navigator.appVersion;
+    if (navigator.appVersion.indexOf("Win") != -1) OSName = "Windows";
+    if (navigator.appVersion.indexOf("Mac") != -1) OSName = "MacOS";
+    if (navigator.appVersion.indexOf("X11") != -1) OSName = "UNIX";
+    if (navigator.appVersion.indexOf("Linux") != -1) OSName = "Linux";
+    return (OSName);
+  }
   const OSName = operatingSytem();
+  
   navigator.saysWho = (() => {
     const { userAgent } = navigator;
     let match = userAgent.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
@@ -218,14 +235,13 @@
     } else {
       isMobile = false;
     }
-
-    
+  
     return (
       <>
       <div className="w3-padding-32 w3-content w3-opacity" id="deviceinfo">
         <p>
           Вход выполнен {isMobile ? 'с мобильного устройства.': 'со стационарного компьютера.'}<br/>
-          {'Операционная система: ' + OSName}.<br/>
+          Операционная система: {isMobile ? OSMobile : OSName}.<br/>
           {'Браузер: ' + browser + ' или совместимый.'}
         </p>
         <p>
