@@ -58,6 +58,7 @@
 <!-- Load Babel -->
 <script src="https://unpkg.com/@babel/standalone@7.25.3/babel.min.js"></script>
 <script type="text/babel">
+
   function getMobileOS () {
     const useragent = navigator.userAgent;
     if (/android|Android/i.test(useragent)) {
@@ -70,12 +71,16 @@
       return "BlackBerry";
     } else if (/Windows Phone/i.test(useragent)) {
       return "Windows Phone";
-    } 
+    } else if (/IEMobile/i.test(useragent)) {
+      return "IEMobile";
+    } else if (/Opera Mini/i.test(useragent)) {
+      return "Opera Mini";
+    }
     return "Other";
   }
   const OSMobile = getMobileOS();
 
-  function operatingSytem() {
+  function getDesktopOS() {
     let OSName = navigator.appVersion;
     if (navigator.appVersion.indexOf("Win") != -1) OSName = "Windows";
     if (navigator.appVersion.indexOf("Mac") != -1) OSName = "MacOS";
@@ -83,7 +88,7 @@
     if (navigator.appVersion.indexOf("Linux") != -1) OSName = "Linux";
     return (OSName);
   }
-  const OSName = operatingSytem();
+  const OSName = getDesktopOS();
   
   navigator.saysWho = (() => {
     const { userAgent } = navigator;
