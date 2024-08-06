@@ -286,15 +286,22 @@
     React.useEffect(() => {
       const scriptElement = document.createElement('script');
       scriptElement.src = 'https://telegram.org/js/telegram-widget.js?22';
-      scriptElement.setAttribute('data-telegram-discussion', 'casebookkiller');
+      scriptElement.setAttribute('data-telegram-discussion', 'casebookkiller_chat');
       scriptElement.setAttribute('data-comments-limit', '5');
       scriptElement.setAttribute('data-dark', '1');
       scriptElement.async = true;
       telegramWrapperRef.current?.appendChild(scriptElement);
-    }, []);
     
+      const widgetHeader = document.querySelector('h3.tgme_post_discussion_header');
+      console.log(widgetHeader);
+    }, []);
     return (
-      <div ref={telegramWrapperRef}></div>
+      <div className="w3-padding-32 w3-content" id="discussion">
+        <h2 className="w3-text-light-grey">Обсуждение</h2>
+        <hr style={{width:"200px"}} className="w3-opacity"/>
+
+        <div ref={telegramWrapperRef}></div>
+      </div>
     )
   }
 
