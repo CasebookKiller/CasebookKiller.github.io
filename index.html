@@ -148,7 +148,7 @@
         <p className="w3-medium"><i>"{quote}"</i></p>
         <p className="w3-text-blue">Автор проекта</p>
       </div>
-      <div className=" w3-padding-32"/>
+      <div className="w3-padding-16"/>
       </>
     );
   }
@@ -284,10 +284,12 @@
 //data-comments-limit="5" data-dark="1">
 
     React.useEffect(() => {
+      const post = '3';
       const scriptElement = document.createElement('script');
       scriptElement.src = 'https://telegram.org/js/telegram-widget.js?22';
-      scriptElement.setAttribute('data-telegram-discussion', 'casebookkiller_chat');
-      scriptElement.setAttribute('data-comments-limit', '5');
+      scriptElement.setAttribute('data-telegram-post', 'casebookkiller/'+post);
+      scriptElement.setAttribute('data-width', '100%');
+      scriptElement.setAttribute('data-userpic', 'false');
       scriptElement.setAttribute('data-dark', '1');
       scriptElement.async = true;
       telegramWrapperRef.current?.appendChild(scriptElement);
@@ -296,10 +298,10 @@
       console.log(widgetHeader);
     }, []);
     return (
-      <div className="w3-padding-32 w3-content" id="discussion">
-        <h2 className="w3-text-light-grey">Обсуждение</h2>
+      <div className="w3-padding-32 w3-content w3-left-align" id="telegram">
+        <h2 className="w3-text-light-grey">Последние новости</h2>
         <hr style={{width:"200px"}} className="w3-opacity"/>
-
+        <br />
         <div ref={telegramWrapperRef}></div>
       </div>
     )
@@ -310,10 +312,10 @@
   root.render(
     <>
       <Header />
+      <Telegram />
       <Objectives />
       <HowToInstall />
       <Scripts />
-      {/*<Telegram />*/}
       <DeviceInfo />
     </>
   );
