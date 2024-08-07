@@ -14,8 +14,7 @@
 <link rel="canonical" href="%page_url%" />
 <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
-<style>
-</style>
+<script src="./js/uaparser.js"></script>
 </head>
 <body class="w3-black">
 
@@ -59,6 +58,8 @@
 <!-- Load Babel -->
 <script src="https://unpkg.com/@babel/standalone@7.25.3/babel.min.js"></script>
 <script type="text/babel">
+  const uaparser = UAParser(navigator.userAgent);
+  console.log(uaparser);
 
   function getMobileOS () {
     const useragent = navigator.userAgent;
@@ -246,9 +247,9 @@
       <>
       <div className="w3-padding-32 w3-content w3-opacity" id="deviceinfo">
         <p>
-          Вход выполнен {isMobile ? 'с мобильного устройства.': 'со стационарного компьютера.'}<br/>
-          Операционная система: {isMobile ? OSMobile : OSName}.<br/>
-          {'Браузер: ' + browser + ' или совместимый.'}
+          Вход выполнен {isMobile ? 'с мобильного устройства.': 'со стационарного компьютера.'}{uaparser.device.vendor ? ' Производитель: ' + uaparser.device.vendor + '.':''}{uaparser.device.model ? ' Модель: ' + uaparser.device.model + '.':''}{uaparser.device.type ? ' Тип: ' + uaparser.device.type + '.':''}<br/>
+          Операционная система: {uaparser.os.name + ', ' + uaparser.os.version}.<br/>
+          {'Браузер: ' + uaparser.browser.name + ', ' + uaparser.browser.major}
         </p>
         <p className="w3-tooltip" onClick={()=>{
           navigator.clipboard.writeText(userAgent).then(function() {
@@ -281,45 +282,11 @@
     );
   }
 
-  function Telegram () {
-    const telegramWrapperRef = React.useRef(null);
-
-//<script 
-//async 
-//src="https://telegram.org/js/telegram-widget.js?22" 
-//data-telegram-discussion="casebookkiller" 
-//data-comments-limit="5" data-dark="1">
-
-    React.useEffect(() => {
-      const post = '3';
-      const scriptElement = document.createElement('script');
-      scriptElement.src = 'https://telegram.org/js/telegram-widget.js?22';
-      scriptElement.setAttribute('data-telegram-post', 'casebookkiller/'+post);
-      scriptElement.setAttribute('data-width', '100%');
-      scriptElement.setAttribute('data-userpic', 'false');
-      scriptElement.setAttribute('data-dark', '1');
-      scriptElement.async = true;
-      telegramWrapperRef.current?.appendChild(scriptElement);
-    
-      const widgetHeader = document.querySelector('h3.tgme_post_discussion_header');
-      console.log(widgetHeader);
-    }, []);
-    return (
-      <div className="w3-padding-32 w3-content w3-left-align" id="telegram">
-        <h2 className="w3-text-light-grey">Последние новости</h2>
-        <hr style={{width:"200px"}} className="w3-opacity"/>
-        <br />
-        <div ref={telegramWrapperRef}></div>
-      </div>
-    )
-  }
-
   const container = document.getElementById('Container');
   const root = ReactDOM.createRoot(container);
   root.render(
     <>
       <Header />
-      {/*<Telegram />*/}
       <Objectives />
       <HowToInstall />
       <Scripts />
