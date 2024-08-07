@@ -248,8 +248,7 @@
       <div className="w3-padding-32 w3-content w3-opacity" id="deviceinfo">
         <p>
           Вход выполнен {isMobile ? 'с мобильного устройства.': 'со стационарного компьютера.'}
-          {uaparser.device.vendor||uaparser.device.model||uaparser.device.type?<br/>:''}
-          {uaparser.device.vendor ? ' Производитель: ' + uaparser.device.vendor + '.':''}{uaparser.device.model ? ' Модель: ' + uaparser.device.model + '.':''}{uaparser.device.type ? ' Тип: ' + uaparser.device.type + '.':''}<br/>
+          {uaparser.device.vendor ? '<br/>Производитель: ' + uaparser.device.vendor + '.':''}{uaparser.device.model ? '<br/>Модель: ' + uaparser.device.model + '.':''}{uaparser.device.type ? '<br/>Тип: ' + uaparser.device.type + '.':''}<br/>
           Операционная система: {uaparser.os.name + ', ' + uaparser.os.version}.<br/>
           {'Браузер: ' + uaparser.browser.name + ', ' + uaparser.browser.major}
         </p>
