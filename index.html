@@ -237,7 +237,7 @@
             </>
           :
             <>
-            <p>Для мобильных устройства возможность установки расширения <a href="https://www.tampermonkey.net/">Tampermonkey</a> в настоящее время реализована только в браузере Mozilla.</p>
+            <p>Для мобильных устройства возможность установки расширения <a href="https://www.tampermonkey.net/">Tampermonkey</a> в настоящее время реализована только в браузере Mozilla Firefox для Android.</p>
               <p className="w3-xlarge">
                 <span className="cbk-tooltip">
                   <span>
@@ -257,11 +257,20 @@
               </button>
             </>
             :
-            <>
-            </>
+              isMobile && uaparser.browser.name.toLowerCase() === 'firefox' && uaparser.os.name.toLowerCase() === 'android' ?
+              <>
+                <button className="w3-button w3-light-grey w3-padding-large w3-section" onClick={()=>{
+                  const tab = window.open('https://addons.mozilla.org/ru/android/addon/tampermonkey/', '_blank')
+                }}>
+                  <i className={"fa " + icon}></i> Установить Tampermonkey
+                </button>
+              </>
+              :
+              <>
+             </>
           }
           {
-            isMobile && uaparser.browser.name.toLowerCase() !== 'firefox' ?
+            isMobile && uaparser.os.name.toLowerCase() === 'android' && uaparser.browser.name.toLowerCase() !== 'firefox' ?
             <>
               <button className="w3-button w3-light-grey w3-padding-large w3-section" onClick={()=>{
                 const tab = window.open('https://www.mozilla.org/ru/firefox/browsers/mobile/get-app/', '_blank')
@@ -273,9 +282,26 @@
             </>
             :<></>
           }
+          {
+            isMobile && uaparser.browser.vendor.toLowerCase() === 'apple' ?
+            <>
+              <p>
+                К сожалению, Apple собственную систему расширений для iOS, которая несовместима с дополнениями и расширениями Firefox для Android, Mac, Windows и Linux. Кроме того, расширения iOS, написанные для других приложений iOS, не будут работать в Firefox для iOS (например, расширения, написанные для Safari, не будут автоматически работать в Firefox для iOS).
+              </p>
+            </>
+            :<></>
+          }
+          {
+            isMobile && uaparser.browser.vendor.toLowerCase() === 'apple' ?
+            <>
+            </>
+            :
+            <>
+              <p>После добавления скрипта в Tampermonkey перейдите в <a href="https://kad.arbitr.ru" target="_blank">Картотеку Арбитражных Дел</a>.</p>
+            </>
+          }
           
 
-          <p>После добавления скрипта в Tampermonkey перейдите в <a href="https://kad.arbitr.ru" target="_blank">Картотеку Арбитражных Дел</a>.</p>
 
         </div>
       </>
