@@ -8,7 +8,47 @@ body, h1,h2,h3,h4,h5,h6 {
 #main {
   margin-left:          120px
 }
+
 @media only screen and (max-width: 600px) {#main {margin-left: 0}}
+
+.cbk-tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.cbk-tooltip .cbk-tooltiptext {
+  visibility: hidden;
+  width: 140px;
+  color: #555;
+  background-color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 150%;
+  left: 50%;
+  margin-left: -75px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.cbk-tooltip .cbk-tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #fff transparent transparent transparent;
+}
+
+.cbk-tooltip:hover .cbk-tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
 
 .piLogo {
   color:              #0d0628;

@@ -186,7 +186,43 @@
           <h2 className="w3-text-light-grey">Установка</h2>
           <hr style={{width:"200px"}} className="w3-opacity"/>
           <p>Для запуска скриптов casebook{'{killer}'} необходимо предварительно установить расширение для браузера <a href="https://www.tampermonkey.net/">Tampermonkey</a>, перегрузить браузер и выбрать необходимый скрипт.    </p>
-
+          <p>Большинство современных браузеров для настольных компьютеров поддерживает установку расширения <a href="https://www.tampermonkey.net/">Tampermonkey</a>.</p>
+          <p className="w3-xlarge">
+            <span className="cbk-tooltip">
+              <span>
+                <i className="fa fa-chrome" aria-hidden="true"></i>
+                <span className="cbk-tooltiptext w3-small" id="userAgentTooltip">Google Chrome</span>
+              </span>
+            </span>
+            <span> </span>
+            <span className="cbk-tooltip">
+              <span>
+                <i className="fa fa-edge" aria-hidden="true"></i>
+                <span className="cbk-tooltiptext w3-small" id="userAgentTooltip">Microsoft Edge</span>
+              </span>
+            </span>
+            <span> </span>
+            <span className="cbk-tooltip">
+              <span>
+                <i className="fa fa-firefox" aria-hidden="true"></i>
+                <span className="cbk-tooltiptext w3-small" id="userAgentTooltip">Mozilla Firefox</span>
+              </span>
+            </span>
+            <span> </span>
+            <span className="cbk-tooltip">
+              <span>
+                <i className="fa fa-safari" aria-hidden="true"></i>
+                <span className="cbk-tooltiptext w3-small" id="userAgentTooltip">Apple Safari</span>
+              </span>
+            </span>
+            <span> </span>
+            <span className="cbk-tooltip">
+              <span>
+                <i className="fa fa-opera" aria-hidden="true"></i>
+                <span className="cbk-tooltiptext w3-small" id="userAgentTooltip">Opera Next</span>
+              </span>
+            </span>
+          </p>
           <button className="w3-button w3-light-grey w3-padding-large w3-section" onClick={()=>{
             
             const tab = window.open(url, '_blank')
@@ -243,6 +279,23 @@
       isMobile = false;
     }
   
+    function userAgentClick() {
+      navigator.clipboard.writeText(userAgent).then(function() {
+            console.log('Скопировано в буфер обмена успешно!');
+          }, function(err) {
+            console.error('Невозможно скопировать текст: ', err);
+          });
+          console.log(userAgent)
+      
+      let tooltip = document.getElementById("userAgentTooltip");
+      tooltip.innerHTML = "Скопировано";
+    }
+
+    function outUserAgent() {
+      let tooltip = document.getElementById("userAgentTooltip");
+      tooltip.innerHTML = "Нажми для копирования";
+    }
+
     return (
       <>
       <div className="w3-padding-32 w3-content w3-opacity" id="deviceinfo">
@@ -256,16 +309,17 @@
           Операционная система: {uaparser.os.name + ', ' + uaparser.os.version}.<br/>
           {'Браузер: ' + uaparser.browser.name + ', ' + uaparser.browser.major}
         </p>
-        <p className="w3-tooltip" onClick={()=>{
-          navigator.clipboard.writeText(userAgent).then(function() {
-            console.log('Copying to clipboard was successful!');
-          }, function(err) {
-            console.error('Could not copy text: ', err);
-          });
-          console.log(userAgent)
-        }}>
-          {userAgent} <span className="w3-text"><i className="fa fa-clipboard" aria-hidden="true"></i></span>
-        </p>
+        <div className="w3-tooltip">
+          <div className="cbk-tooltip">
+            <div onClick={userAgentClick} onMouseOut={outUserAgent}>
+              {userAgent + ' '}
+              <span className="cbk-tooltiptext" id="userAgentTooltip">Нажми для копирования</span>
+              <span className="w3-text"><i className="fa fa-clipboard" aria-hidden="true"></i></span>
+            </div>
+          </div>
+        </div>
+
+
         
         {/*<div className="w3-row-padding" style={{margin:"0 -16px"}}>
           <div className="w3-half">
