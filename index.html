@@ -263,12 +263,13 @@
           {
             isMobile && uaparser.browser.name.toLowerCase() !== 'firefox' ?
             <>
-             <button className="w3-button w3-light-grey w3-padding-large w3-section" onClick={()=>{
-                const tab = window.open('https://www.mozilla.org/ru/firefox/browsers/mobile/', '_blank')
+              <button className="w3-button w3-light-grey w3-padding-large w3-section" onClick={()=>{
+                const tab = window.open('https://www.mozilla.org/ru/firefox/browsers/mobile/get-app/', '_blank')
               }}>
-              Установить Mozilla Firefox <i className={"fa firefox"}></i>
-            </button>
-              
+                Установить <i className={"fa firefox"}></i> Mozilla Firefox
+              </button>
+              <p>
+              </p>
             </>
             :<></>
           }
