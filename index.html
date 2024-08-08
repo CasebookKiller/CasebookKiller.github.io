@@ -58,6 +58,14 @@
 <!-- Load Babel -->
 <script src="https://unpkg.com/@babel/standalone@7.25.3/babel.min.js"></script>
 <script type="text/babel">
+  let isMobile = false;
+
+  if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+    isMobile = true;
+  } else {
+    isMobile = false;
+  }
+
   const uaparser = UAParser(navigator.userAgent);
   console.log(uaparser);
 
@@ -186,49 +194,85 @@
           <h2 className="w3-text-light-grey">Установка</h2>
           <hr style={{width:"200px"}} className="w3-opacity"/>
           <p>Для запуска скриптов casebook{'{killer}'} необходимо предварительно установить расширение для браузера <a href="https://www.tampermonkey.net/">Tampermonkey</a>, перегрузить браузер и выбрать необходимый скрипт.    </p>
-          <p>Большинство современных браузеров для настольных компьютеров поддерживает установку расширения <a href="https://www.tampermonkey.net/">Tampermonkey</a>.</p>
-          <p className="w3-xlarge">
-            <span className="cbk-tooltip">
-              <span>
-                <i className="fa fa-chrome" aria-hidden="true"></i>
-                <span className="cbk-tooltiptext w3-small" id="userAgentTooltip">Google Chrome</span>
-              </span>
-            </span>
-            <span> </span>
-            <span className="cbk-tooltip">
-              <span>
-                <i className="fa fa-edge" aria-hidden="true"></i>
-                <span className="cbk-tooltiptext w3-small" id="userAgentTooltip">Microsoft Edge</span>
-              </span>
-            </span>
-            <span> </span>
-            <span className="cbk-tooltip">
-              <span>
-                <i className="fa fa-firefox" aria-hidden="true"></i>
-                <span className="cbk-tooltiptext w3-small" id="userAgentTooltip">Mozilla Firefox</span>
-              </span>
-            </span>
-            <span> </span>
-            <span className="cbk-tooltip">
-              <span>
-                <i className="fa fa-safari" aria-hidden="true"></i>
-                <span className="cbk-tooltiptext w3-small" id="userAgentTooltip">Apple Safari</span>
-              </span>
-            </span>
-            <span> </span>
-            <span className="cbk-tooltip">
-              <span>
-                <i className="fa fa-opera" aria-hidden="true"></i>
-                <span className="cbk-tooltiptext w3-small" id="userAgentTooltip">Opera Next</span>
-              </span>
-            </span>
-          </p>
-          <button className="w3-button w3-light-grey w3-padding-large w3-section" onClick={()=>{
-            
-            const tab = window.open(url, '_blank')
-          }}>
-            <i className={"fa " + icon}></i> Установить Tampermonkey
-          </button>
+          {
+            !isMobile ?
+            <>
+              <p>Большинство современных браузеров для настольных компьютеров поддерживает установку расширения <a href="https://www.tampermonkey.net/">Tampermonkey</a>.</p>
+              <p className="w3-xlarge">
+                <span className="cbk-tooltip">
+                  <span>
+                    <i className="fa fa-chrome" aria-hidden="true"></i>
+                    <span className="cbk-tooltiptext w3-small" id="userAgentTooltip">Google Chrome</span>
+                  </span>
+                </span>
+                <span> </span>
+                <span className="cbk-tooltip">
+                  <span>
+                    <i className="fa fa-edge" aria-hidden="true"></i>
+                    <span className="cbk-tooltiptext w3-small" id="userAgentTooltip">Microsoft Edge</span>
+                  </span>
+                </span>
+                <span> </span>
+                <span className="cbk-tooltip">
+                  <span>
+                    <i className="fa fa-firefox" aria-hidden="true"></i>
+                    <span className="cbk-tooltiptext w3-small" id="userAgentTooltip">Mozilla Firefox</span>
+                  </span>
+                </span>
+                <span> </span>
+                <span className="cbk-tooltip">
+                  <span>
+                    <i className="fa fa-safari" aria-hidden="true"></i>
+                    <span className="cbk-tooltiptext w3-small" id="userAgentTooltip">Apple Safari</span>
+                  </span>
+                </span>
+                <span> </span>
+                <span className="cbk-tooltip">
+                  <span>
+                    <i className="fa fa-opera" aria-hidden="true"></i>
+                    <span className="cbk-tooltiptext w3-small" id="userAgentTooltip">Opera Next</span>
+                  </span>
+                </span>
+              </p>
+            </>
+          :
+            <>
+            <p>Для мобильных устройства возможность установки расширения <a href="https://www.tampermonkey.net/">Tampermonkey</a> в настоящее время реализована только в браузере Mozilla.</p>
+              <p className="w3-xlarge">
+                <span className="cbk-tooltip">
+                  <span>
+                    <i className="fa fa-firefox" aria-hidden="true"></i>
+                    <span className="cbk-tooltiptext w3-small" id="userAgentTooltip">Mozilla Firefox</span>
+                  </span>
+                </span>
+              </p>
+            </>
+          }
+          {!isMobile ?
+            <>
+              <button className="w3-button w3-light-grey w3-padding-large w3-section" onClick={()=>{
+                const tab = window.open(url, '_blank')
+              }}>
+                <i className={"fa " + icon}></i> Установить Tampermonkey
+              </button>
+            </>
+            :
+            <>
+            </>
+          }
+          {
+            isMobile && uaparser.browser.name.toLowerCase() !== 'firefox' ?
+            <>
+             <button className="w3-button w3-light-grey w3-padding-large w3-section" onClick={()=>{
+                const tab = window.open('https://www.mozilla.org/ru/firefox/browsers/mobile/', '_blank')
+              }}>
+              Установить Mozilla Firefox<i className={"fa " + icon}></i>
+            </button>
+              
+            </>
+            :<></>
+          }
+          
 
           <p>После добавления скрипта в Tampermonkey перейдите в <a href="https://kad.arbitr.ru" target="_blank">Картотеку Арбитражных Дел</a>.</p>
 
@@ -271,13 +315,6 @@
     const { userAgent, platform } = navigator;
     console.log(navigator);    
     console.log(userAgent);
-    let isMobile = false;
-
-    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-      isMobile = true;
-    } else {
-      isMobile = false;
-    }
   
     function userAgentClick() {
       navigator.clipboard.writeText(userAgent).then(function() {
