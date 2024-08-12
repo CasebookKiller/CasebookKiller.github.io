@@ -14,10 +14,16 @@
 <link rel="canonical" href="%page_url%" />
 <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+<script src="https://unpkg.com/super-react-gist/umd/super-react-gist.min.js"></script>
+
 <script src="./js/uaparser.js"></script>
 </head>
 <body class="w3-black">
-
+<div class="topline">
+  <div class="progress-container">
+    <div class="progress-bar" id="cbkBar"></div>
+  </div>  
+</div>
 <!-- Боковое меню -->
 <nav class="w3-sidebar w3-bar-block w3-small w3-hide-small w3-center" id="leftNavbar">
   <a href="#" class="w3-bar-item w3-button w3-padding-large w3-hover-white">
@@ -58,6 +64,15 @@
 <!-- Load Babel -->
 <script src="https://unpkg.com/@babel/standalone@7.25.3/babel.min.js"></script>
 <script type="text/babel">
+  window.onscroll = function() {onScroll()};
+
+  function onScroll() {
+    let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    let scrolled = (winScroll / height) * 100;
+    document.getElementById("cbkBar").style.width = scrolled + "%";
+  }
+
   let isMobile = false;
 
   if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
@@ -300,7 +315,8 @@ console.log(uaparser)
       </>
     )
   }
-
+       /*<script src="https://gist.github.com/CasebookKiller/e3a24723f5d75cdf2032ed7a8c16e923.js"/>*/
+ 
   function Scripts() {
     // Скрипты
     return (
@@ -311,6 +327,13 @@ console.log(uaparser)
         <p>
           В процессе создания...
         </p>
+        <Gist url="https://gist.github.com/CasebookKiller/e3a24723f5d75cdf2032ed7a8c16e923.js"/>
+        <Gist
+          url='https://gist.github.com/CasebookKiller/e3a24723f5d75cdf2032ed7a8c16e923'
+          file='gistfile.txt'
+          οnLoad={() => console.log('Gist загружен успешно!')}
+          onError={() => console.log('Gist не был загружен!')}
+          />
         {/*<div className="w3-row-padding" style={{margin:"0 -16px"}}>
           <div className="w3-half">
             <img src="https://www.w3schools.com/w3images/wedding.jpg" style={{width:"100%"}}/>
