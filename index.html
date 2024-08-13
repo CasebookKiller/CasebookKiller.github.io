@@ -323,12 +323,13 @@ console.log(uaparser)
       <div className="w3-padding-32 w3-content" id="scripts">
         <h2 className="w3-text-light-grey">Скрипты</h2>
         <hr style={{width:"200px"}} className="w3-opacity"/>
+        <h5 id='script_common'>casebook{'{'}killer{'}'} common вер. 0.0.1</h5>
         <p>
-          <strong>casebook{'{'}killer{'}'} common вер. 0.0.1</strong> - подключение необходимых библиотек (SQL.js) и файлов со стилями (W3.CSS, Fontawesome 4, Bootstrap Icons).
+          Подключение необходимых библиотек (SQL.js) и файлов c адоптированными под kad.arbitr.ru стилями (W3.CSS, Fontawesome 4, Bootstrap Icons).
         </p>
-        <Gist
+        <Gist id='e3a24723f5d75cdf2032ed7a8c16e923'
           url='https://gist.github.com/CasebookKiller/e3a24723f5d75cdf2032ed7a8c16e923'
-          file='gistfile.txt'
+          file='gistfile.js'
           οnLoad={() => console.log('Gist загружен успешно!')}
           onError={() => console.log('Gist не был загружен!')}
           />
