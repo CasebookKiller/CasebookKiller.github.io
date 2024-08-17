@@ -1,437 +1,643 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>CASEBOOK{KILLER}</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="icon" type="image/x-icon" href="./favicon.ico">
-<link rel="stylesheet" href="./css/w3.css">
-<link rel="stylesheet" href="./css/w3.custom.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" type="text/css" href="./bloodfont.css" />
-<link rel="stylesheet" type="text/css" href="./blockquote.css" />
-<link rel="stylesheet" type="text/css" href="./index.css" />
-<link rel="canonical" href="%page_url%" />
-<script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
-<script src="https://unpkg.com/super-react-gist/umd/super-react-gist.min.js"></script>
-
-<script src="./js/uaparser.js"></script>
+  <title>CASEBOOK{KILLER}</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="./favicon.ico">
+  <link rel="stylesheet" href="./css/w3.css">
+  <link rel="stylesheet" href="./css/w3.custom.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="./bloodfont.css" />
+  <link rel="stylesheet" type="text/css" href="./blockquote.css" />
+  <link rel="stylesheet" type="text/css" href="./index.css" />
+  <link rel="canonical" href="%page_url%" />
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/super-react-gist/umd/super-react-gist.min.js"></script>
+  <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.11.0/sql-wasm.js" integrity="sha512-tz0jOZaOg9RtWWB6AdxSkINQwIs7S5obj1Dlml9KewZLPTblTWCux5eLtnexBb8kbLUo5crPmjsi8/vI17Vw0w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>-->
+  <script src="./js/sql-wasm.js"></script>
+  <script src="./js/uaparser.js"></script>
 </head>
 <body class="w3-black">
-<div class="topline">
-  <div class="progress-container">
-    <div class="progress-bar" id="cbkBar"></div>
-  </div>  
-</div>
-<!-- Боковое меню -->
-<nav class="w3-sidebar w3-bar-block w3-small w3-hide-small w3-center" id="leftNavbar">
-  <a href="#" class="w3-bar-item w3-button w3-padding-large w3-hover-white">
-    <i class="fa fa-home w3-xxlarge"></i>
-    <p>ГЛАВНАЯ</p>
-  </a>
-  <a href="#install" class="w3-bar-item w3-button w3-padding-large w3-hover-white">
-    <i class="fa fa-download w3-xxlarge"></i>
-    <p>УСТАНОВКА</p>
-  </a>
-  <a href="#scripts" class="w3-bar-item w3-button w3-padding-large w3-hover-white">
-    <i class="fa fa-code w3-xxlarge"></i>
-    <p>СКРИПТЫ</p>
-  </a>
-</nav>
+  <script>
+    // Проверка IndexedDB
+    window.indexedDB =
+      window.indexedDB ||
+      window.mozIndexedDB ||
+      window.webkitIndexedDB ||
+      window.msIndexedDB;
+    window.IDBTransaction =
+      window.IDBTransaction ||
+      window.webkitIDBTransaction ||
+      window.msIDBTransaction;
+    window.IDBKeyRange =
+      window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
 
-<!-- Верхнее меню -->
-<div class="w3-top w3-hide-large w3-hide-medium" id="topNavbar">
-  <div class="w3-bar w3-black w3-opacity w3-hover-opacity-off w3-center w3-small">
-    <a href="#" class="w3-bar-item w3-button" style="width:25% !important">ГЛАВНАЯ</a>
-    <a href="#install" class="w3-bar-item w3-button" style="width:25% !important">УСТАНОВКА</a>
-    <a href="#scripts" class="w3-bar-item w3-button" style="width:25% !important">СКРИПТЫ</a>
+    if (!window.indexedDB) {
+      console.log(
+        "Этот браузер не поддерживает стабильную версию IndexedDB. Сохранение базы данных невозможно",
+      );
+    }
+
+    config = {
+      locateFile: filename => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.11.0/${filename}`
+    }
+
+    // Функция `initsqls` глобально предоставляется всеми основными дистрибутивами, если они загружены в браузер.
+    // Мы должны указать эту функцию locateFile, если мы загружаем wasm-файл из любого другого места, кроме папки текущей html-страницы.
+    let iDB, SQLitedb, binarydb;
+    initSqlJs(config).then(function(SQL){
+      // Создание базы данных
+      SQLitedb = new SQL.Database();
+      // Запрос на создание таблицы
+      SQLitedb.run("CREATE TABLE test (col1, col2);");
+      // Запрос на создание двух записей: (1,111) и (2,222)
+      SQLitedb.run("INSERT INTO test VALUES (?,?), (?,?)", [1,111,2,222]);
+
+      // Подготовка запроса
+      const stmt = SQLitedb.prepare("SELECT * FROM test WHERE col1 BETWEEN $start AND $end");
+      stmt.getAsObject({$start:1, $end:1}); // {col1:1, col2:111}
+
+      // Привязка новых значений
+      stmt.bind({$start:1, $end:2});
+      while(stmt.step()) { //
+        const row = stmt.getAsObject();
+        console.log('Here is a row: ' + JSON.stringify(row));
+      }
+      binarydb = SQLitedb.export();
+      //saveCasesDb(binarydb, cbSaveCasesDB);
+      getCasesDb(cbGetBinary);
+    });
+
+    /**
+     *  IndexedDB
+     */ 
+    
+    // Обратный вызов при сохранении базы данных
+    function cbSaveCasesDB(db) {
+      console.log('casesdb: ', db);
+    }
+
+    // Обратный вызов при получении базы данных
+    function cbGetCasesDB(db) {
+      console.log('casesdb: ', db);
+    }
+   
+    // Обратный вызов при получении базы данных
+    function cbGetBinary(result) {
+      console.log('binary: ', result.find(i => i.cbk === 1).database);
+    }
+    
+    // Запрос на открытие базы данных
+    function openRequestDB(name, version) {
+      return window.indexedDB.open(name, version);
+    }
+
+    // Обновление структуры базы данных
+    function iDBUpgradeNeeded(revent) {
+      console.log('request: ', request.target);
+      console.log('event: ', event);
+      console.log('event: ', event);
+      // версия существующей базы данных меньше 2 (или база данных не существует)
+      iDB = event.target.result; //openRequest.result;
+      console.log('event: ', event);      
+      switch(event.oldVersion) { // существующая (старая) версия базы данных
+        case 0:
+          // версия 0 означает, что на клиенте нет базы данных
+          // выполнить инициализацию
+          if (!iDB.objectStoreNames.contains('cases')) { // если хранилище "cases" не существует
+            iDB.createObjectStore('cases', {keyPath: 'cbk'}); // создаём хранилище
+            
+          }
+        case 1:
+          // на клиенте версия базы данных 1
+          // обновить
+      }
+      console.log(iDB.objectStoreNames);
+    }
+
+    // Обработка блокировки базы данных
+    function iDBBlocked (event) {
+      // это событие не должно срабатывать, если мы правильно обрабатываем onversionchange
+
+      // это означает, что есть ещё одно открытое соединение с той же базой данных
+      // и он не был закрыт после того, как для него сработал db.onversionchange
+      
+      console.log('Сработало событие блокировки. Необходимо закрыть другие вкладки.');
+    }
+
+    // Обработка ошибок
+    function iDBError (event) {
+      console.log('event: ', event);
+      console.error("Ошибка загрузки базы данных", openRequest.error);
+    }
+
+    // Обработка открытия базы данных
+    function iDBOpened (event, func, cb) {
+      iDB = event.target.result;
+      console.log('iDB: ', iDB);
+      iDB.onversionchange = function() {
+        iDB.close();
+        alert('База данных устарела, пожалуйста, перезагрузите страницу.');
+      };
+
+      // ...база данных готова...
+      func(iDB, cb);
+    }
+
+    function getAll(iDB, cb) {
+        console.log('function getAll');
+        const transaction = iDB.transaction("cases", "readwrite"); // (1)
+        // получить хранилище объектов для работы с ним
+        const cases = transaction.objectStore("cases"); // (2)
+        const getAll = cases.getAll();
+        getAll.onsuccess = function(e) {
+          cb(getAll.result);
+        }
+        getAll.onerror = function(e) {
+          console.log(e);
+        }      
+    }
+    
+    function DBRequest(
+      iDB,                  // IndexedDB
+      storeName,            // Имя хранилища
+      requestType,          // Тип запроса
+      requestParams,        // Параметры запроса
+      cb                    // Функция обратного вызова в случае успеха
+    ) {
+      const transaction = iDB.transaction(storeName, 'readwrite');
+      const store = transaction.objectStore(storeName); // получить хранилище объектов
+      const request = store[requestType](requestParams);
+      request.onsuccess = (e) => {
+        console.log('Запрос "'+requestType+'" выполнен.');
+        console.log('Результат запроса: ', e.target.result);
+        cb(e.target.result);
+      }
+    }
+
+    // здесь должно быть открытие
+    function getCasesDb(cb) {
+      // Открытие IndexedDB
+      const openRequest = openRequestDB('casebook{killer}',1);//window.indexedDB.open("casebook{killer}", 1);
+      
+      openRequest.onupgradeneeded = (e) => iDBUpgradeNeeded(e); // Обновление структуры базы данных
+      openRequest.onblocked = (e) => iDBBlocked(e); // Обработка блокировки
+      openRequest.onerror = (e) => iDBError(e); // Обработка ошибок
+      openRequest.onsuccess = (e) => {
+        iDBOpened(
+          e, 
+          ()=> DBRequest(iDB,'cases','getAll',undefined,cb), 
+          cb
+        ); // При успешном открытии
+      }
+    }
+
+    // сюда перенести алгоритм сохраения бд
+    function saveCasesDb(binary, cb) {
+      console.log('saveCasesDB: ', binary);
+      // Открытие IndexedDB
+      const openRequest = openRequestDB('casebook{killer}',1);
+
+      openRequest.onupgradeneeded = (e) => iDBUpgradeNeeded(e); // Обновление структуры базы данных
+      openRequest.onblocked = (e) => iDBBlocked(e); // Обработка блокировки
+      openRequest.onerror = (e) => iDBError(e); // Обработка ошибок
+      openRequest.onsuccess = (e) => {
+        console.log('event: ', e);
+        iDB = e.target.result;
+        iDB.onversionchange = function() {
+          iDB.close();
+          alert("База данных устарела, пожалуйста, перезагрузите страницу.")
+        };
+
+        // ...база данных готова...
+        DBRequest(
+          iDB, 
+          'cases',
+          'put',
+          {
+            cbk: 1, 
+            database: binary},
+          cb
+        );
+      };
+
+    }
+  </script>
+  <div class="topline">
+    <div class="progress-container">
+      <div class="progress-bar" id="cbkBar"></div>
+    </div>  
   </div>
-</div>
+  <!-- Боковое меню -->
+  <nav class="w3-sidebar w3-bar-block w3-small w3-hide-small w3-center" id="leftNavbar">
+    <a href="#" class="w3-bar-item w3-button w3-padding-large w3-hover-white">
+      <i class="fa fa-home w3-xxlarge"></i>
+      <p>ГЛАВНАЯ</p>
+    </a>
+    <a href="#install" class="w3-bar-item w3-button w3-padding-large w3-hover-white">
+      <i class="fa fa-download w3-xxlarge"></i>
+      <p>УСТАНОВКА</p>
+    </a>
+    <a href="#scripts" class="w3-bar-item w3-button w3-padding-large w3-hover-white">
+      <i class="fa fa-code w3-xxlarge"></i>
+      <p>СКРИПТЫ</p>
+    </a>
+  </nav>
 
-<!-- Содержимое -->
-<div class="w3-padding-large" id="main">
-  <div id="Container"></div>
+  <!-- Верхнее меню -->
+  <div class="w3-top w3-hide-large w3-hide-medium" id="topNavbar">
+    <div class="w3-bar w3-black w3-opacity w3-hover-opacity-off w3-center w3-small">
+      <a href="#" class="w3-bar-item w3-button" style="width:25% !important">ГЛАВНАЯ</a>
+      <a href="#install" class="w3-bar-item w3-button" style="width:25% !important">УСТАНОВКА</a>
+      <a href="#scripts" class="w3-bar-item w3-button" style="width:25% !important">СКРИПТЫ</a>
+    </div>
+  </div>
 
-  <!-- Подвал -->
-  <footer class="w3-content w3-padding-32 w3-text-grey w3-xlarge">
-    <a href="https://t.me/casebookkiller" target="_blank" class="w3-hover-text-white"><i class="fa fa-telegram w3-hover-opacity"></i></a>
-  </footer>
+  <!-- Содержимое -->
+  <div class="w3-padding-large" id="main">
+    <div id="Container"></div>
 
-<!-- END PAGE CONTENT -->
-</div>
+    <!-- Подвал -->
+    <footer class="w3-content w3-padding-32 w3-text-grey w3-xlarge">
+      <a href="https://t.me/casebookkiller" target="_blank" class="w3-hover-text-white"><i class="fa fa-telegram w3-hover-opacity"></i></a>
+    </footer>
 
-<!-- Load Babel -->
-<script src="https://unpkg.com/@babel/standalone@7.25.3/babel.min.js"></script>
-<script type="text/babel">
-  window.onscroll = function() {onScroll()};
+  </div>
+  <!-- END PAGE CONTENT -->
 
-  function onScroll() {
-    let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-    let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    let scrolled = (winScroll / height) * 100;
-    document.getElementById("cbkBar").style.width = scrolled + "%";
-  }
+  <!-- Load Babel -->
+  <script src="https://unpkg.com/@babel/standalone@7.25.3/babel.min.js"></script>
+  <script type="text/babel">
+    window.onscroll = function() {onScroll()};
 
-  let isMobile = false;
-
-  if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-    isMobile = true;
-  } else {
-    isMobile = false;
-  }
-
-  const uaparser = UAParser(navigator.userAgent);
-  console.log(uaparser);
-
-  function getMobileOS () {
-    const useragent = navigator.userAgent;
-    if (/android|Android/i.test(useragent)) {
-      return "Android";
-    } else if (/iPad|iPhone|iPod/.test(useragent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) {
-      return "iOS";
-    } else if (/webOS/i.test(useragent)) {
-      return "webOS";
-    } else if (/BlackBerry/i.test(useragent)) {
-      return "BlackBerry";
-    } else if (/Windows Phone/i.test(useragent)) {
-      return "Windows Phone";
-    } else if (/IEMobile/i.test(useragent)) {
-      return "IEMobile";
-    } else if (/Opera Mini/i.test(useragent)) {
-      return "Opera Mini";
+    function onScroll() {
+      let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      let scrolled = (winScroll / height) * 100;
+      document.getElementById("cbkBar").style.width = scrolled + "%";
     }
-    return "Other";
-  }
-  const OSMobile = getMobileOS();
 
-  function getDesktopOS() {
-    let OSName = navigator.appVersion;
-    if (navigator.appVersion.indexOf("Win") != -1) OSName = "Windows";
-    if (navigator.appVersion.indexOf("Mac") != -1) OSName = "MacOS";
-    if (navigator.appVersion.indexOf("X11") != -1) OSName = "UNIX";
-    if (navigator.appVersion.indexOf("Linux") != -1) OSName = "Linux";
-    return (OSName);
-  }
-  const OSName = getDesktopOS();
-  
-  navigator.saysWho = (() => {
-    const { userAgent } = navigator;
-    let match = userAgent.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
-    let temp;
-    if (/trident/i.test(match[1])) {
-      temp = /\brv[ :]+(\d+)/g.exec(userAgent) || [];
-      return `IE ${temp[1] || ''}`;
+    let isMobile = false;
+
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+      isMobile = true;
+    } else {
+      isMobile = false;
     }
-    if (match[1] === 'Chrome') {
-      temp = userAgent.match(/\b(OPR|Edge)\/(\d+)/);
-      if (temp !== null) {
-        return temp.slice(1).join(' ').replace('OPR', 'Opera');
+
+    const uaparser = UAParser(navigator.userAgent);
+    console.log(uaparser);
+
+    function getMobileOS () {
+      const useragent = navigator.userAgent;
+      if (/android|Android/i.test(useragent)) {
+        return "Android";
+      } else if (/iPad|iPhone|iPod/.test(useragent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) {
+        return "iOS";
+      } else if (/webOS/i.test(useragent)) {
+        return "webOS";
+      } else if (/BlackBerry/i.test(useragent)) {
+        return "BlackBerry";
+      } else if (/Windows Phone/i.test(useragent)) {
+        return "Windows Phone";
+      } else if (/IEMobile/i.test(useragent)) {
+        return "IEMobile";
+      } else if (/Opera Mini/i.test(useragent)) {
+        return "Opera Mini";
       }
-      temp = userAgent.match(/\b(Edg)\/(\d+)/);
-      if (temp !== null) {
-        return temp.slice(1).join(' ').replace('Edg', 'Edge (Chromium)');
+      return "Other";
+    }
+    const OSMobile = getMobileOS();
+
+    function getDesktopOS() {
+      let OSName = navigator.appVersion;
+      if (navigator.appVersion.indexOf("Win") != -1) OSName = "Windows";
+      if (navigator.appVersion.indexOf("Mac") != -1) OSName = "MacOS";
+      if (navigator.appVersion.indexOf("X11") != -1) OSName = "UNIX";
+      if (navigator.appVersion.indexOf("Linux") != -1) OSName = "Linux";
+      return (OSName);
+    }
+    const OSName = getDesktopOS();
+    
+    navigator.saysWho = (() => {
+      const { userAgent } = navigator;
+      let match = userAgent.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+      let temp;
+      if (/trident/i.test(match[1])) {
+        temp = /\brv[ :]+(\d+)/g.exec(userAgent) || [];
+        return `IE ${temp[1] || ''}`;
       }
-    }
-    match = match[2] ? [ match[1], match[2] ] : [ navigator.appName, navigator.appVersion, '-?' ];
-    temp = userAgent.match(/version\/(\d+)/i);
-    if (temp !== null) {
-      match.splice(1, 1, temp[1]);
-    }
-    return match.join(' ');
-  })();
-  const browser = navigator.saysWho.split(" ")[0];
+      if (match[1] === 'Chrome') {
+        temp = userAgent.match(/\b(OPR|Edge)\/(\d+)/);
+        if (temp !== null) {
+          return temp.slice(1).join(' ').replace('OPR', 'Opera');
+        }
+        temp = userAgent.match(/\b(Edg)\/(\d+)/);
+        if (temp !== null) {
+          return temp.slice(1).join(' ').replace('Edg', 'Edge (Chromium)');
+        }
+      }
+      match = match[2] ? [ match[1], match[2] ] : [ navigator.appName, navigator.appVersion, '-?' ];
+      temp = userAgent.match(/version\/(\d+)/i);
+      if (temp !== null) {
+        match.splice(1, 1, temp[1]);
+      }
+      return match.join(' ');
+    })();
+    const browser = navigator.saysWho.split(" ")[0];
 
-  function Header() {
-    const [quote, setQuote] = React.useState('Программирование - это такой же навык, как завязывание шнурков, письмо шариковой ручкой или вождение автомобиля. Навык, который даёт его обладателю преимущество в любой другой профессиональной деятельности...');
-    // Заголовок
+    function Header() {
+      const [quote, setQuote] = React.useState('Программирование - это такой же навык, как завязывание шнурков, письмо шариковой ручкой или вождение автомобиля. Навык, который даёт его обладателю преимущество в любой другой профессиональной деятельности...');
+      // Заголовок
 
-    return ( 
-      <>
-      {/*<div className="w3-container w3-padding-32 w3-center w3-black FS-LOGO w3-border" id="home">
-          <span className="piLogoWhite">casebook</span>
-          <span className="piLogoBlue">{'{'}</span>
-          <span className="piLogoRed">killer</span>
-          <span className="piLogoBlue">{'}'}</span>
-      </div>*/}
-      <div className="w3-padding-32 w3-black w3-xxlarge">
-        <div className="w3-row w3-left-align">
-          <div className="w3-col m16 ll10 w3-text-white w3-blood w3-weight-900">casebook</div>
-          <div className="w3-col m12 ll14 w3-text-white w3-blood w3-weight-900">
-            <span className="w3-text-blue">{'{'}</span>
-            <span className="w3-text-red">killer</span>
-            <span className="w3-text-blue">{'}'}</span>
+      return ( 
+        <>
+        {/*<div className="w3-container w3-padding-32 w3-center w3-black FS-LOGO w3-border" id="home">
+            <span className="piLogoWhite">casebook</span>
+            <span className="piLogoBlue">{'{'}</span>
+            <span className="piLogoRed">killer</span>
+            <span className="piLogoBlue">{'}'}</span>
+        </div>*/}
+        <div className="w3-padding-32 w3-black w3-xxlarge">
+          <div className="w3-row w3-left-align">
+            <div className="w3-col m16 ll10 w3-text-white w3-blood w3-weight-900">casebook</div>
+            <div className="w3-col m12 ll14 w3-text-white w3-blood w3-weight-900">
+              <span className="w3-text-blue">{'{'}</span>
+              <span className="w3-text-red">killer</span>
+              <span className="w3-text-blue">{'}'}</span>
+            </div>
           </div>
         </div>
-      </div>
-      {/*<blockquote className="blockquote-header">
-        <p className="piWhite">{quote}</p>
-        <cite className="piBlue">Автор проекта</cite>
-      </blockquote>*/}
-      <div className="w3-panel w3-leftbar w3-dark">
-        <p className="w3-medium"><i>"{quote}"</i></p>
-        <p className="w3-text-blue">Автор проекта</p>
-      </div>
-      <div className="w3-padding-16"/>
-      </>
-    );
-  }
+        {/*<blockquote className="blockquote-header">
+          <p className="piWhite">{quote}</p>
+          <cite className="piBlue">Автор проекта</cite>
+        </blockquote>*/}
+        <div className="w3-panel w3-leftbar w3-dark">
+          <p className="w3-medium"><i>"{quote}"</i></p>
+          <p className="w3-text-blue">Автор проекта</p>
+        </div>
+        <div className="w3-padding-16"/>
+        </>
+      );
+    }
 
-  function Objectives() {
-    // Цели
-    return (
-      <>
-      <div className="FS-3">
-        <h2 className="w3-text-light-grey">Цели проекта</h2>
-        <hr style={{width:"200px"}} className="w3-opacity"/>
-        <ul className="list">
-          <li>Создание скриптов, упрощающих сбор и анализ информации о судебных дел.</li>
-          <li>Распространение созданной библиотеки на безвозмедной основе.</li>
-        </ul>
-      </div>
-      </>
-    )
-  }
-
-  function HowToInstall() {
-    // Установка
-    console.log(browser.toLowerCase());
-    const icon = browser.toLowerCase() === 'chrome'||'firefox'||'opera'||'edge' ? 
-    'fa-' + browser.toLowerCase() : 'fa-download'; 
-    console.log(icon);
-    const domain = 'https://www.tampermonkey.net/index.php';
-    const url = browser.toLowerCase() === 'chrome'||'firefox'||'opera'||'edge' ? 
-      domain + '?browser=' + browser.toLowerCase() : domain;
-console.log(uaparser)
-    return (
-      <>
-        <div className="w3-content w3-justify w3-text-light-grey w3-padding-32" id="install">
-          <h2 className="w3-text-light-grey">Установка</h2>
+    function Objectives() {
+      // Цели
+      return (
+        <>
+        <div className="FS-3">
+          <h2 className="w3-text-light-grey">Цели проекта</h2>
           <hr style={{width:"200px"}} className="w3-opacity"/>
-          <p>Для запуска скриптов <span className="w3-blood w3-small w3-weight-100">casebook{'{killer}'}</span> необходимо предварительно установить расширение для браузера <a href="https://www.tampermonkey.net/">Tampermonkey</a>, перегрузить браузер и выбрать необходимый скрипт.    </p>
-          {
-            !isMobile ?
-            <>
-              <p>Большинство современных браузеров для настольных компьютеров поддерживает установку расширения <a href="https://www.tampermonkey.net/">Tampermonkey</a>.</p>
-              <p className="w3-xlarge">
-                <span className="cbk-tooltip">
-                  <span>
-                    <i className="fa fa-chrome" aria-hidden="true"></i>
-                    <span className="cbk-tooltiptext w3-small" id="userAgentTooltip">Google Chrome</span>
+          <ul className="list">
+            <li>Создание скриптов, упрощающих сбор и анализ информации о судебных дел.</li>
+            <li>Распространение созданной библиотеки на безвозмедной основе.</li>
+          </ul>
+        </div>
+        </>
+      )
+    }
+
+    function HowToInstall() {
+      // Установка
+      console.log(browser.toLowerCase());
+      const icon = browser.toLowerCase() === 'chrome'||'firefox'||'opera'||'edge' ? 
+      'fa-' + browser.toLowerCase() : 'fa-download'; 
+      console.log(icon);
+      const domain = 'https://www.tampermonkey.net/index.php';
+      const url = browser.toLowerCase() === 'chrome'||'firefox'||'opera'||'edge' ? 
+        domain + '?browser=' + browser.toLowerCase() : domain;
+        console.log(uaparser)
+      return (
+        <>
+          <div className="w3-content w3-justify w3-text-light-grey w3-padding-32" id="install">
+            <h2 className="w3-text-light-grey">Установка</h2>
+            <hr style={{width:"200px"}} className="w3-opacity"/>
+            <p>Для запуска скриптов <span className="w3-blood w3-small w3-weight-100">casebook{'{killer}'}</span> необходимо предварительно установить расширение для браузера <a href="https://www.tampermonkey.net/">Tampermonkey</a>, перегрузить браузер и выбрать необходимый скрипт.    </p>
+            {
+              !isMobile ?
+              <>
+                <p>Большинство современных браузеров для настольных компьютеров поддерживает установку расширения <a href="https://www.tampermonkey.net/">Tampermonkey</a>.</p>
+                <p className="w3-xlarge">
+                  <span className="cbk-tooltip">
+                    <span>
+                      <i className="fa fa-chrome" aria-hidden="true"></i>
+                      <span className="cbk-tooltiptext w3-small" id="userAgentTooltip">Google Chrome</span>
+                    </span>
                   </span>
-                </span>
-                <span> </span>
-                <span className="cbk-tooltip">
-                  <span>
-                    <i className="fa fa-edge" aria-hidden="true"></i>
-                    <span className="cbk-tooltiptext w3-small" id="userAgentTooltip">Microsoft Edge</span>
+                  <span> </span>
+                  <span className="cbk-tooltip">
+                    <span>
+                      <i className="fa fa-edge" aria-hidden="true"></i>
+                      <span className="cbk-tooltiptext w3-small" id="userAgentTooltip">Microsoft Edge</span>
+                    </span>
                   </span>
-                </span>
-                <span> </span>
-                <span className="cbk-tooltip">
-                  <span>
-                    <i className="fa fa-firefox" aria-hidden="true"></i>
-                    <span className="cbk-tooltiptext w3-small" id="userAgentTooltip">Mozilla Firefox</span>
+                  <span> </span>
+                  <span className="cbk-tooltip">
+                    <span>
+                      <i className="fa fa-firefox" aria-hidden="true"></i>
+                      <span className="cbk-tooltiptext w3-small" id="userAgentTooltip">Mozilla Firefox</span>
+                    </span>
                   </span>
-                </span>
-                <span> </span>
-                <span className="cbk-tooltip">
-                  <span>
-                    <i className="fa fa-safari" aria-hidden="true"></i>
-                    <span className="cbk-tooltiptext w3-small" id="userAgentTooltip">Apple Safari</span>
+                  <span> </span>
+                  <span className="cbk-tooltip">
+                    <span>
+                      <i className="fa fa-safari" aria-hidden="true"></i>
+                      <span className="cbk-tooltiptext w3-small" id="userAgentTooltip">Apple Safari</span>
+                    </span>
                   </span>
-                </span>
-                <span> </span>
-                <span className="cbk-tooltip">
-                  <span>
-                    <i className="fa fa-opera" aria-hidden="true"></i>
-                    <span className="cbk-tooltiptext w3-small" id="userAgentTooltip">Opera Next</span>
+                  <span> </span>
+                  <span className="cbk-tooltip">
+                    <span>
+                      <i className="fa fa-opera" aria-hidden="true"></i>
+                      <span className="cbk-tooltiptext w3-small" id="userAgentTooltip">Opera Next</span>
+                    </span>
                   </span>
-                </span>
-              </p>
-            </>
-          :
-            <>
-            <p>Для мобильных устройства возможность установки расширения <a href="https://www.tampermonkey.net/">Tampermonkey</a> в настоящее время реализована только в браузере <i className="fa fa-firefox" aria-hidden="true"></i><span>Mozilla Firefox</span> для Android.</p>
-            </>
-          }
-          {!isMobile ?
-            <>
-              <button className="w3-button w3-light-grey w3-padding-large w3-section" onClick={()=>{
-                const tab = window.open(url, '_blank')
-              }}>
-                <i className={"fa " + icon}></i> Установить Tampermonkey
-              </button>
-            </>
+                </p>
+              </>
             :
-              isMobile && uaparser.browser.name.toLowerCase() === 'firefox' && uaparser.os.name.toLowerCase() === 'android' ?
+              <>
+              <p>Для мобильных устройства возможность установки расширения <a href="https://www.tampermonkey.net/">Tampermonkey</a> в настоящее время реализована только в браузере <i className="fa fa-firefox" aria-hidden="true"></i><span>Mozilla Firefox</span> для Android.</p>
+              </>
+            }
+            {!isMobile ?
               <>
                 <button className="w3-button w3-light-grey w3-padding-large w3-section" onClick={()=>{
-                  const tab = window.open('https://addons.mozilla.org/ru/android/addon/tampermonkey/', '_blank')
+                  const tab = window.open(url, '_blank')
                 }}>
                   <i className={"fa " + icon}></i> Установить Tampermonkey
                 </button>
               </>
               :
+                isMobile && uaparser.browser.name.toLowerCase() === 'firefox' && uaparser.os.name.toLowerCase() === 'android' ?
+                <>
+                  <button className="w3-button w3-light-grey w3-padding-large w3-section" onClick={()=>{
+                    const tab = window.open('https://addons.mozilla.org/ru/android/addon/tampermonkey/', '_blank')
+                  }}>
+                    <i className={"fa " + icon}></i> Установить Tampermonkey
+                  </button>
+                </>
+                :
+                <>
+              </>
+            }
+            {
+              isMobile && uaparser.os.name.toLowerCase() === 'android' && uaparser.browser.name.toLowerCase() !== 'firefox' ?
               <>
-             </>
-          }
-          {
-            isMobile && uaparser.os.name.toLowerCase() === 'android' && uaparser.browser.name.toLowerCase() !== 'firefox' ?
-            <>
-              <button className="w3-button w3-light-grey w3-padding-large w3-section" onClick={()=>{
-                const tab = window.open('https://www.mozilla.org/ru/firefox/browsers/mobile/get-app/', '_blank')
-              }}>
-                Установить <i className={"fa firefox"}></i> Mozilla Firefox
-              </button>
-              <p>
-              </p>
-            </>
-            :<></>
-          }
-          {
-            isMobile && uaparser.os.name?.toLowerCase() === 'ios' ?
-            <>
-              <p>
-                К сожалению, Apple собственную систему расширений для iOS, которая несовместима с дополнениями и расширениями Firefox для Android, Mac, Windows и Linux.<br/>
-                Расширения iOS, написанные для других приложений iOS, не будут работать в Firefox для iOS (например, расширения, написанные для Safari, не будут автоматически работать в Firefox для iOS).
-              </p>
-            </>
-            :<></>
-          }
-          {
-            isMobile && uaparser.os.name?.toLowerCase() === 'ios' ?
-            <>
-            </>
-            :
-            <>
-              <p>После добавления скрипта в Tampermonkey перейдите в <a href="https://kad.arbitr.ru" target="_blank">Картотеку Арбитражных Дел</a>.</p>
-            </>
-          }
-          
+                <button className="w3-button w3-light-grey w3-padding-large w3-section" onClick={()=>{
+                  const tab = window.open('https://www.mozilla.org/ru/firefox/browsers/mobile/get-app/', '_blank')
+                }}>
+                  Установить <i className={"fa firefox"}></i> Mozilla Firefox
+                </button>
+                <p>
+                </p>
+              </>
+              :<></>
+            }
+            {
+              isMobile && uaparser.os.name?.toLowerCase() === 'ios' ?
+              <>
+                <p>
+                  К сожалению, Apple собственную систему расширений для iOS, которая несовместима с дополнениями и расширениями Firefox для Android, Mac, Windows и Linux.<br/>
+                  Расширения iOS, написанные для других приложений iOS, не будут работать в Firefox для iOS (например, расширения, написанные для Safari, не будут автоматически работать в Firefox для iOS).
+                </p>
+              </>
+              :<></>
+            }
+            {
+              isMobile && uaparser.os.name?.toLowerCase() === 'ios' ?
+              <>
+              </>
+              :
+              <>
+                <p>После добавления скрипта в Tampermonkey перейдите в <a href="https://kad.arbitr.ru" target="_blank">Картотеку Арбитражных Дел</a>.</p>
+              </>
+            }
+            
 
 
-        </div>
-      </>
-    )
-  }
- 
-  function Scripts() {
-    // Скрипты
-    return (
-      <>
-      <div className="w3-padding-32 w3-content" id="scripts">
-        <h2 className="w3-text-light-grey">Скрипты</h2>
-        <hr style={{width:"200px"}} className="w3-opacity"/>
-        <h5 id='script_common'>casebook{'{'}killer{'}'} common вер. 0.0.1</h5>
-        <p>
-          Подключение необходимых библиотек (SQL.js) и файлов c адоптированными под kad.arbitr.ru стилями (W3.CSS, Fontawesome 4, Bootstrap Icons).
-        </p>
-        <Gist id='e3a24723f5d75cdf2032ed7a8c16e923'
-          url='https://gist.github.com/CasebookKiller/e3a24723f5d75cdf2032ed7a8c16e923'
-          file='gistfile.js'
-          οnLoad={() => console.log('Gist загружен успешно!')}
-          onError={() => console.log('Gist не был загружен!')}
-          />
-        {/*<div className="w3-row-padding" style={{margin:"0 -16px"}}>
-          <div className="w3-half">
-            <img src="https://www.w3schools.com/w3images/wedding.jpg" style={{width:"100%"}}/>
-            <img src="https://www.w3schools.com/w3images/rocks.jpg" style={{width:"100%"}}/>
-            <img src="https://www.w3schools.com/w3images/sailboat.jpg" style={{width:"100%"}}/>
           </div>
-
-          <div className="w3-half">
-            <img src="https://www.w3schools.com/w3images/underwater.jpg" style={{width:"100%"}}/>
-            <img src="https://www.w3schools.com/w3images/chef.jpg" style={{width:"100%"}}/>
-            <img src="https://www.w3schools.com/w3images/wedding.jpg" style={{width:"100%"}}/>
-            <img src="https://www.w3schools.com/w3images/p6.jpg" style={{width:"100%"}}/>
-          </div>
-        </div>*/}
-      </div>
-      
-      </>
-    )
-  }
-
-  function DeviceInfo() {
-    const { userAgent, platform } = navigator;
-    console.log(navigator);    
-    console.log(userAgent);
+        </>
+      )
+    }
   
-    function userAgentClick() {
-      navigator.clipboard.writeText(userAgent).then(function() {
-            console.log('Скопировано в буфер обмена успешно!');
-          }, function(err) {
-            console.error('Невозможно скопировать текст: ', err);
-          });
-          console.log(userAgent)
-      
-      let tooltip = document.getElementById("userAgentTooltip");
-      tooltip.innerHTML = "Скопировано";
+    function Scripts() {
+      // Скрипты
+      return (
+        <>
+        <div className="w3-padding-32 w3-content" id="scripts">
+          <h2 className="w3-text-light-grey">Скрипты</h2>
+          <hr style={{width:"200px"}} className="w3-opacity"/>
+          <h5 id='script_common'>casebook{'{'}killer{'}'} common вер. 0.0.1</h5>
+          <p>
+            Подключение необходимых библиотек (SQL.js) и файлов c адоптированными под kad.arbitr.ru стилями (W3.CSS, Fontawesome 4, Bootstrap Icons).
+          </p>
+          <Gist id='e3a24723f5d75cdf2032ed7a8c16e923'
+            url='https://gist.github.com/CasebookKiller/e3a24723f5d75cdf2032ed7a8c16e923'
+            file='gistfile.js'
+            οnLoad={() => console.log('Gist загружен успешно!')}
+            onError={() => console.log('Gist не был загружен!')}
+            />
+          {/*<div className="w3-row-padding" style={{margin:"0 -16px"}}>
+            <div className="w3-half">
+              <img src="https://www.w3schools.com/w3images/wedding.jpg" style={{width:"100%"}}/>
+              <img src="https://www.w3schools.com/w3images/rocks.jpg" style={{width:"100%"}}/>
+              <img src="https://www.w3schools.com/w3images/sailboat.jpg" style={{width:"100%"}}/>
+            </div>
+
+            <div className="w3-half">
+              <img src="https://www.w3schools.com/w3images/underwater.jpg" style={{width:"100%"}}/>
+              <img src="https://www.w3schools.com/w3images/chef.jpg" style={{width:"100%"}}/>
+              <img src="https://www.w3schools.com/w3images/wedding.jpg" style={{width:"100%"}}/>
+              <img src="https://www.w3schools.com/w3images/p6.jpg" style={{width:"100%"}}/>
+            </div>
+          </div>*/}
+        </div>
+        
+        </>
+      )
     }
 
-    function outUserAgent() {
-      let tooltip = document.getElementById("userAgentTooltip");
-      tooltip.innerHTML = "Нажми для копирования";
-    }
+    function DeviceInfo() {
+      const { userAgent, platform } = navigator;
+      console.log(navigator);    
+      console.log(userAgent);
+    
+      function userAgentClick() {
+        navigator.clipboard.writeText(userAgent).then(function() {
+              console.log('Скопировано в буфер обмена успешно!');
+            }, function(err) {
+              console.error('Невозможно скопировать текст: ', err);
+            });
+            console.log(userAgent)
+        
+        let tooltip = document.getElementById("userAgentTooltip");
+        tooltip.innerHTML = "Скопировано";
+      }
 
-    return (
-      <>
-      <div className="w3-padding-32 w3-content w3-opacity" id="deviceinfo">
-        <p>
-          Вход выполнен {isMobile ? 'с мобильного устройства.': 'со стационарного компьютера.'}
-          {uaparser.device.vendor ? <br/> :''}
-          {uaparser.device.vendor ? 'Производитель: ' + uaparser.device.vendor + '.':''}
-          {uaparser.device.model ? <br/> :''}
-          {uaparser.device.model ? 'Модель: ' + uaparser.device.model + '.':''}<br/>
-          
-          Операционная система: {uaparser.os.name + ', ' + uaparser.os.version}.<br/>
-          {'Браузер: ' + uaparser.browser.name + ', ' + uaparser.browser.major}
-        </p>
-        <div className="w3-tooltip">
-          <div className="cbk-tooltip">
-            <div onClick={userAgentClick} onMouseOut={outUserAgent}>
-              {userAgent + ' '}
-              <span className="cbk-tooltiptext" id="userAgentTooltip">Нажми для копирования</span>
-              <span className="w3-text"><i className="fa fa-clipboard" aria-hidden="true"></i></span>
+      function outUserAgent() {
+        let tooltip = document.getElementById("userAgentTooltip");
+        tooltip.innerHTML = "Нажми для копирования";
+      }
+
+      return (
+        <>
+        <div className="w3-padding-32 w3-content w3-opacity" id="deviceinfo">
+          <p>
+            Вход выполнен {isMobile ? 'с мобильного устройства.': 'со стационарного компьютера.'}
+            {uaparser.device.vendor ? <br/> :''}
+            {uaparser.device.vendor ? 'Производитель: ' + uaparser.device.vendor + '.':''}
+            {uaparser.device.model ? <br/> :''}
+            {uaparser.device.model ? 'Модель: ' + uaparser.device.model + '.':''}<br/>
+            
+            Операционная система: {uaparser.os.name + ', ' + uaparser.os.version}.<br/>
+            {'Браузер: ' + uaparser.browser.name + ', ' + uaparser.browser.major}
+          </p>
+          <div className="w3-tooltip">
+            <div className="cbk-tooltip">
+              <div onClick={userAgentClick} onMouseOut={outUserAgent}>
+                {userAgent + ' '}
+                <span className="cbk-tooltiptext" id="userAgentTooltip">Нажми для копирования</span>
+                <span className="w3-text"><i className="fa fa-clipboard" aria-hidden="true"></i></span>
+              </div>
             </div>
           </div>
+
+
+          
+          {/*<div className="w3-row-padding" style={{margin:"0 -16px"}}>
+            <div className="w3-half">
+              <img src="https://www.w3schools.com/w3images/wedding.jpg" style={{width:"100%"}}/>
+              <img src="https://www.w3schools.com/w3images/rocks.jpg" style={{width:"100%"}}/>
+              <img src="https://www.w3schools.com/w3images/sailboat.jpg" style={{width:"100%"}}/>
+            </div>
+
+            <div className="w3-half">
+              <img src="https://www.w3schools.com/w3images/underwater.jpg" style={{width:"100%"}}/>
+              <img src="https://www.w3schools.com/w3images/chef.jpg" style={{width:"100%"}}/>
+              <img src="https://www.w3schools.com/w3images/wedding.jpg" style={{width:"100%"}}/>
+              <img src="https://www.w3schools.com/w3images/p6.jpg" style={{width:"100%"}}/>
+            </div>
+          </div>*/}
         </div>
-
-
         
-        {/*<div className="w3-row-padding" style={{margin:"0 -16px"}}>
-          <div className="w3-half">
-            <img src="https://www.w3schools.com/w3images/wedding.jpg" style={{width:"100%"}}/>
-            <img src="https://www.w3schools.com/w3images/rocks.jpg" style={{width:"100%"}}/>
-            <img src="https://www.w3schools.com/w3images/sailboat.jpg" style={{width:"100%"}}/>
-          </div>
+        </>
+      );
+    }
 
-          <div className="w3-half">
-            <img src="https://www.w3schools.com/w3images/underwater.jpg" style={{width:"100%"}}/>
-            <img src="https://www.w3schools.com/w3images/chef.jpg" style={{width:"100%"}}/>
-            <img src="https://www.w3schools.com/w3images/wedding.jpg" style={{width:"100%"}}/>
-            <img src="https://www.w3schools.com/w3images/p6.jpg" style={{width:"100%"}}/>
-          </div>
-        </div>*/}
-      </div>
-      
+    const container = document.getElementById('Container');
+    const root = ReactDOM.createRoot(container);
+    root.render(
+      <>
+        <Header />
+        <Objectives />
+        <HowToInstall />
+        <Scripts />
+        <DeviceInfo />
       </>
     );
-  }
-
-  const container = document.getElementById('Container');
-  const root = ReactDOM.createRoot(container);
-  root.render(
-    <>
-      <Header />
-      <Objectives />
-      <HowToInstall />
-      <Scripts />
-      <DeviceInfo />
-    </>
-  );
-</script>
+  </script>
 
 </body>
 </html>
