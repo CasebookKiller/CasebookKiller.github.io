@@ -72,8 +72,8 @@ function openRequestDB(name, version) {
 }
 
 // Обновление структуры базы данных
-function iDBUpgradeNeeded(revent) {
-  console.log('request: ', request.target);
+function iDBUpgradeNeeded(event) {
+  console.log('request: ', event.target);
   console.log('event: ', event);
   console.log('event: ', event);
   // версия существующей базы данных меньше 2 (или база данных не существует)
