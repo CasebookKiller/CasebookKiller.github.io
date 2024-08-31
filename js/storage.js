@@ -63,8 +63,13 @@ function cbGetCasesDB(db) {
 
 // Обратный вызов при получении базы данных
 function cbGetBinary(result) {
-  console.log(result);
-  console.log('binary: ', result.find(i => i.cbk === 1).database);
+  console.log(result)
+
+  if (result.length !== 0) {
+    console.log('binary: ', result.find(i => i.cbk === 1).database);
+  } else {
+    console.log('база не получена')
+  }
 }
 
 // Запрос на открытие базы данных
