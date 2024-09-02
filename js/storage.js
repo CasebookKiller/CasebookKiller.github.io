@@ -45,6 +45,7 @@ initSqlJs(config).then(function(SQL){
   binarydb = SQLitedb.export();
   getCasesDb(cbGetBinary);
   if (binarydb === undefined) saveCasesDb(binarydb, cbSaveCasesDB);
+  top.postMessage("message from iframe", 'https://kad.arbitr.ru');
 });
 
 /**
