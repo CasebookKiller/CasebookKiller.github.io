@@ -43,8 +43,8 @@ initSqlJs(config).then(function(SQL){
     console.log('Here is a row: ' + JSON.stringify(row));
   }
   binarydb = SQLitedb.export();
-  //saveCasesDb(binarydb, cbSaveCasesDB);
-  getCasesDb(cbGetBinary);
+  saveCasesDb(binarydb, cbSaveCasesDB);
+  //getCasesDb(cbGetBinary);
 });
 
 /**
