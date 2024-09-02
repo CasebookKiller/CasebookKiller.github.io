@@ -43,8 +43,8 @@ initSqlJs(config).then(function(SQL){
     console.log('Here is a row: ' + JSON.stringify(row));
   }
   binarydb = SQLitedb.export();
-  saveCasesDb(binarydb, cbSaveCasesDB);
-  //getCasesDb(cbGetBinary);
+  getCasesDb(cbGetBinary);
+  if (binarydb === undefined) saveCasesDb(binarydb, cbSaveCasesDB);
 });
 
 /**
@@ -67,8 +67,9 @@ function cbGetBinary(result) {
 
   if (result.length !== 0) {
     console.log('binary: ', result.find(i => i.cbk === 1).database);
+
   } else {
-    console.log('база не получена')
+    console.log('база не получена');
   }
 }
 
