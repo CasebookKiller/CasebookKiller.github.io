@@ -1,7 +1,7 @@
 window.addEventListener('message', function(msg) {
   console.log('msg:',msg);
-  
-  let obj = JSON.parse(msg);
+
+  let obj = JSON.parse(msg.data);
   console.log('obj:',obj);
   
   console.log('сообщение поступило в storage.html:', msg.data); //Сообщение отправленно в storage.html
