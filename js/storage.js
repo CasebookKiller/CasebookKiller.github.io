@@ -46,16 +46,8 @@ function createTestDB(SQLitedb) {
   SQLitedb.run("INSERT INTO test VALUES (?,?), (?,?)", [1,111,2,222]);
 }
 
-// Функция `initsqls` глобально предоставляется всеми основными дистрибутивами, если они загружены в браузер.
-// Мы должны указать эту функцию locateFile, если мы загружаем wasm-файл из любого другого места, кроме папки текущей html-страницы.
-let iDB, SQLitedb, binarydb;
-initSqlJs(config).then(function(SQL){
-  // Создание базы данных
-  SQLitedb = new SQL.Database();
-
-  // Создание тестовой таблицы
-  createTestDB(SQLitedb);
-
+// Запрос к тестовой таблице
+function requestTestDB(SQLitedb) {
   // Подготовка запроса
   const stmt = SQLitedb.prepare("SELECT * FROM test WHERE col1 BETWEEN $start AND $end");
   stmt.getAsObject({$start:1, $end:1}); // {col1:1, col2:111}
@@ -66,6 +58,20 @@ initSqlJs(config).then(function(SQL){
     const row = stmt.getAsObject();
     console.log('Here is a row: ' + JSON.stringify(row));
   }
+
+}
+
+// Функция `initsqls` глобально предоставляется всеми основными дистрибутивами, если они загружены в браузер.
+// Мы должны указать эту функцию locateFile, если мы загружаем wasm-файл из любого другого места, кроме папки текущей html-страницы.
+let iDB, SQLitedb, binarydb;
+initSqlJs(config).then(function(SQL){
+  // Создание базы данных
+  SQLitedb = new SQL.Database();
+
+  // Создание тестовой таблицы
+  createTestDB(SQLitedb);
+  // Запрос к тестовой таблице
+  requestTestDB(SQLitedb);
   
   binarydb = SQLitedb.export();
   getCasesDb(cbGetBinary);
