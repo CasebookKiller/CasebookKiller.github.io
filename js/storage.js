@@ -1,7 +1,7 @@
 window.addEventListener('message', function(msg) {
   if (msg.origin === 'https://kad.arbitr.ru') {
     let obj = JSON.parse(msg.data);
-    if (obj.key === 'storage') {
+    if (obj.key === '-storage') {
       console.log('msg:',msg);
     
       console.log('obj:',obj);
