@@ -1,12 +1,14 @@
 window.addEventListener('message', function(msg) {
-  console.log('msg:',msg);
+  if (msg.origin === 'https://kad.arbitr.ru') {
+    console.log('msg:',msg);
 
-  let obj = JSON.parse(msg.data);
-  console.log('obj:',obj);
+    let obj = JSON.parse(msg.data);
+    console.log('obj:',obj);
   
-  console.log('сообщение поступило в storage.html:', msg.data); //Сообщение отправленно в storage.html
-  // читать здесь
-  // https://ru.stackoverflow.com/questions/1275278/%D0%9A%D0%B0%D0%BA-%D0%BE%D1%82%D0%BF%D1%80%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-%D1%81%D0%BE%D0%BE%D0%B1%D1%89%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2-iframe-%D0%B8-%D0%BE%D0%B1%D1%80%D0%B0%D1%82%D0%BD%D0%BE
+    console.log('сообщение поступило в storage.html:', msg.data); //Сообщение отправленно в storage.html
+    // читать здесь
+    // https://ru.stackoverflow.com/questions/1275278/%D0%9A%D0%B0%D0%BA-%D0%BE%D1%82%D0%BF%D1%80%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-%D1%81%D0%BE%D0%BE%D0%B1%D1%89%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2-iframe-%D0%B8-%D0%BE%D0%B1%D1%80%D0%B0%D1%82%D0%BD%D0%BE
+  }
 },false);
 
 
@@ -33,16 +35,23 @@ config = {
   locateFile: filename => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.11.0/${filename}`
 }
 
+// Создание тестовой таблицы
+function createTestDB(SQLitedb) {
+  // Запрос на создание таблицы
+  SQLitedb.run("CREATE TABLE test (col1, col2);");
+  // Запрос на создание двух записей: (1,111) и (2,222)
+  SQLitedb.run("INSERT INTO test VALUES (?,?), (?,?)", [1,111,2,222]);
+}
+
 // Функция `initsqls` глобально предоставляется всеми основными дистрибутивами, если они загружены в браузер.
 // Мы должны указать эту функцию locateFile, если мы загружаем wasm-файл из любого другого места, кроме папки текущей html-страницы.
 let iDB, SQLitedb, binarydb;
 initSqlJs(config).then(function(SQL){
   // Создание базы данных
   SQLitedb = new SQL.Database();
-  // Запрос на создание таблицы
-  SQLitedb.run("CREATE TABLE test (col1, col2);");
-  // Запрос на создание двух записей: (1,111) и (2,222)
-  SQLitedb.run("INSERT INTO test VALUES (?,?), (?,?)", [1,111,2,222]);
+
+  // Создание тестовой таблицы
+  createTestDB(SQLitedb);
 
   // Подготовка запроса
   const stmt = SQLitedb.prepare("SELECT * FROM test WHERE col1 BETWEEN $start AND $end");
@@ -54,6 +63,7 @@ initSqlJs(config).then(function(SQL){
     const row = stmt.getAsObject();
     console.log('Here is a row: ' + JSON.stringify(row));
   }
+  
   binarydb = SQLitedb.export();
   getCasesDb(cbGetBinary);
   console.log('проверка binarydb:', binarydb);
