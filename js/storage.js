@@ -17,9 +17,11 @@ function iniFrame() {
     self = true;
   }
   
+  console.log('location: ', location);
+  console.log('self: ', self);
+
   return location && self;
 }
-
 
 /**
  * Проверка IndexedDB
@@ -65,6 +67,8 @@ window.addEventListener('message', function(msg) {
       // https://ru.stackoverflow.com/questions/1275278/%D0%9A%D0%B0%D0%BA-%D0%BE%D1%82%D0%BF%D1%80%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-%D1%81%D0%BE%D0%BE%D0%B1%D1%89%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2-iframe-%D0%B8-%D0%BE%D0%B1%D1%80%D0%B0%D1%82%D0%BD%D0%BE
     }
     
+  } else if (msg.origin === 'https://casebookkiller.github.io') {
+    console.log(msg);
   }
 },false);
 
@@ -126,7 +130,7 @@ function createHistoryDB(SQLitedb) {
 // Функция `initsqls` глобально предоставляется всеми основными дистрибутивами, если они загружены в браузер.
 // Мы должны указать эту функцию locateFile, если мы загружаем wasm-файл из любого другого места, кроме папки текущей html-страницы.
 let iDB, SQLitedb, binarydb;
-initSqlJs(config).then(function(SQL){
+initSqlJs(config).then(function(SQL) {
   // Создание базы данных
   SQLitedb = new SQL.Database();
 
@@ -148,9 +152,10 @@ initSqlJs(config).then(function(SQL){
     try { origin = top?.origin } catch (err) { origin = null }
 
     console.log('origin: ', origin);
+    
     if (origin !== null) {
-        console.log('top.origin: ', origin);
-        if (origin === 'https://kad.arbitr.ru') top.postMessage("сообщение из iframe", 'https://kad.arbitr.ru');
+      console.log('top.origin: ', origin);
+      if (origin === 'https://kad.arbitr.ru') top.postMessage("сообщение из iframe", 'https://kad.arbitr.ru');
     } else {
       console.log('Окно открыто с тем же origin');
     }
