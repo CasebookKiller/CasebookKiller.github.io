@@ -63,7 +63,7 @@ window.addEventListener('message', function(msg) {
       console.log(str);
     }
     
-    if (obj?.key === 'storage') {
+    if (obj.key === 'storage') {
       console.log('msg:',msg);
     
       console.log('obj:',obj);
