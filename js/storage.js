@@ -53,15 +53,7 @@ if (!window.indexedDB) {
  */
 window.addEventListener('message', function(msg) {
   if (msg.origin === 'https://kad.arbitr.ru') {
-    let obj;
-    let str;
-
-    try {
-      obj = JSON.parse(msg.data);
-    } catch (err) {
-      str = msg.data;
-      console.log(str);
-    }
+    let obj = JSON.parse(msg.data);
     
     if (obj.key === 'storage') {
       console.log('msg:',msg);
