@@ -80,6 +80,15 @@ let config = {
   locateFile: filename => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.11.0/${filename}`
 }
 
+if (document.cbk === undefined) {
+  document.cbk = new Object();
+
+  let cbk = document.cbk;
+
+  cbk.storage = 'isloaded';
+  
+}
+
 // Создание тестовой таблицы
 function createTestDB(SQLitedb) {
   // Запрос на создание таблицы
