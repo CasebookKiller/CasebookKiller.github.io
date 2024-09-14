@@ -17,8 +17,13 @@
   <script src="https://unpkg.com/super-react-gist/umd/super-react-gist.min.js"></script>
   <script src="./js/sql-wasm.js"></script>
   <script src="./js/uaparser.js"></script>
+  <script>
+    function storageOnload() {
+      top.postMessage('yahoo','https://kad.arbitr.ru');
+    }
+  </script>
 </head>
-<body>
+<body onload="storageOnload()">
   <div>
     IFrame
     <button id="trigger">Trigger postMessage</button>
