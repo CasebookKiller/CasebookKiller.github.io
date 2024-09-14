@@ -1,21 +1,29 @@
-window.addEventListener('message', function(msg) {
-  if (msg.origin === 'https://kad.arbitr.ru') {
-    let obj = JSON.parse(msg.data);
-    if (obj.key === 'storage') {
-      console.log('msg:',msg);
-    
-      console.log('obj:',obj);
-    
-      console.log('сообщение поступило в storage.html:', msg.data); //Сообщение отправленно в storage.html
-      // читать здесь
-      // https://ru.stackoverflow.com/questions/1275278/%D0%9A%D0%B0%D0%BA-%D0%BE%D1%82%D0%BF%D1%80%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-%D1%81%D0%BE%D0%BE%D0%B1%D1%89%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2-iframe-%D0%B8-%D0%BE%D0%B1%D1%80%D0%B0%D1%82%D0%BD%D0%BE
-    }
-    
+/**
+ * Вспомогательные функции
+ */
+
+/**
+ * Проверка запуска окна в iframe
+ * @returns boolean
+ */
+function iniFrame() {
+  let location = false;
+  if (window.location !== window.parent.location) {
+    location = true;
+  } 
+
+  let self = false;
+  if (window.self !== window.top) {
+    self = true;
   }
-},false);
+  
+  return location && self;
+}
 
 
-// Проверка IndexedDB
+/**
+ * Проверка IndexedDB
+ */ 
 window.indexedDB =
   window.indexedDB ||
   window.mozIndexedDB ||
@@ -34,7 +42,45 @@ if (!window.indexedDB) {
   );
 }
 
-config = {
+/**
+ * -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+ * =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+ * -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+ */
+
+/**
+ * Прослушиватель для сообщений
+ */
+window.addEventListener('message', function(msg) {
+  if (msg.origin === 'https://kad.arbitr.ru') {
+    let obj;
+    let str;
+
+    try {
+      obj = JSON.parse(msg.data);
+    } catch (err) {
+      str = msg.data;
+      console.log(str);
+    }
+    
+    if (obj?.key === 'storage') {
+      console.log('msg:',msg);
+    
+      console.log('obj:',obj);
+    
+      console.log('сообщение поступило в storage.html:', msg.data); //Сообщение отправленно в storage.html
+      // читать здесь
+      // https://ru.stackoverflow.com/questions/1275278/%D0%9A%D0%B0%D0%BA-%D0%BE%D1%82%D0%BF%D1%80%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-%D1%81%D0%BE%D0%BE%D0%B1%D1%89%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2-iframe-%D0%B8-%D0%BE%D0%B1%D1%80%D0%B0%D1%82%D0%BD%D0%BE
+    }
+    
+  }
+},false);
+
+
+/**
+ * Настройка загрузки wasm
+ */
+let config = {
   locateFile: filename => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.11.0/${filename}`
 }
 
@@ -61,6 +107,30 @@ function requestTestDB(SQLitedb) {
 
 }
 
+// Создание таблицы c историей запросов
+function createHistoryDB(SQLitedb) {
+  // Запрос на создание таблицы
+  // CREATE TABLE IF NOT EXISTS TblUsers (UserId INTEGER PRIMARY KEY, UserName varchar(100), ContactName varchar(100),Password varchar(100));
+  SQLitedb.run("CREATE TABLE IF NOT EXISTS history (id PRIMARY KEY, Page, Count, Courts, DateFrom, DateTo, Sides, Judges, CaseNumbers, WithVKSInstances);");
+  /*
+    {
+      "Page": 1,
+      "Count": 25,
+      "Courts": [],
+      "DateFrom": null,
+      "DateTo": null,
+      "Sides": [],
+      "Judges": [],
+      "CaseNumbers": [
+        "А40-172055/2013"
+      ],
+    "WithVKSInstances": false
+  }
+  */
+  // Запрос на создание двух записей: (1,111) и (2,222)
+  //SQLitedb.run("INSERT INTO test VALUES (?,?), (?,?)", [1,111,2,222]);
+}
+
 // Функция `initsqls` глобально предоставляется всеми основными дистрибутивами, если они загружены в браузер.
 // Мы должны указать эту функцию locateFile, если мы загружаем wasm-файл из любого другого места, кроме папки текущей html-страницы.
 let iDB, SQLitedb, binarydb;
@@ -75,9 +145,24 @@ initSqlJs(config).then(function(SQL){
   
   binarydb = SQLitedb.export();
   getCasesDb(cbGetBinary);
+
   console.log('проверка binarydb:', binarydb);
   if (binarydb === undefined) saveCasesDb(binarydb, cbSaveCasesDB);
-  top.postMessage("message from iframe", 'https://kad.arbitr.ru');
+  
+  if (iniFrame()) {
+    // Если окно запущено в iframe
+    let origin;
+
+    try { origin = top?.origin } catch (err) { origin = null }
+
+    console.log('origin: ', origin);
+    if (origin !== null) {
+        console.log('top.origin: ', origin);
+        if (origin === 'https://kad.arbitr.ru') top.postMessage("сообщение из iframe", 'https://kad.arbitr.ru');
+    } else {
+      console.log('Окно открыто с тем же origin');
+    }
+  }
 });
 
 /**
