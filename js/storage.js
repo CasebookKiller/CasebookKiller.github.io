@@ -75,19 +75,15 @@ window.addEventListener('message', function(msg) {
       //Сообщение отправленно в storage.html
       if (typeof(info) === 'object') {
         console.log('%cв storage.html поступил объект: %o','color:#FB74BD;', info);
-        if (document.cbk.log !== undefined) {
-          let log = document.cbk.log;
-          log('Page: ',info.Page);
-          log('Count: ',info.Count);
-          log('Courts: ',info.Courts);
-          log('DateFrom: ',info.DateFrom);
-          log('DateTo: ',info.DateTo);
-          log('Sides: ',info.Sides);
-          log('Judges: ',info.Judges);
-          log('CaseNumbers: ',info.CaseNumbers);
-          log('WithVKSInstances: ',info.WithVKSInstances);
-        }
-        console.log('%c: %o','color:#FB74BD;', info);
+        console.log('%c' + 'Page: %o','color:#FB74BD;', info.Page);
+        console.log('%c' + 'Count: %o','color:#FB74BD;', info.Count);
+        console.log('%c' + 'Courts: %o','color:#FB74BD;',info.Courts);
+        console.log('%c' + 'DateFrom: %o','color:#FB74BD;',info.DateFrom);
+        console.log('%c' + 'DateTo: %o','color:#FB74BD;',info.DateTo);
+        console.log('%c' + 'Sides: %o','color:#FB74BD;',info.Sides);
+        console.log('%c' + 'Judges: %o','color:#FB74BD;',info.Judges);
+        console.log('%c' + 'CaseNumbers: %o','color:#FB74BD;',info.CaseNumbers);
+        console.log('%c' + 'WithVKSInstances: %o','color:#FB74BD;',info.WithVKSInstances);
       } else {
         console.log('%cв storage.html поступило сообщение: ','color:#FB74BD;', info);
       }
