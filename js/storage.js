@@ -64,7 +64,7 @@ window.addEventListener('message', function(msg) {
     }
 
     if (obj.key === 'storage') {
-      console.log('msg:',msg);
+      //console.log('msg:',msg);
       //console.log('obj:',obj);
       let info = obj.info !== undefined ? obj.info : '';
       try {
@@ -75,11 +75,24 @@ window.addEventListener('message', function(msg) {
       //Сообщение отправленно в storage.html
       if (typeof(info) === 'object') {
         console.log('%cв storage.html поступил объект: %o','color:#FB74BD;', info);
+        if (document.cbk.log !== undefined) {
+          let log = document.cbk.log;
+          log('Page: ',info.Page);
+          log('Count: ',info.Count);
+          log('Courts: ',info.Courts);
+          log('DateFrom: ',info.DateFrom);
+          log('DateTo: ',info.DateTo);
+          log('Sides: ',info.Sides);
+          log('Judges: ',info.Judges);
+          log('CaseNumbers: ',info.CaseNumbers);
+          log('WithVKSInstances: ',info.WithVKSInstances);
+        }
+        console.log('%c: %o','color:#FB74BD;', info);
       } else {
         console.log('%cв storage.html поступило сообщение: ','color:#FB74BD;', info);
       }
       
-            // читать здесь
+      // читать здесь
       // https://ru.stackoverflow.com/questions/1275278/%D0%9A%D0%B0%D0%BA-%D0%BE%D1%82%D0%BF%D1%80%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-%D1%81%D0%BE%D0%BE%D0%B1%D1%89%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2-iframe-%D0%B8-%D0%BE%D0%B1%D1%80%D0%B0%D1%82%D0%BD%D0%BE
     }
     
