@@ -22,29 +22,30 @@
 // @run-at      document-start
 // ==/UserScript==
 
+
 (function() {
   'use strict';
   if (location.hostname === 'kad.arbitr.ru') {
     // Расширение функциональности document
-    let DOC = document;
+ 
+    if (document.cbk === undefined) {
+      document.cbk = new Object();
 
-    if (DOC.cbk === undefined) {
-      DOC.cbk = new Object();
+      let cbk = document.cbk;
 
-      let cbk = DOC.cbk;
-
-      // test
-      if (cbk.log === undefined) {
-        cbk.log = () => {
-          console.log('test');
+      if (document.cbk.log === undefined) {
+        document.cbk.log = function(msg, obj) {
+          if (obj !== undefined) {
+            console.log("%c" + msg + "%o", "color:cyan;", obj);
+          } else {
+            console.log("%c" + msg, "color:cyan;");
+          }
         }
-      };
-
-      /**
-       * Добавление iframe storage
-       */
+      }
+      
+      // Добавление iframe storage
       if (cbk.addIFrameStorage === undefined) {
-        cbk.messageToiFrameStorage = function (src) {
+        cbk.addIFrameStorage = function (src) {
           src = src === undefined ? 'https://casebookkiller.github.io/storage.html' : src;
           let ifrm = document.createElement("iframe");
           ifrm.setAttribute("id","ifrmstorage");
@@ -55,9 +56,8 @@
         }
       }
 
-      /**
-       * Отправка сообщения в iFrame из окна с kad.arbitr.ru
-       */
+      
+      // Отправка сообщения в iFrame из окна с kad.arbitr.ru
       if (cbk.messageToiFrame === undefined) {
         cbk.messageToiFrame = function (msg, path) {
           path = path === undefined ? '*': path;
@@ -70,9 +70,9 @@
         };
       }
 
-      /**
-       * Отправка json  в iFrame из окна с kad.arbitr.ru
-       */
+      
+      // Отправка json  в iFrame из окна с kad.arbitr.ru
+      
       if (cbk.objToiFrame === undefined) {
         cbk.objToiFrame = function (obj, path) {
           path = path === undefined ? '*': path;
@@ -84,8 +84,29 @@
           }
         }
       }
-    }
 
+      if (cbk.receiveMessage === undefined) {
+        cbk.receiveMessage = function (event) {
+          if (event.origin === "https://casebookkiller.github.io"
+              && event.data === "message from iframe"
+              && event.data.length === 19
+              && typeof event.data === 'string') {
+
+            console.log("event.origin: ", event.origin);
+            console.log("event.data: ", event.data);
+            console.log("event.source: ", event.source);
+
+            console.log(`
+                       Message from iFrame:
+                       event.origin: ${event.origin}
+                       event.data: ${event.data}
+                       // open also console to inspect objects
+            `);
+          }
+        }
+      }
+    }
+ 
     // Подключение SQL.js
     GM_xmlhttpRequest({
       method : "GET",
@@ -135,187 +156,348 @@
     }
 
 
-  /**
-   * ===============================================
-   *
-   * Переопределение глобальных функий kad.arbitr.ru
-   *
-   * ===============================================
-   */
+    /**
+     * ===============================================
+     *
+     * Переопределение глобальных функий kad.arbitr.ru
+     *
+     * ===============================================
+     */
 
+    // Переопределение функции doSearchRequest
+    function doSearchRequest(page){
+	  checkPravocaptchaCallback = function (token) {
+	    setColumnHeight();
 
-  // Переопределение функции returnRequestInfo
-  function returnRequestInfo(page, returnObject){
-	let info = {};
+	    let info = returnRequestInfo(page);
 
-	info.Page = parseInt(page, 10) || 1;
-	info.Count = 25;
+        // cbk
+        let msg = "info: ";
+        console.log('%c'+msg,'color:lightgreen;',JSON.parse(info));
+        document.cbk.info = info;
+        let obj = {
+          key:'storage',
+          id:'01',
+          info: info
+        };
+        document.cbk.objToiFrame(obj,'https://casebookkiller.github.io/storage.html');
 
-	let groupByCategory;
-	let $active = $('#filter-cases li.active').eq(0);
-	if($active){
-	  if($active.hasClass('administrative')){
-		groupByCategory = 'A';
-      }
-      if($active.hasClass('bankruptcy')){
-        groupByCategory = 'B';
+        /*
+        {
+          "Page": 1,
+          "Count": 25,
+          "Courts": [
+            "MSK"
+          ],
+          "DateFrom": "2012-01-01T00:00:00",
+          "DateTo": "2013-12-31T23:59:59",
+          "Sides": [
+            {
+              "Name": "МАСТЕР БАНК",
+              "Type": -1,
+              "ExactMatch": false
+            }
+          ],
+          "Judges": [
+            {
+              "JudgeId": "50f923cd-9672-4a91-8285-b94cfbede836",
+              "Type": -1
+            }
+          ],
+          "CaseNumbers": [
+            "а40-172055/2013"
+          ],
+          "WithVKSInstances": false
+        }
+      */
+        // cbk
+
+        if (!info) {
+	      return false;
+	    }
+
+	    loading($('#main-column2 .b-case-loading .loading'), 12);
+
+	    globals.filterRequest = $.ajax({
+		  type:"post",
+		  cache : false,
+		  url: config.services.getInstances,
+		  //dataType: "json",
+		  data: info,
+		  contentType: "application/json",
+		  beforeSend: function (xhr) {
+		    xhr.setRequestHeader('x-date-format', 'iso');
+
+		    if (token) {
+			  xhr.setRequestHeader('RecaptchaToken', token);
+		    }
+		  },
+		  success: function (result) {
+		    let $cases,
+			    totalCount,
+			    $results = $('.b-results'),
+			    $noResults = $('.b-noResults', '#main-column2');
+
+		    /* Задача - http://jira.parcsis.org/browse/VS-11842
+		     * Решение - http://stackoverflow.com/questions/7267014/ie9-table-has-random-rows-which-are-offset-at-random-columns
+		     */
+		    result = result && $.trim(result).replace(/>[ \t\r\n\v\f]*</g, '><');
+
+		    $cases = $('#b-cases');
+
+		    $cases.html(result);
+
+	        totalCount = parseInt($('#documentsTotalCount').val(), 10);
+
+		    if (totalCount) {
+			  $('#totalCount').text(totalCount);
+
+			  $noResults.addClass('g-hidden');
+
+              reDrawPages({
+                linesPerPage: parseInt($('#documentsPageSize').val(), 10),
+                page:  parseInt($('#documentsPage').val(), 10),
+                pagesCount:  parseInt($('#documentsPagesCount').val(), 10),
+                totalCount: totalCount
+              });
+
+              $results
+                .removeClass('g-hidden')
+                .find('#table')
+                .scrollTop(0);
+
+              if ($('.more', '#b-cases tbody tr').length) {
+                showHideEntities($('.b-button', '#b-cases tbody tr'));
+              }
+
+              $('.b-rollover').remove();
+
+              $('#b-cases span.js-rollover').each(function() {
+                let $this = $(this),
+                  cell = $this.closest('td'),
+                  cellIndex = cell.index(),
+                  row = cell.closest('tr'),
+                  html = $('.js-rolloverHtml', this).html();
+
+                $this.attachRollover({
+                  vertical: cellIndex >= 2,
+                  html: html
+                });
+              });
+
+              typeSwitcher($('.b-type-switcher'));
+
+              if ($('#b-footer-pages ul li').length == 4) {
+                $('#b-footer-pages ul').hide();
+              } else {
+                $('#b-footer-pages ul').show();
+              }
+
+              $('#contentHeader .h2').hide();
+              $('.b-found-total').text('Найдено '+ totalCount + ' дел').show();
+              $('.b-feedback').animate({'opacity':'0'}, 1000);
+              $('.b-feedback').hide();
+
+              try {
+                if (ga) {
+                  ga('send', 'pageview', '/Kad/Search');
+                }
+              } catch(err) {}
+
+              //if (yaCounter13493410) {
+              //    yaCounter13493410.hit('/Kad/Search');
+              //}
+            } else {
+              let court = $('input.js-input', '#caseCourt').valEx(),
+                  caseNumber = $('div.tag input', '#sug-cases').eq(0).valEx();
+
+              $results.addClass('g-hidden');
+
+              $noResults.removeClass('g-hidden');
+
+              new NoResults({
+                $court: $('.b-combobox', '#caseCourt').clone(),
+                caseNumber: caseNumber,
+                container: $noResults,
+                request: info
+              });
+
+              reDrawPages({
+                totalCount: 0
+              });
+
+              $('#contentHeader .h2').show();
+              $('.b-found-total').hide();
+              $('.b-feedback').show();
+              $('.b-feedback').animate({'opacity':'1'}, 1000);
+            }
+          },
+          complete: function() {
+            highlightFound({filters:$('#sug-participants textarea')});
+            globals.filterRequest = null;
+            hideLoading();
+            stateOfButton();
+            setColumnHeight();
+            setWidthColumn();
+            //$('#table').scrollTo('0%',300);
+          },
+          error: function (xhr) {
+            ajaxSetupError(xhr);
+
+            $('.b-case-blank').show();
+          }
+        }); //close $.ajax
+      };
+
+	  Common.executePravocaptcha(checkPravocaptchaCallback);
+    }
+
+    // Переопределение функции returnRequestInfo
+    function returnRequestInfo(page, returnObject){
+	  let info = {};
+
+	  info.Page = parseInt(page, 10) || 1;
+	  info.Count = 25;
+
+	  let groupByCategory;
+	  let $active = $('#filter-cases li.active').eq(0);
+	  if($active){
+	    if($active.hasClass('administrative')){
+		  groupByCategory = 'A';
+        }
+        if($active.hasClass('bankruptcy')){
+          groupByCategory = 'B';
+	    }
+	    if($active.hasClass('civil')){
+          groupByCategory = 'G';
+	    }
 	  }
-	  if($active.hasClass('civil')){
-        groupByCategory = 'G';
+
+	  if (groupByCategory) {
+	    info.CaseType = groupByCategory;
 	  }
-	}
 
-	if (groupByCategory) {
-	  info.CaseType = groupByCategory;
-	}
-
-	let $courts = $('#caseCourt .js-select'),
+	  let $courts = $('#caseCourt .js-select'),
 	    courtsArray = [];
 
-	$.each($courts, function() {
-	  let $select = $(this),
-		  $options = $select.children('option'),
-		  $input = $select.parent().find('.js-input'),
-		  inputVal = $input.val();
+	  $.each($courts, function() {
+	    let $select = $(this),
+	        $options = $select.children('option'),
+		    $input = $select.parent().find('.js-input'),
+		    inputVal = $input.val();
 
-	  if (inputVal) {
-		$.each($options, function() {
-		  let $option = $(this);
+	    if (inputVal) {
+		  $.each($options, function() {
+		    let $option = $(this);
 
-		  if ($option.text() == inputVal) {
-			courtsArray.push($option.val());
-		  }
-		});
-	  }
-	});
-
-	/*if (globals.isVasEnteredInKad) {
-	  if (courtsArray) {
-	    for (let i = 0, max = courtsArray.length; i < max; i++) {
-		  if (globals.isVasEnteredInKad && (courtsArray[i] !== 'VAS')) {
-			delete globals.isVasEnteredInKad;
-		  }
-		}
-	  } else {
-		delete globals.isVasEnteredInKad;
-	  }
-	}*/
-
-	info.Courts = courtsArray;
-
-	let dates = $('#selected-dates').val() || '';
-	dates = dates.replace(/(\d{1,2})\.(\d{1,2})\.(\d{2,4})/g, '$3.$2.$1').match(/\d{2,4}\.\d{1,2}\.\d{1,2}/g) || ['',''];
-	dates[0] = (dates[0] || '2000.01.01').split('.');
-	dates[1] = (dates[1] || '2030.01.01').split('.');
-    console.log('dates: ', dates);
-	//	info.DateFrom = Common.date.returnDotNetDate(
-	//		Common.date.returnDateUTC(dates[0][0],dates[0][1],dates[0][2])
-	//	);
-	//	info.DateTo = Common.date.returnDotNetDate(
-	//		Common.date.returnDateUTC(dates[1][0],dates[1][1],dates[1][2], 23, 59, 59)
-	//	);
-
-	dates = ($('#selected-dates').val() || '').split(' - ');
-
-	if (dates[0] && !checkDate(dates[0]) || dates[1] && !checkDate(dates[1])) {
-	  showPageMessage({
-		type: 'error',
-		title: 'Ошибка',
-		message: 'Введена неверная дата',
-		right: 20
+		    if ($option.text() == inputVal) {
+		      courtsArray.push($option.val());
+		    }
+		  });
+	    }
 	  });
 
-      return false;
-	}
+	  /*if (globals.isVasEnteredInKad) {
+	      if (courtsArray) {
+	        for (let i = 0, max = courtsArray.length; i < max; i++) {
+		      if (globals.isVasEnteredInKad && (courtsArray[i] !== 'VAS')) {
+			    delete globals.isVasEnteredInKad;
+		      }
+		    }
+	      } else {
+	  	    delete globals.isVasEnteredInKad;
+	      }
+	    }*/
 
-    if (dates[0]) {
-      info.DateFrom = dates[0].replace(/(\d{1,2})\.(\d{1,2})\.(\d{2,4})/g, '$3-$2-$1') + 'T00:00:00' || ['', '']; //'2000-01-01T00:00:00'
-	} else {
-	  info.DateFrom = null;
-	}
+	  info.Courts = courtsArray;
 
-	if (dates[1]) {
-	  info.DateTo = dates[1].replace(/(\d{1,2})\.(\d{1,2})\.(\d{2,4})/g, '$3-$2-$1') + 'T23:59:59' || ['', '']; //'2000-01-01T00:00:00'
-	} else {
-	  info.DateTo = null;
-	}
+	  let dates = $('#selected-dates').val() || '';
+	  dates = dates.replace(/(\d{1,2})\.(\d{1,2})\.(\d{2,4})/g, '$3.$2.$1').match(/\d{2,4}\.\d{1,2}\.\d{1,2}/g) || ['',''];
+	  dates[0] = (dates[0] || '2000.01.01').split('.');
+	  dates[1] = (dates[1] || '2030.01.01').split('.');
+      console.log('dates: ', dates);
+	  //	info.DateFrom = Common.date.returnDotNetDate(
+	  //		Common.date.returnDateUTC(dates[0][0],dates[0][1],dates[0][2])
+	  //	);
+	  //	info.DateTo = Common.date.returnDotNetDate(
+	  //		Common.date.returnDateUTC(dates[1][0],dates[1][1],dates[1][2], 23, 59, 59)
+	  //	);
 
-	let tags = 'Sides,Judges,CaseNumbers'.split(','); //названия тегов
-	let groups = 'sug-participants,sug-judges,sug-cases'.split(',');
+	  dates = ($('#selected-dates').val() || '').split(' - ');
 
-	for(j in tags){
-	  let tag = tags[j];
-	  info[tag] = [];
-	  let field;
-	  if ($('#' + groups[j]+' input[type=text]').length ) {
-	    field = $('#' + groups[j] + ' input[type=text]');
-	  } else {
-		field = $('#' + groups[j] + ' textarea');
+	  if (dates[0] && !checkDate(dates[0]) || dates[1] && !checkDate(dates[1])) {
+	    showPageMessage({
+	      type: 'error',
+		  title: 'Ошибка',
+		  message: 'Введена неверная дата',
+		  right: 20
+	    });
+
+        return false;
 	  }
-			field.each(function(){
-				let $currentField = $(this);
-				if(!$currentField.hasClass('g-ph')) {
-					if (tag == "Sides") {
-						info[tag].push({
-							Name: $currentField.valEx(),
-							Type: parseInt($currentField.closest('.tag').find('.b-type-switcher .selected input').val(), 10),
-							ExactMatch: $currentField.data('exactmatch') ? true : false
-						});
-					} else if (tag == 'Judges') {
-						let judgeId = $currentField.attr('id');
 
-						// Тип судьи не является критерием поиска
-						info[tag].push({
-							JudgeId: judgeId,
-							Type: -1 //$currentField.closest('.tag').find('.b-type-switcher .selected input').val() || 1
-						});
-					} else {
-						info[tag].push($currentField.valEx());
-					}
-				}
-			});
-		}
+      if (dates[0]) {
+        info.DateFrom = dates[0].replace(/(\d{1,2})\.(\d{1,2})\.(\d{2,4})/g, '$3-$2-$1') + 'T00:00:00' || ['', '']; //'2000-01-01T00:00:00'
+	  } else {
+	    info.DateFrom = null;
+	  }
 
-		info.WithVKSInstances = $('.vksCheckClass').attr('checked');
+	  if (dates[1]) {
+	    info.DateTo = dates[1].replace(/(\d{1,2})\.(\d{1,2})\.(\d{2,4})/g, '$3-$2-$1') + 'T23:59:59' || ['', '']; //'2000-01-01T00:00:00'
+	  } else {
+	    info.DateTo = null;
+	  }
 
-		/*if (globals.isVasEnteredInKad) {
-			info.InstanceLevel  = 1;
-		}*/
-    console.log('info: ', info);
-    /*
-      {
-        "Page": 1,
-        "Count": 25,
-        "Courts": [
-          "MSK"
-        ],
-        "DateFrom": "2012-01-01T00:00:00",
-        "DateTo": "2013-12-31T23:59:59",
-        "Sides": [
-          {
-            "Name": "МАСТЕР БАНК",
-            "Type": -1,
-            "ExactMatch": false
-          }
-        ],
-        "Judges": [
-          {
-            "JudgeId": "50f923cd-9672-4a91-8285-b94cfbede836",
-            "Type": -1
-          }
-        ],
-        "CaseNumbers": [
-          "а40-172055/2013"
-        ],
-        "WithVKSInstances": false
+	  let tags = 'Sides,Judges,CaseNumbers'.split(','); //названия тегов
+	  let groups = 'sug-participants,sug-judges,sug-cases'.split(',');
+
+	  for(j in tags){
+	    let tag = tags[j];
+	    info[tag] = [];
+	    let field;
+	    if ($('#' + groups[j]+' input[type=text]').length ) {
+	      field = $('#' + groups[j] + ' input[type=text]');
+	    } else {
+	      field = $('#' + groups[j] + ' textarea');
+	    }
+	    field.each(function(){
+		  let $currentField = $(this);
+		  if(!$currentField.hasClass('g-ph')) {
+		    if (tag == "Sides") {
+		      info[tag].push({
+			    Name: $currentField.valEx(),
+			    Type: parseInt($currentField.closest('.tag').find('.b-type-switcher .selected input').val(), 10),
+			    ExactMatch: $currentField.data('exactmatch') ? true : false
+			  });
+		    } else if (tag == 'Judges') {
+		      let judgeId = $currentField.attr('id');
+
+			  // Тип судьи не является критерием поиска
+			  info[tag].push({
+			    JudgeId: judgeId,
+			    Type: -1 //$currentField.closest('.tag').find('.b-type-switcher .selected input').val() || 1
+			  });
+		    } else {
+			  info[tag].push($currentField.valEx());
+		    }
+		  }
+	    });
       }
-    */
-		return returnObject ? info : $.toJSON(info);
-	}
 
+	  info.WithVKSInstances = $('.vksCheckClass').attr('checked');
+
+	  /*if (globals.isVasEnteredInKad) {
+	      info.InstanceLevel  = 1;
+	    }*/
+
+      console.log('info: ', info);
+      return returnObject ? info : $.toJSON(info);
+    }
+
+    // Добавление нового определения функции doSearchRequest
+    addJS_Node (doSearchRequest);
     // Добавление нового определения функции returnRequestInfo
     addJS_Node (returnRequestInfo);
-
-
   }
+
 })();

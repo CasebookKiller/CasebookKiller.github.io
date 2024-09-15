@@ -1927,7 +1927,7 @@ function initFilters() {
 			setColumnHeight();
 
 			let info = returnRequestInfo(page);
-
+      console.log(info);
 			if (!info) {
 				return false;
 			}
