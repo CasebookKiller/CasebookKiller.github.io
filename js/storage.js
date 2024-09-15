@@ -59,9 +59,7 @@ window.addEventListener('message', function(msg) {
     
     if (obj.key === 'storage') {
       console.log('msg:',msg);
-    
       console.log('obj:',obj);
-    
       console.log('сообщение поступило в storage.html:', msg.data); //Сообщение отправленно в storage.html
       // читать здесь
       // https://ru.stackoverflow.com/questions/1275278/%D0%9A%D0%B0%D0%BA-%D0%BE%D1%82%D0%BF%D1%80%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-%D1%81%D0%BE%D0%BE%D0%B1%D1%89%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2-iframe-%D0%B8-%D0%BE%D0%B1%D1%80%D0%B0%D1%82%D0%BD%D0%BE
@@ -72,7 +70,6 @@ window.addEventListener('message', function(msg) {
   }
 },false);
 
-
 /**
  * Настройка загрузки wasm
  */
@@ -82,11 +79,8 @@ let config = {
 
 if (document.cbk === undefined) {
   document.cbk = new Object();
-
   let cbk = document.cbk;
-
   cbk.storage = 'isloaded';
-  
 }
 
 // Создание тестовой таблицы
@@ -109,7 +103,6 @@ function requestTestDB(SQLitedb) {
     const row = stmt.getAsObject();
     console.log('Here is a row: ' + JSON.stringify(row));
   }
-
 }
 
 // Создание таблицы c историей запросов
@@ -188,10 +181,8 @@ function cbGetCasesDB(db) {
 // Обратный вызов при получении базы данных
 function cbGetBinary(result) {
   console.log(result)
-
   if (result.length !== 0) {
     console.log('binary: ', result.find(i => i.cbk === 1).database);
-
   } else {
     console.log('база не получена');
   }
@@ -216,7 +207,6 @@ function iDBUpgradeNeeded(event) {
       // выполнить инициализацию
       if (!iDB.objectStoreNames.contains('cases')) { // если хранилище "cases" не существует
         iDB.createObjectStore('cases', {keyPath: 'cbk'}); // создаём хранилище
-        
       }
     case 1:
       // на клиенте версия базы данных 1
@@ -228,10 +218,8 @@ function iDBUpgradeNeeded(event) {
 // Обработка блокировки базы данных
 function iDBBlocked (event) {
   // это событие не должно срабатывать, если мы правильно обрабатываем onversionchange
-
   // это означает, что есть ещё одно открытое соединение с той же базой данных
   // и он не был закрыт после того, как для него сработал db.onversionchange
-  
   console.log('Сработало событие блокировки. Необходимо закрыть другие вкладки.');
 }
 
@@ -249,23 +237,22 @@ function iDBOpened (event, func, cb) {
     iDB.close();
     alert('База данных устарела, пожалуйста, перезагрузите страницу.');
   };
-
   // ...база данных готова...
   func(iDB, cb);
 }
 
 function getAll(iDB, cb) {
-    console.log('function getAll');
-    const transaction = iDB.transaction("cases", "readwrite"); // (1)
-    // получить хранилище объектов для работы с ним
-    const cases = transaction.objectStore("cases"); // (2)
-    const getAll = cases.getAll();
-    getAll.onsuccess = function(e) {
-      cb(getAll.result);
-    }
-    getAll.onerror = function(e) {
-      console.log(e);
-    }      
+  console.log('function getAll');
+  const transaction = iDB.transaction("cases", "readwrite"); // (1)
+  // получить хранилище объектов для работы с ним
+  const cases = transaction.objectStore("cases"); // (2)
+  const getAll = cases.getAll();
+  getAll.onsuccess = function(e) {
+    cb(getAll.result);
+  }
+  getAll.onerror = function(e) {
+    console.log(e);
+  }      
 }
 
 function DBRequest(
@@ -289,7 +276,6 @@ function DBRequest(
 function getCasesDb(cb) {
   // Открытие IndexedDB
   const openRequest = openRequestDB('casebook{killer}',1);//window.indexedDB.open("casebook{killer}", 1);
-  
   openRequest.onupgradeneeded = (e) => iDBUpgradeNeeded(e); // Обновление структуры базы данных
   openRequest.onblocked = (e) => iDBBlocked(e); // Обработка блокировки
   openRequest.onerror = (e) => iDBError(e); // Обработка ошибок
@@ -307,7 +293,6 @@ function saveCasesDb(binary, cb) {
   console.log('saveCasesDB: ', binary);
   // Открытие IndexedDB
   const openRequest = openRequestDB('casebook{killer}',1);
-
   openRequest.onupgradeneeded = (e) => iDBUpgradeNeeded(e); // Обновление структуры базы данных
   openRequest.onblocked = (e) => iDBBlocked(e); // Обработка блокировки
   openRequest.onerror = (e) => iDBError(e); // Обработка ошибок
@@ -318,7 +303,6 @@ function saveCasesDb(binary, cb) {
       iDB.close();
       alert("База данных устарела, пожалуйста, перезагрузите страницу.")
     };
-
     // ...база данных готова...
     DBRequest(
       iDB, 
@@ -330,5 +314,4 @@ function saveCasesDb(binary, cb) {
       cb
     );
   };
-
 }

@@ -19,22 +19,12 @@
   <script src="./js/uaparser.js"></script>
   <script>
     function storageOnload() {
-      top.postMessage('yahoo','https://kad.arbitr.ru');
+      top.postMessage('Сообщение от IFrame','https://kad.arbitr.ru');
     }
   </script>
 </head>
 <body onload="storageOnload()">
-  <div>
-    IFrame
-    <button id="trigger">Trigger postMessage</button>
-    
-  </div>
-  <script>
-    let btn = document.getElementById('trigger');
-    btn.onclick = () => {
-      top.postMessage('ooo','https://kad.arbitr.ru');
-    }
-  </script>
+  <div>IFrame</div>
   <script src="./js/storage.js"></script>
 </body>
 </html>
