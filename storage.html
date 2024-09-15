@@ -19,7 +19,10 @@
   <script src="./js/uaparser.js"></script>
   <script>
     function storageOnload() {
-      let msg = {text: 'Сообщение от IFrame'};
+      let msg = {
+        key: 'storage',
+        text: 'сообщение от iframe'
+      };
       top.postMessage(msg, 'https://kad.arbitr.ru');
     }
   </script>
