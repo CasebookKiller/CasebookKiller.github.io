@@ -67,8 +67,14 @@ window.addEventListener('message', function(msg) {
       //console.log('msg:',msg);
       //console.log('obj:',obj);
       let info = obj.info !== undefined ? obj.info : '';
+      let dates = obj.dates !== undefined ? obj.dates : '';
       try {
         info = JSON.parse(info);
+      } catch (err) {
+      }
+
+      try {
+        dates = JSON.parse(dates);
       } catch (err) {
       }
 
@@ -86,6 +92,12 @@ window.addEventListener('message', function(msg) {
         console.log('%c' + 'WithVKSInstances: %o','color:#FB74BD;',info.WithVKSInstances);
       } else {
         console.log('%cв storage.html поступило сообщение: ','color:#FB74BD;', info);
+      }
+
+      if (typeof(dates) === 'object') {
+        console.log('%cв storage.html поступил объект: %o','color:#FB74BD;', dates);
+      } else {
+        console.log('%cв storage.html поступило сообщение: ','color:#FB74BD;', dates);
       }
       
       // читать здесь
