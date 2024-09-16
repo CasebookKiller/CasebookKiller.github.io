@@ -70,6 +70,7 @@ window.addEventListener('message', function(msg) {
       let dates = obj.dates !== undefined ? obj.dates : '';
       try {
         info = JSON.parse(info);
+        info.id = new Date();
       } catch (err) {
       }
 
@@ -81,6 +82,7 @@ window.addEventListener('message', function(msg) {
       //Сообщение отправленно в storage.html
       if (typeof(info) === 'object') {
         console.log('%cв storage.html поступил объект: %o','color:#FB74BD;', info);
+        console.log('%c' + 'Id: %o','color:#FB74BD;', info.Id);
         console.log('%c' + 'Page: %o','color:#FB74BD;', info.Page);
         console.log('%c' + 'Count: %o','color:#FB74BD;', info.Count);
         console.log('%c' + 'Courts: %o','color:#FB74BD;',info.Courts);
