@@ -70,7 +70,7 @@ window.addEventListener('message', function(msg) {
       let dates = obj.dates !== undefined ? obj.dates : '';
       try {
         info = JSON.parse(info);
-        info.Id = (new Date()).getMilliseconds();
+        info.Id = (new Date()).getTime();
       } catch (err) {
       }
 
