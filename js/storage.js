@@ -90,6 +90,9 @@ window.addEventListener('message', function(msg) {
         console.log('%c' + 'Page: %o','color:#FB74BD;', info.Page);
         console.log('%c' + 'Count: %o','color:#FB74BD;', info.Count);
         console.log('%c' + 'Courts: %o','color:#FB74BD;',info.Courts);
+        for (let i = 0; i < info.Courts.length; i++) {
+          console.log('%c' + 'Court: %o','color:#FB74BD;',info.Courts[i]);
+        }
         console.log('%c' + 'DateFrom: %o','color:#FB74BD;',info.DateFrom);
         console.log('%c' + 'DateTo: %o','color:#FB74BD;',info.DateTo);
         console.log('%c' + 'Sides: %o','color:#FB74BD;',info.Sides);
