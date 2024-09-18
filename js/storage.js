@@ -77,8 +77,8 @@ window.addEventListener('message', function(msg) {
       try {
         info = JSON.parse(info);
         info.Id = (new Date()).getTime(); // Timestamp
-        info.DateFrom = dates[0][2]+ '.' + dates[0][1] + '.' + dates[0][0];
-        info.DateTo = dates[1][2]+ '.' + dates[1][1] + '.' + dates[1][0];
+        info.DateFrom = new Date(dates[0][2]+ '.' + dates[0][1] + '.' + dates[0][0]);
+        info.DateTo = new Date(dates[1][2]+ '.' + dates[1][1] + '.' + dates[1][0]);
       } catch (err) {
       }
 
