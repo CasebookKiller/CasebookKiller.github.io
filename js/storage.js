@@ -68,16 +68,20 @@ window.addEventListener('message', function(msg) {
       //console.log('obj:',obj);
       let info = obj.info !== undefined ? obj.info : '';
       let dates = obj.dates !== undefined ? obj.dates : '';
-      try {
-        info = JSON.parse(info);
-        info.Id = (new Date()).getTime(); // Timestamp
-      } catch (err) {
-      }
 
       try {
         dates = JSON.parse(dates);
       } catch (err) {
       }
+
+      try {
+        info = JSON.parse(info);
+        info.Id = (new Date()).getTime(); // Timestamp
+        info.DateFrom = dates[0][2]+ '.' + dates[0][1] + '.' + dates[0][0];
+        info.DateTo = dates[1][2]+ '.' + dates[1][1] + '.' + dates[1][0];
+      } catch (err) {
+      }
+
 
       //Сообщение отправленно в storage.html
       if (typeof(info) === 'object') {
