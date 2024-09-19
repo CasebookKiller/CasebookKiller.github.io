@@ -1,9 +1,3 @@
-/*
- * HTML Parser By John Resig (ejohn.org)
- * Original code by Erik Arvidsson, Mozilla Public License
- * http://erik.eae.net/simplehtmlparser/simplehtmlparser.js
- */
-
 (function(){
 
 	// Regular Expressions for parsing tags and attributes
