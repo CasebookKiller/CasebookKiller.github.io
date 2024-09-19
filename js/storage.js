@@ -1,4 +1,159 @@
-/**
+let htmltoparse = `<colgroup><col /><col /><col /><col /></colgroup><tr ><td class="num"><div class="b-container"><div class="bankruptcy" title="03.12.2013 0:00:00"><i class="b-icon"><i></i></i><span>03.12.2013</span></div><a href="https://kad.arbitr.ru/Card/6a05b5d6-5c1e-47b0-9518-beb8b06c3c16" target="_blank" class="num_case">
+                            А40-172055/2013
+                        </a></div></td><td class="court"><div class="b-container"><div class="judge" title="Истомин С. С.">Истомин С. С.</div><div title="АС города Москвы">АС города Москвы</div></div></td><td class="plaintiff"><div class="b-container"><div class="b-button-container"><div class="b-button"><strong>1854</strong><i class="b-icon"><i></i></i></div></div><div ><span class="js-rollover b-newRollover">
+                                    Попова
+                                    <span class="js-rolloverHtml" style="display: none;"><strong>Попова</strong><br /></span></span></div><div ><span class="js-rollover b-newRollover">
+                                    Бирюков А. И.
+                                    <span class="js-rolloverHtml" style="display: none;"><strong>Бирюков А. И.</strong><br />
+                                        Данные скрыты
+                                    </span></span></div><div class='more'><span class="js-rollover b-newRollover">
+                                    Пономаренко В. П.
+                                    <span class="js-rolloverHtml" style="display: none;"><strong>Пономаренко В. П.</strong><br />
+                                        Данные скрыты
+                                    </span></span></div><div class='more'><span class="js-rollover b-newRollover">
+                                    ОАО КБ Мастер-банк Семеновой Т. С.
+                                    <span class="js-rolloverHtml" style="display: none;"><strong>ОАО КБ Мастер-банк Семеновой Т. С.</strong><br />
+                                        117525, ул. Днепропетровская д. 3 к. 5 кв. 124 Москва
+                                    </span></span></div><div class='more'><span class="js-rollover b-newRollover">
+                                    ОАО КБ Мастер-банк Фальковская Е. В.
+                                    <span class="js-rolloverHtml" style="display: none;"><strong>ОАО КБ Мастер-банк Фальковская Е. В.</strong><br />
+                                        117525, ул. Чертановская д. 24 к. 1 кв. 125 Москва
+                                    </span></span></div><div class='more'><span class="js-rollover b-newRollover">
+                                    ЗАО НПФ &quot;Доломант&quot;
+                                    <span class="js-rolloverHtml" style="display: none;"><strong>ЗАО НПФ &quot;Доломант&quot;</strong><br />
+                                        117437, г. Москва, ул. Профсоюзная, д. 108
+                                    </span></span></div><div class='more'><span class="js-rollover b-newRollover">
+                                    Мельников В. В.
+                                    <span class="js-rolloverHtml" style="display: none;"><strong>Мельников В. В.</strong><br />
+                                        Данные скрыты
+                                    </span></span></div><div class='more'><span class="js-rollover b-newRollover">
+                                    Олейник Л. С.
+                                    <span class="js-rolloverHtml" style="display: none;"><strong>Олейник Л. С.</strong><br />
+                                        Данные скрыты
+                                    </span></span></div><div class='more'><span class="js-rollover b-newRollover">
+                                    ООО &quot;Тандем&quot;
+                                    <span class="js-rolloverHtml" style="display: none;"><strong>ООО &quot;Тандем&quot;</strong><br />
+                                        142432, Моск.обл., г. Черноголовка, Институцский проспект, д. 4, кв. 121
+                                    </span></span></div><div class='more'><span class="js-rollover b-newRollover">
+                                    СРО НП по содействию и развитию строительной деятельности &quot;Содружество Строителей&quot;
+                                    <span class="js-rolloverHtml" style="display: none;"><strong>СРО НП по содействию и развитию строительной деятельности &quot;Содружество Строителей&quot;</strong><br />
+                                        197110, Россия, Санткт-Петербург, ул.Малая разночинная,д.9, литА
+                                    </span></span></div><div class='more'><span class="js-rollover b-newRollover">
+                                    Юрина М.А.
+                                    <span class="js-rolloverHtml" style="display: none;"><strong>Юрина М.А.</strong><br />
+                                        Данные скрыты
+                                    </span></span></div><div class='more'><span class="js-rollover b-newRollover">
+                                    Прудников А.Е.
+                                    <span class="js-rolloverHtml" style="display: none;"><strong>Прудников А.Е.</strong><br />
+                                        Данные скрыты
+                                    </span></span></div><div class='more'><span class="js-rollover b-newRollover">
+                                    Борисовая Н.Н.
+                                    <span class="js-rolloverHtml" style="display: none;"><strong>Борисовая Н.Н.</strong><br />
+                                        Данные скрыты
+                                    </span></span></div><div class='more'><span class="js-rollover b-newRollover">
+                                    НП &quot;Ассоциация проектрировщиков профессионалов&quot;
+                                    <span class="js-rolloverHtml" style="display: none;"><strong>НП &quot;Ассоциация проектрировщиков профессионалов&quot;</strong><br />
+                                        121309, Россия, Москва, Василисы Кожиной, д.14, корп.6
+                                    </span></span></div><div class='more'><span class="js-rollover b-newRollover">
+                                    Дубровина Е. А.
+                                    <span class="js-rolloverHtml" style="display: none;"><strong>Дубровина Е. А.</strong><br />
+                                        Данные скрыты
+                                    </span></span></div><div class='more'><span class="js-rollover b-newRollover">
+                                    Борисова Н. Н.
+                                    <span class="js-rolloverHtml" style="display: none;"><strong>Борисова Н. Н.</strong><br />
+                                        Данные скрыты
+                                    </span></span></div><div class='more'><span class="js-rollover b-newRollover">
+                                    Иванова Л. В.
+                                    <span class="js-rolloverHtml" style="display: none;"><strong>Иванова Л. В.</strong><br />
+                                        Данные скрыты
+                                    </span></span></div><div class='more'><span class="js-rollover b-newRollover">
+                                    ООО &quot;Центральный булочные&quot;
+                                    <span class="js-rolloverHtml" style="display: none;"><strong>ООО &quot;Центральный булочные&quot;</strong><br />
+                                        198052, Россия, Санкт-Петербург, Измайловский пр., 18
+                                    </span></span></div><div class='more'><span class="js-rollover b-newRollover">
+                                    ООО ФГБУ &quot;Спецмедснаб ФМАБ России&quot;
+                                    <span class="js-rolloverHtml" style="display: none;"><strong>ООО ФГБУ &quot;Спецмедснаб ФМАБ России&quot;</strong><br />
+                                        141400, Россия, г.Химки, МО, Вашутинское ш., д.23
+                                    </span></span></div><div class='more'><span class="js-rollover b-newRollover">
+                                    ОАО &quot;Промышленный энергетический банк&quot;
+                                    <span class="js-rolloverHtml" style="display: none;"><strong>ОАО &quot;Промышленный энергетический банк&quot;</strong><br />
+                                        160009, Россия, Вологда, Чехова, д. 30
+                                    </span></span></div><div class="more"><span class="js-rollover b-newRollover"><a href="https://kad.arbitr.ru/Card/6a05b5d6-5c1e-47b0-9518-beb8b06c3c16" target="_blank" class="num_case">
+                                        Подробнее...
+                                    </a><span class="js-rolloverHtml" style="display: none;">
+                                        Для просмотра полного списка участников перейдите к карточке дела, нажав на эту ссылку
+                                    </span></span></div></div></td><td class="respondent"><div class="b-container"><div class="b-button-container"><div class="b-button"><strong>17</strong><i class="b-icon"><i></i></i></div></div><div ><span class="js-rollover b-newRollover">
+                                    КБ &quot;Мастер-Банк&quot; (ОАО)&quot;
+                                    <span class="js-rolloverHtml" style="display: none;"><strong>КБ &quot;Мастер-Банк&quot; (ОАО)&quot;</strong><br />
+                                        109240, МОСКВА, ВЕРХНИЙ ТАГАНСКИЙ ТУПИК, 4
+                                                                                                                                                            </span></span></div><div ><span class="js-rollover b-newRollover">
+                                    КБ Мастер Банк в лице ГК АСВ
+                                    <span class="js-rolloverHtml" style="display: none;"><strong>КБ Мастер Банк в лице ГК АСВ</strong><br />
+                                        Данные скрыты
+                                                                                                                                                            </span></span></div><div class='more'><span class="js-rollover b-newRollover">
+                                    Левченко Е. В.
+                                    <span class="js-rolloverHtml" style="display: none;"><strong>Левченко Е. В.</strong><br />
+                                        Данные скрыты
+                                                                                                                                                            </span></span></div><div class='more'><span class="js-rollover b-newRollover">
+                                    К/У ГК &quot;Агенство по страхованию вкладов&quot;
+                                    <span class="js-rolloverHtml" style="display: none;"><strong>К/У ГК &quot;Агенство по страхованию вкладов&quot;</strong><br />
+                                        109240, Россия, Москва, Верх.Таганский туп., , д. 4
+                                                                                                                                                            </span></span></div><div class='more'><span class="js-rollover b-newRollover">
+                                    ОАО Конкурсный управляющий ОАО &quot;Мастер.Банк&quot;
+                                    <span class="js-rolloverHtml" style="display: none;"><strong>ОАО Конкурсный управляющий ОАО &quot;Мастер.Банк&quot;</strong><br />
+                                        115184, Россия, Москва, пер. Руновский, 12
+                                                                                                                                                            </span></span></div><div class='more'><span class="js-rollover b-newRollover">
+                                    К/у ООО &quot;Мастер-Банк&quot; Бельков А. О.
+                                    <span class="js-rolloverHtml" style="display: none;"><strong>К/у ООО &quot;Мастер-Банк&quot; Бельков А. О.</strong><br />
+                                        127055, Россия, Москва, ул. Лесная, д. 59, стр. 2
+                                                                                                                                                            </span></span></div><div class='more'><span class="js-rollover b-newRollover">
+                                    Конкурсный управляющий ОАО &quot;Мастер.Банк&quot; (ОАО)
+                                    <span class="js-rolloverHtml" style="display: none;"><strong>Конкурсный управляющий ОАО &quot;Мастер.Банк&quot; (ОАО)</strong><br />
+                                        115184, Россия, Москва, пер. Руновский, 12
+                                                                                                                                                            </span></span></div><div class='more'><span class="js-rollover b-newRollover">
+                                    ОАО КБ &quot;Мастер-Банк&quot; в лице к/у ГК &quot;Агентство по страхованию вкладов&quot;
+                                    <span class="js-rolloverHtml" style="display: none;"><strong>ОАО КБ &quot;Мастер-Банк&quot; в лице к/у ГК &quot;Агентство по страхованию вкладов&quot;</strong><br />
+                                        127055, Россия, Москва, ул. Лесная, д. 59, стр. 2
+                                                                                                                                                            </span></span></div><div class='more'><span class="js-rollover b-newRollover">
+                                    ГК КБ &quot;Мастер-Банк&quot; в лице &quot;Агентство по страхованию вкладов&quot;
+                                    <span class="js-rolloverHtml" style="display: none;"><strong>ГК КБ &quot;Мастер-Банк&quot; в лице &quot;Агентство по страхованию вкладов&quot;</strong><br />
+                                        109240, Россия, Москва, Верхн. Таганский туп., 4
+                                                                                                                                                            </span></span></div><div class='more'><span class="js-rollover b-newRollover">
+                                    ГК К/У &quot;Агенство по страхованию вкладов&quot;
+                                    <span class="js-rolloverHtml" style="display: none;"><strong>ГК К/У &quot;Агенство по страхованию вкладов&quot;</strong><br />
+                                        109240, Россия, Москва, Верх.Таганский туп., , д. 4
+                                                                                                                                                            </span></span></div><div class='more'><span class="js-rollover b-newRollover">
+                                    ОАО КУ КБ &quot;Мастер-Банк&quot;
+                                    <span class="js-rolloverHtml" style="display: none;"><strong>ОАО КУ КБ &quot;Мастер-Банк&quot;</strong><br />
+                                        115184, Россия, Москва, Руновский пер., 12
+                                                                                                                                                            </span></span></div><div class='more'><span class="js-rollover b-newRollover">
+                                    ООО К/у &quot;Мастер-Банк&quot; Бельков А.О.
+                                    <span class="js-rolloverHtml" style="display: none;"><strong>ООО К/у &quot;Мастер-Банк&quot; Бельков А.О.</strong><br />
+                                        127055, Россия, Москва, ул. Лесная, д. 59, стр. 2
+                                                                                                                                                            </span></span></div><div class='more'><span class="js-rollover b-newRollover">
+                                    Левченко Е.В.
+                                    <span class="js-rolloverHtml" style="display: none;"><strong>Левченко Е.В.</strong><br />
+                                        Данные скрыты
+                                                                                                                                                            </span></span></div><div class='more'><span class="js-rollover b-newRollover">
+                                    Булочник А.Б.
+                                    <span class="js-rolloverHtml" style="display: none;"><strong>Булочник А.Б.</strong><br />
+                                        Данные скрыты
+                                                                                                                                                            </span></span></div><div class='more'><span class="js-rollover b-newRollover">
+                                    Киселев А.Г.
+                                    <span class="js-rolloverHtml" style="display: none;"><strong>Киселев А.Г.</strong><br />
+                                        Данные скрыты
+                                                                                                                                                            </span></span></div><div class='more'><span class="js-rollover b-newRollover">
+                                    Орлов В.А.
+                                    <span class="js-rolloverHtml" style="display: none;"><strong>Орлов В.А.</strong><br />
+                                        Данные скрыты
+                                                                                                                                                            </span></span></div><div class='more'><span class="js-rollover b-newRollover">
+                                    НОПРИЗ
+                                    <span class="js-rolloverHtml" style="display: none;"><strong>НОПРИЗ</strong><br />
+                                        119019, Россия, Москва, Н.Арбат, 21
+                                                                                                                                                            </span></span></div></div></td></tr><input type="hidden" id="documentsPageSize" value="25" /><input type="hidden" id="documentsPage" value="1" /><input type="hidden" id="documentsTotalCount" value="1" /><input type="hidden" id="documentsPagesCount" value="1" />`;
+let dom = HTMLtoDOM(htmltoparse);
+console.log('dom: ',dom);
+                                                                                                                                                            /**
  * Вспомогательные функции
  */
 
