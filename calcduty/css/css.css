@@ -1,0 +1,261 @@
+html * {max-height:1000000px;} /* шрифт в моб.версии как на десктопе */
+
+.warn {
+    color: red;
+    vertical-align: 8px;
+    font-size: 11px;
+}
+.noprint2 {
+    display:block;
+}
+.showprint {
+    display:none;
+}
+#podrobnee {
+    z-index:100000;
+    position:fixed;
+    width: 590px;
+    height: 205px;
+    padding: 30px;
+    border: 1px solid #000000;
+    border-radius: 3px;
+    top: 10px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0 auto;
+    background: #f8f8f8;
+    display:none;
+}
+
+#zatemnenie {
+    background-color: rgba(0,0,0,0.5);
+    position:fixed;
+    left:0;
+    top: 0;
+    width:100%;
+    height:100%;
+    display:none;
+    z-index:9999;
+}
+#divImportDolga, #divImportOplat {
+    z-index:100000;
+    position:fixed;
+    width: 700px;
+    height: 370px;
+    padding: 3px;
+    border: 1px solid #0000cc;
+    border-radius: 3px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0 auto;
+    background: #f8f8f8;
+    display:none;
+}
+.importtextarea {
+	resize: none;
+	width: 348px;
+	height: 277px;    
+}
+.llink {
+    cursor: pointer;
+    color: #0066cc;
+    text-decoration: underline;
+}
+.llink:active {
+    color: red;
+}
+.llink:focus {
+    color: #7849A2;
+}
+
+a img {border: none;}
+
+input.error {border-color:red;}
+
+.mm {position:absolute; padding:.2em; border:1px solid #ccc; background-color:#fff; z-index:2;}
+.mm table {border-collapse:separate; table-layout:fixed; text-align:center; font-family:arial, tahoma; font-size:12px;}
+.mm col {width:2em; }
+.mm th {font-weight:normal; }
+.mm col.red {background-color:#ffffcc;}
+.mm td {padding:0; vertical-align:middle; height:1.5em; }
+.mm td div {padding: .1em 0 0 0; border:1px solid #999; border-color:#ddd #777 #777 #ddd; cursor:default;}
+.mm td div:hover, .mm td .hover {background-color:#eee; border-color:#777 #ddd #ddd #777 ;}
+.mm div.red {color:#c00;}
+.mm select {margin-right:0;}
+.mm .ri {text-align:right;}
+.mm p {margin:0;}
+.disnone {display:none;}
+.mm a {text-decoration:none;}
+
+ol {text-align:left; width:40em; font-size:.75em; margin:0 auto; font-family:verdana;}
+
+.metka {background-color:#ffffcc; color:#c00;}
+/*.metka {background-image:url(img/metka.gif);  background-repeat:repeat-x; background-position:right bottom; color:#c00;}*/
+
+.prokrutka {
+	width:700px;
+	height:200px;
+	background: #fff; /* цвет фона, белый */
+	border: 0px solid #C1C1C1; /* размер и цвет границы блока */
+	overflow: auto; /* свойство для прокрутки по горизонтали. Автоматом, если больше блока */
+}
+
+.prim {
+	color: #aaa; font-style: italic;
+}
+@media print  {
+	.noprint {display: none !important;}
+	div.yashare-auto-init {display: none !important;}
+}
+/*---------Оформление подсказок. Общие стили---------*/
+.support {
+	display: inline-block;
+	position: relative;
+	text-decoration: none;
+	cursor: pointer;
+}
+.support em {
+	background: #FFFFFF;
+	border-radius: 10px;
+	border: 1px solid #999;
+	text-align: center;
+	color: #999;
+ 	font: normal bold 11px Arial;
+ 	padding: 0 3px;
+}
+.tip { 
+  	display: none;
+  	position: absolute;
+  	z-index: 9998;
+  	top: 0;
+  	left: 100%;
+  	background: #fafafa;
+  	border-radius: 3px;
+  	border: 1px solid #ccc;
+  	box-shadow: 5px 5px 0.5em -0.1em rgba(0,0,6,0.5);
+  	text-align: left;
+  	color: #000;
+  	font: normal 500 13px Verdana;
+/*  opacity: .9;   */
+  	cursor: default;
+  	padding: 5px;
+  	margin: -30px 0 0 0;
+  	width: auto;
+	min-width: 250px;
+  	min-height: 32px; 
+ 	height: auto;
+}
+.tip:before {
+ 	border-width: 9px 8px 9px 0;
+ 	border-color: transparent #cccccc transparent transparent;
+ 	top: 13px;
+ 	left: -9px;
+}
+.tip:after {
+ 	border-width: 7px 7px 7px 0;
+ 	border-color: transparent #fafafa transparent transparent;
+ 	top: 15px;
+ 	left: -7px;
+}
+.tip:before,
+.tip:after {
+ 	content:"";
+ 	position:absolute;
+ 	width: 0px;
+ 	height: 0px;
+ 	border-style: solid;
+}
+.tip-block {
+ 	display: inline-block;
+ 	position: relative;
+ 	background: transparent;
+ 	margin: 0;
+ 	padding: 0;
+ 	border: 0;
+ 	height: 0;
+ 	width: 1px;
+}
+#tip1:checked ~ .support em, #tip2:checked ~ .support em, #tip3:checked ~ .support em, #tip4:checked ~ .support em, #tip5:checked ~ .support em, #tip6:checked ~ .support em, #tip7:checked ~ .support em, #tip8:checked ~ .support em, #tip9:checked ~ .support em, #tip10:checked ~ .support em {
+ 	background: #79B9D3;
+	color: #fff;
+	border: 1px solid #79B9D3;
+}
+/*----------Использование тега 'INPUT'--------------*/
+#tip1:checked ~ * .tip, #tip2:checked ~ * .tip, #tip3:checked ~ * .tip, #tip4:checked ~ * .tip, #tip5:checked ~ * .tip, #tip6:checked ~ * .tip, #tip7:checked ~ * .tip, #tip8:checked ~ * .tip, #tip9:checked ~ * .tip, #tip10:checked ~ * .tip {
+    display: block;
+}
+.tip-checkbox {
+  	display: none;
+}
+.tip-close {
+ 	display: inline-block;
+  	position: absolute;
+ 	background: #79B9D3;
+ 	border-radius: 20px;
+ 	border: 2px solid #FFF;
+ 	top: -9px;
+ 	right: -12px;
+ 	font: normal bold 13px Comic Sans MS;
+ 	text-align: center;
+ 	color: #fff;
+ 	cursor: pointer;
+ 	padding: 0 4px;
+}
+/*---- /подсказки -----*/
+h1 {
+	font-size: 17px;
+	color: #555555;
+}
+span.explain {
+	font-size: 13px;
+	color: #555555;
+}
+h2.timesnewroman {
+	font-family: Times New Roman;
+	font-size: 16px;
+	margin: 0;
+}
+h3 {
+    color: #555555;
+}
+span.timesnewroman {
+	font-family: Times New Roman;
+	font-size: 16px;
+}
+body {
+	font-family: Verdana;
+	font-size: 13px;
+	margin-left: 15px;
+	margin-top: 10px;
+}
+.entertable td {
+	padding:3px;
+	font-size:13px;
+	font-family: Verdana;
+}
+.notice {
+	font-size:11px;
+	color:#666;
+	margin-top:1px;
+	vertical-align: top;
+}
+.entertable input, .entertable select, .entertable textarea  {
+	height:auto;
+	padding: 3px;
+	font-size: 13px;
+	color:#333;
+	font-family: Verdana;
+}
+.entertable .dot {
+	border-style: dotted none none none;
+	border-width: 1px;
+	border-color: #d0d0d0;
+}
+.mainbutton {
+	padding: 5px 10px;
+	font-size: 15px;
+	cursor: pointer;
+}
