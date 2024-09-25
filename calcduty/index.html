@@ -86,6 +86,7 @@
       if (/[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZабвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ]/.test(um) ) {
         var reg=/\D*(\d+)\D+(\d*)\D*/	// игнорируем руб., коп. и т.п.
         var abc=reg.exec(um)
+        console.log('abc: ',abc)
         if (abc[2]!="") um=abc[1]+"."+abc[2];
         else um=abc[1]
       }
