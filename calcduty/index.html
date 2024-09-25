@@ -82,8 +82,8 @@
         else if (a==")") skoba2++
       }
       if (um=="") um=0
-      var regx = /[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZабвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ]/;
-      if (regx.test(um) ) {
+      
+      if (/[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZабвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ]/.test(um) ) {
         var reg=/\D*(\d+)\D+(\d*)\D*/	// игнорируем руб., коп. и т.п.
         var abc=reg.exec(um)
         if (abc[2]!="") um=abc[1]+"."+abc[2];
