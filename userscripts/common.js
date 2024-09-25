@@ -8,6 +8,7 @@
 // @match       *://*.kad.arbitr.ru/*
 // @match       *://*.cdnjs.cloudflare.com/*
 // @match       *://*.casebookkiller.github.io/*
+// @match       *://*.casebookkiller.github.io/js/*
 // @exclude     *://*.casebookkiller.github.io/css/*
 // @exclude     *://*.casebookkiller.github.io/fonts/*
 // @resource    SQLJS             https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.11.0/sql-wasm.js
@@ -26,87 +27,98 @@
 (function() {
   'use strict';
   if (location.hostname === 'kad.arbitr.ru') {
-    // Расширение функциональности document
- 
-    if (document.cbk === undefined) {
-      document.cbk = new Object();
 
-      let cbk = document.cbk;
+    // Вспомогательные функции
 
-      if (document.cbk.log === undefined) {
-        document.cbk.log = function(msg, obj) {
-          if (obj !== undefined) {
-            console.log("%c" + msg + "%o", "color:cyan;", obj);
-          } else {
-            console.log("%c" + msg, "color:cyan;");
-          }
-        }
-      }
-      
-      // Добавление iframe storage
-      if (cbk.addIFrameStorage === undefined) {
-        cbk.addIFrameStorage = function (src) {
-          src = src === undefined ? 'https://casebookkiller.github.io/storage.html' : src;
-          let ifrm = document.createElement("iframe");
-          ifrm.setAttribute("id","ifrmstorage");
-          ifrm.setAttribute("src", src);
-          ifrm.style.width = "64px";
-          ifrm.style.height = "64px";
-          document.body.appendChild(ifrm);
-        }
-      }
-
-      
-      // Отправка сообщения в iFrame из окна с kad.arbitr.ru
-      if (cbk.messageToiFrame === undefined) {
-        cbk.messageToiFrame = function (msg, path) {
-          path = path === undefined ? '*': path;
-          let ifrm = document.querySelector('#ifrmstorage');
-          if (ifrm !== undefined) {
-            ifrm.contentWindow.postMessage(msg, path); //'https://casebookkiller.github.io/storage.html'); //В первом файле сработает алерт и покажет это сообщение
-          } else {
-            console.log('не удалось найти IFrame');
-          }
-        };
-      }
-
-      
-      // Отправка json  в iFrame из окна с kad.arbitr.ru
-      
-      if (cbk.objToiFrame === undefined) {
-        cbk.objToiFrame = function (obj, path) {
-          path = path === undefined ? '*': path;
-          let ifrm = document.querySelector('#ifrmstorage');
-          if (ifrm !== undefined) {
-            ifrm.contentWindow.postMessage(JSON.stringify(obj), path); //'https://casebookkiller.github.io/storage.html'); //В первом файле сработает алерт и покажет это сообщение
-          } else {
-            console.log('не удалось найти IFrame');
-          }
-        }
-      }
-
-      if (cbk.receiveMessage === undefined) {
-        cbk.receiveMessage = function (event) {
-          if (event.origin === "https://casebookkiller.github.io"
-              && event.data === "message from iframe"
-              && event.data.length === 19
-              && typeof event.data === 'string') {
-
-            console.log("event.origin: ", event.origin);
-            console.log("event.data: ", event.data);
-            console.log("event.source: ", event.source);
-
-            console.log(`
-                       Message from iFrame:
-                       event.origin: ${event.origin}
-                       event.data: ${event.data}
-                       // open also console to inspect objects
-            `);
-          }
-        }
+    const log = document.cbk !== undefined && document.cbk.log !== undefined ? document.cbk.log : (msg, obj) => {
+      if (obj !== undefined) {
+        console.log("%c" + msg + "%o", "color:cyan;", obj);
+      } else {
+        console.log("%c" + msg, "color:cyan;");
       }
     }
- 
+
+    const addIFrameStorage = (src) => {
+      let ifrm;
+
+      ifrm = document.getElementById("ifrmstorage");
+      if (ifrm === undefined) {
+        src = src === undefined ? 'https://casebookkiller.github.io/storage.html' : src;
+        ifrm = document.createElement("iframe");
+        ifrm.setAttribute("id","ifrmstorage");
+        ifrm.setAttribute("src", src);
+        ifrm.style.width = "64px";
+        ifrm.style.height = "64px";
+        document.body.appendChild(ifrm);
+      }
+
+      return ifrm;
+    }
+
+    const messageToiFrame = (msg, path) => {
+      path = path === undefined ? '*': path;
+      let ifrm = document.querySelector('#ifrmstorage');
+      if (ifrm !== undefined) {
+        ifrm.contentWindow.postMessage(msg, path); //'https://casebookkiller.github.io/storage.html'); //В первом файле сработает алерт и покажет это сообщение
+      } else {
+        console.log('не удалось найти IFrame');
+      }
+    }
+
+    const objToiFrame = (obj, path) => {
+      path = path === undefined ? '*': path;
+      let ifrm = document.querySelector('#ifrmstorage');
+      if (ifrm !== undefined) {
+        ifrm.contentWindow.postMessage(JSON.stringify(obj), path); //'https://casebookkiller.github.io/storage.html'); //В первом файле сработает алерт и покажет это сообщение
+      } else {
+        console.log('не удалось найти IFrame');
+      }
+    }
+
+    // Обработка сообщений
+    const receiveMessage = (event) => {
+      if (event.origin === "https://casebookkiller.github.io") {
+        let msg;
+        let log = document.cbk.log !== undefined ? document.cbk.log : log;
+        log("origin: ", event.origin);
+        log("data: ", event.data);
+        log("source: ", event.source);
+      }
+    }
+
+    // Расширение функциональности document
+        // cbk
+    if (document.cbk === undefined) {
+      document.cbk = new Object();
+    }
+
+    let cbk = document.cbk;
+
+    if (cbk.log === undefined) {
+      cbk.log = log;
+    }
+
+    // Добавление iframe storage
+    if (cbk.addIFrameStorage === undefined) {
+      cbk.addIFrameStorage = addIFrameStorage;
+    }
+
+    // Отправка сообщения в iFrame из окна с kad.arbitr.ru
+    if (cbk.messageToiFrame === undefined) {
+      cbk.messageToiFrame = messageToiFrame;
+    }
+
+    // Отправка json  в iFrame из окна с kad.arbitr.ru
+    if (cbk.objToiFrame === undefined) {
+      cbk.objToiFrame = objToiFrame;
+    }
+
+    if (cbk.receiveMessage === undefined) {
+      cbk.receiveMessage = receiveMessage;
+    }
+
+
+    ////////////////////////////////////////////////////////////////////
     // Подключение SQL.js
     GM_xmlhttpRequest({
       method : "GET",
@@ -178,7 +190,8 @@
         let obj = {
           key:'storage',
           id:'01',
-          info: info
+          info: info,
+          dates: document.cbk.dates
         };
         document.cbk.objToiFrame(obj,'https://casebookkiller.github.io/storage.html');
 
@@ -242,7 +255,7 @@
 		     * Решение - http://stackoverflow.com/questions/7267014/ie9-table-has-random-rows-which-are-offset-at-random-columns
 		     */
 		    result = result && $.trim(result).replace(/>[ \t\r\n\v\f]*</g, '><');
-
+            console.log(result);
 		    $cases = $('#b-cases');
 
 		    $cases.html(result);
@@ -415,7 +428,11 @@
 	  dates = dates.replace(/(\d{1,2})\.(\d{1,2})\.(\d{2,4})/g, '$3.$2.$1').match(/\d{2,4}\.\d{1,2}\.\d{1,2}/g) || ['',''];
 	  dates[0] = (dates[0] || '2000.01.01').split('.');
 	  dates[1] = (dates[1] || '2030.01.01').split('.');
+
       console.log('dates: ', dates);
+      if (document.cbk !== undefined) {
+        document.cbk.dates = dates;
+      }
 	  //	info.DateFrom = Common.date.returnDotNetDate(
 	  //		Common.date.returnDateUTC(dates[0][0],dates[0][1],dates[0][2])
 	  //	);
@@ -491,6 +508,11 @@
 	    }*/
 
       console.log('info: ', info);
+      for (let i = 0; i < info.Judges.length; i++)
+      {
+          //console.log('-----------------',info.Judges[i]);
+          info.Judges[i].Description = document.getElementById(info.Judges[i].JudgeId).value;
+      }
       return returnObject ? info : $.toJSON(info);
     }
 
@@ -498,6 +520,7 @@
     addJS_Node (doSearchRequest);
     // Добавление нового определения функции returnRequestInfo
     addJS_Node (returnRequestInfo);
+
   }
 
 })();

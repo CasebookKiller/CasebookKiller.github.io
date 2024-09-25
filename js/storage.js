@@ -151,11 +151,161 @@ let htmltoparse = `<colgroup><col /><col /><col /><col /></colgroup><tr ><td cla
                                     <span class="js-rolloverHtml" style="display: none;"><strong>НОПРИЗ</strong><br />
                                         119019, Россия, Москва, Н.Арбат, 21
                                                                                                                                                             </span></span></div></div></td></tr><input type="hidden" id="documentsPageSize" value="25" /><input type="hidden" id="documentsPage" value="1" /><input type="hidden" id="documentsTotalCount" value="1" /><input type="hidden" id="documentsPagesCount" value="1" />`;
-let dom = HTMLtoDOM(htmltoparse);
+
+
+let xml = HTMLtoXML(htmltoparse);
+let dom = HTMLtoDOM('<div>'+xml+'</div>');
 console.log('dom: ',dom);
-                                                                                                                                                            /**
- * Вспомогательные функции
- */
+let trs = dom.querySelectorAll('div > tr');
+for (let i = 0; i < trs.length; i++) {
+  let tr = trs[i];
+  // console.log('tr: ',tr);
+  let courtcase = new Object();
+  let tr_num = tr.querySelector('td.num');
+  courtcase.num = tr_num.querySelector('.num_case').innerHTML.trim();
+  //console.log('case_num: ',courtcase.num);
+  courtcase.type = tr.querySelector('td.num > div.b-container > div').getAttribute('class').trim();
+  //console.log('case_type: ',courtcase.type);
+  let case_time = tr.querySelector('td.num > div.b-container > div').getAttribute('title').trim().split(' ')[0].split('.');
+  courtcase.time = new Date(case_time[2], case_time[1] - 1, case_time[0]);
+  //console.log('case_time: ', courtcase.time);
+  let tr_court = tr.querySelector('td.court');
+  courtcase.court = tr_court.querySelector('div:not([class])').innerHTML.trim();
+  //console.log('court: ',courtcase.court);
+  courtcase.judge = tr_court.querySelector('div.judge').innerHTML.trim();
+  //console.log('judge: ',courtcase.judge);
+  //document.querySelector("li:not([class])")
+  //console.log('court: ',tr_court);
+  courtcase.plaintiffs = new Array();
+
+  let td_plaintiff = tr.querySelector('td.plaintiff');
+  //console.log('td_plaintiff: ',td_plaintiff);
+  let plaintiffs_rollovers = td_plaintiff.querySelectorAll('span.js-rollover');
+  for (let i = 0; i < plaintiffs_rollovers.length; i++) {
+    let plaintiff = new Object();
+    let rollover = plaintiffs_rollovers[i];
+    //console.log('rollover: ', rollover);
+    let name = rollover.querySelector('strong');
+    let rolloverHtml = rollover.querySelector('.js-rolloverHtml');
+    //console.log('rolloverHtml: ', rolloverHtml);
+    
+    if (rolloverHtml.childNodes.length > 1) {
+      for (let i = 0; i < rolloverHtml.childNodes.length; i++) {
+        let childNode = rolloverHtml.childNodes[i];
+        if (childNode.nodeType === 3) {
+          let address = childNode.nodeValue.trim().replaceAll('&amp;quot;','"');
+          //console.log('address: ', address);
+          plaintiff.address=address;
+        }
+        
+      }
+    }
+    //let plaintiff_address = rolloverHtml.innerHTML.trim().replaceAll('&amp;quot;','"');
+    //console.log('plaintiff_address: ',plaintiff_address);
+    if (name !== null) {
+      let str = name.innerHTML.trim().replaceAll('&amp;quot;','"');
+      //console.log('name: ', str);
+      plaintiff.name = str;
+    }
+    //console.log('plaintiff: ',plaintiff);
+    if (plaintiff.name !== undefined) {
+      courtcase.plaintiffs.push(plaintiff);
+    }
+   
+  }
+
+  //console.log('plaintiffs: ', courtcase.plaintiffs);
+  courtcase.respondents = new Array();
+  let td_respondent = tr.querySelector('td.respondent');
+  //console.log('respondent: ',td_respondent);
+  let respondents_rollovers = td_respondent.querySelectorAll('span.js-rollover');
+  for (let i = 0; i < respondents_rollovers.length; i++) {
+    let respondent = new Object();
+    let rollover = respondents_rollovers[i];
+    //console.log('rollover: ', rollover);
+    respondent.name = rollover.querySelector('strong').innerHTML.trim().replaceAll('&amp;quot;','"');
+    //console.log('name: ', respondent.name);
+    let rolloverHtml = rollover.querySelector('.js-rolloverHtml');
+    //console.log('rolloverHtml: ', rolloverHtml);
+    if (rolloverHtml.childNodes.length > 1) {
+      for (let i = 0; i < rolloverHtml.childNodes.length; i++) {
+        let childNode = rolloverHtml.childNodes[i];
+        if (childNode.nodeType === 3) {
+          let address = childNode.nodeValue.trim().replaceAll('&amp;quot;','"');
+          //console.log('address: ', address);
+          respondent.address=address;
+        }
+        
+      }
+    }
+    //console.log('respondent: ', respondent);
+    courtcase.respondents.push(respondent);
+  }
+
+  console.log('courtcase: ', courtcase);
+}
+let elt_num = dom.querySelector('.num');
+let elt_num_case = dom.querySelector('.num_case');
+console.log('elt_num: ',elt_num);
+console.log('elt_num_case: ',elt_num_case.innerHTML.trim());
+
+let xmlString = '<xml>'+xml+'</xml>';  	// get some xml (string or document/node)
+
+let result = xmlToJSON.parseString(xmlString, {
+	mergeCDATA: false,
+	xmlns: false,
+	attrsAsObject: false
+});	// parse
+
+//console.log('result: ',JSON.stringify(result));
+
+/*
+{
+  "xml":[
+    {
+      "colgroup":[
+        {
+          "col":[
+            {"_text":[null]},
+            {"_text":[null]},
+            {"_text":[null]},
+            {"_text":[null]}
+          ]
+        }
+      ],
+      "tr":[
+        {"td":[
+          {
+            "_attrclass":{"_value":"num"},
+            "div":[
+              {
+                "_attrclass":{"_value":"b-container"},
+                "div":[
+                  {
+                    "_attrclass":{"_value":"bankruptcy"},
+                    "_attrtitle":{"_value":"03.12.2013 0:00:00"},
+                    "i":[
+                      {
+                        "_attrclass":{"_value":"b-icon"},
+                        "i":[
+                          {"_text":[null]}
+                        ]
+                      }
+                    ],
+                    "span":[{"_text":"03.12.2013"}]
+                  }
+                ],
+                "a":[
+                  {
+                    "_attrhref":{"_value":"https://kad.arbitr.ru/Card/6a05b5d6-5c1e-47b0-9518-beb8b06c3c16"},
+                    "_attrtarget":{"_value":"_blank"},
+                    "_attrclass":{"_value":"num_case"},
+                    "_text":"А40-172055/2013"}
+                  ]
+                }
+              ]
+            },{"_attrclass":{"_value":"court"},"div":[{"_attrclass":{"_value":"b-container"},"div":[{"_attrclass":{"_value":"judge"},"_attrtitle":{"_value":"Истомин С. С."},"_text":"Истомин С. С."},{"_attrtitle":{"_value":"АС города Москвы"},"_text":"АС города Москвы"}]}]},{"_attrclass":{"_value":"plaintiff"},"div":[{"_attrclass":{"_value":"b-container"},"div":[{"_attrclass":{"_value":"b-button-container"},"div":[{"_attrclass":{"_value":"b-button"},"strong":[{"_text":1854}],"i":[{"_attrclass":{"_value":"b-icon"},"i":[{"_text":[null]}]}]}]},{"span":[{"_attrclass":{"_value":"js-rollover b-newRollover"},"span":[{"_attrclass":{"_value":"js-rolloverHtml"},"_attrstyle":{"_value":"display: none;"},"strong":[{"_text":"Попова"}],"br":[{"_text":[null]}]}],"_text":"Попова"}]},{"span":[{"_attrclass":{"_value":"js-rollover b-newRollover"},"span":[{"_attrclass":{"_value":"js-rolloverHtml"},"_attrstyle":{"_value":"display: none;"},"strong":[{"_text":"Бирюков А. И."}],"br":[{"_text":[null]}],"_text":"Данные скрыты"}],"_text":"Бирюков А. И."}]},{"_attrclass":{"_value":"more"},"span":[{"_attrclass":{"_value":"js-rollover b-newRollover"},"span":[{"_attrclass":{"_value":"js-rolloverHtml"},"_attrstyle":{"_value":"display: none;"},"strong":[{"_text":"Пономаренко В. П."}],"br":[{"_text":[null]}],"_text":"Данные скрыты"}],"_text":"Пономаренко В. П."}]},{"_attrclass":{"_value":"more"},"span":[{"_attrclass":{"_value":"js-rollover b-newRollover"},"span":[{"_attrclass":{"_value":"js-rolloverHtml"},"_attrstyle":{"_value":"display: none;"},"strong":[{"_text":"ОАО КБ Мастер-банк Семеновой Т. С."}],"br":[{"_text":[null]}],"_text":"117525, ул. Днепропетровская д. 3 к. 5 кв. 124 Москва"}],"_text":"ОАО КБ Мастер-банк Семеновой Т. С."}]},{"_attrclass":{"_value":"more"},"span":[{"_attrclass":{"_value":"js-rollover b-newRollover"},"span":[{"_attrclass":{"_value":"js-rolloverHtml"},"_attrstyle":{"_value":"display: none;"},"strong":[{"_text":"ОАО КБ Мастер-банк Фальковская Е. В."}],"br":[{"_text":[null]}],"_text":"117525, ул. Чертановская д. 24 к. 1 кв. 125 Москва"}],"_text":"ОАО КБ Мастер-банк Фальковская Е. В."}]},{"_attrclass":{"_value":"more"},"span":[{"_attrclass":{"_value":"js-rollover b-newRollover"},"span":[{"_attrclass":{"_value":"js-rolloverHtml"},"_attrstyle":{"_value":"display: none;"},"strong":[{"_text":"ЗАО НПФ \"Доломант\""}],"br":[{"_text":[null]}],"_text":"117437, г. Москва, ул. Профсоюзная, д. 108"}],"_text":"ЗАО НПФ \"Доломант\""}]},{"_attrclass":{"_value":"more"},"span":[{"_attrclass":{"_value":"js-rollover b-newRollover"},"span":[{"_attrclass":{"_value":"js-rolloverHtml"},"_attrstyle":{"_value":"display: none;"},"strong":[{"_text":"Мельников В. В."}],"br":[{"_text":[null]}],"_text":"Данные скрыты"}],"_text":"Мельников В. В."}]},{"_attrclass":{"_value":"more"},"span":[{"_attrclass":{"_value":"js-rollover b-newRollover"},"span":[{"_attrclass":{"_value":"js-rolloverHtml"},"_attrstyle":{"_value":"display: none;"},"strong":[{"_text":"Олейник Л. С."}],"br":[{"_text":[null]}],"_text":"Данные скрыты"}],"_text":"Олейник Л. С."}]},{"_attrclass":{"_value":"more"},"span":[{"_attrclass":{"_value":"js-rollover b-newRollover"},"span":[{"_attrclass":{"_value":"js-rolloverHtml"},"_attrstyle":{"_value":"display: none;"},"strong":[{"_text":"ООО \"Тандем\""}],"br":[{"_text":[null]}],"_text":"142432, Моск.обл., г. Черноголовка, Институцский проспект, д. 4, кв. 121"}],"_text":"ООО \"Тандем\""}]},{"_attrclass":{"_value":"more"},"span":[{"_attrclass":{"_value":"js-rollover b-newRollover"},"span":[{"_attrclass":{"_value":"js-rolloverHtml"},"_attrstyle":{"_value":"display: none;"},"strong":[{"_text":"СРО НП по содействию и развитию строительной деятельности \"Содружество Строителей\""}],"br":[{"_text":[null]}],"_text":"197110, Россия, Санткт-Петербург, ул.Малая разночинная,д.9, литА"}],"_text":"СРО НП по содействию и развитию строительной деятельности \"Содружество Строителей\""}]},{"_attrclass":{"_value":"more"},"span":[{"_attrclass":{"_value":"js-rollover b-newRollover"},"span":[{"_attrclass":{"_value":"js-rolloverHtml"},"_attrstyle":{"_value":"display: none;"},"strong":[{"_text":"Юрина М.А."}],"br":[{"_text":[null]}],"_text":"Данные скрыты"}],"_text":"Юрина М.А."}]},{"_attrclass":{"_value":"more"},"span":[{"_attrclass":{"_value":"js-rollover b-newRollover"},"span":[{"_attrclass":{"_value":"js-rolloverHtml"},"_attrstyle":{"_value":"display: none;"},"strong":[{"_text":"Прудников А.Е."}],"br":[{"_text":[null]}],"_text":"Данные скрыты"}],"_text":"Прудников А.Е."}]},{"_attrclass":{"_value":"more"},"span":[{"_attrclass":{"_value":"js-rollover b-newRollover"},"span":[{"_attrclass":{"_value":"js-rolloverHtml"},"_attrstyle":{"_value":"display: none;"},"strong":[{"_text":"Борисовая Н.Н."}],"br":[{"_text":[null]}],"_text":"Данные скрыты"}],"_text":"Борисовая Н.Н."}]},{"_attrclass":{"_value":"more"},"span":[{"_attrclass":{"_value":"js-rollover b-newRollover"},"span":[{"_attrclass":{"_value":"js-rolloverHtml"},"_attrstyle":{"_value":"display: none;"},"strong":[{"_text":"НП \"Ассоциация проектрировщиков профессионалов\""}],"br":[{"_text":[null]}],"_text":"121309, Россия, Москва, Василисы Кожиной, д.14, корп.6"}],"_text":"НП \"Ассоциация проектрировщиков профессионалов\""}]},{"_attrclass":{"_value":"more"},"span":[{"_attrclass":{"_value":"js-rollover b-newRollover"},"span":[{"_attrclass":{"_value":"js-rolloverHtml"},"_attrstyle":{"_value":"display: none;"},"strong":[{"_text":"Дубровина Е. А."}],"br":[{"_text":[null]}],"_text":"Данные скрыты"}],"_text":"Дубровина Е. А."}]},{"_attrclass":{"_value":"more"},"span":[{"_attrclass":{"_value":"js-rollover b-newRollover"},"span":[{"_attrclass":{"_value":"js-rolloverHtml"},"_attrstyle":{"_value":"display: none;"},"strong":[{"_text":"Борисова Н. Н."}],"br":[{"_text":[null]}],"_text":"Данные скрыты"}],"_text":"Борисова Н. Н."}]},{"_attrclass":{"_value":"more"},"span":[{"_attrclass":{"_value":"js-rollover b-newRollover"},"span":[{"_attrclass":{"_value":"js-rolloverHtml"},"_attrstyle":{"_value":"display: none;"},"strong":[{"_text":"Иванова Л. В."}],"br":[{"_text":[null]}],"_text":"Данные скрыты"}],"_text":"Иванова Л. В."}]},{"_attrclass":{"_value":"more"},"span":[{"_attrclass":{"_value":"js-rollover b-newRollover"},"span":[{"_attrclass":{"_value":"js-rolloverHtml"},"_attrstyle":{"_value":"display: none;"},"strong":[{"_text":"ООО \"Центральный булочные\""}],"br":[{"_text":[null]}],"_text":"198052, Россия, Санкт-Петербург, Измайловский пр., 18"}],"_text":"ООО \"Центральный булочные\""}]},{"_attrclass":{"_value":"more"},"span":[{"_attrclass":{"_value":"js-rollover b-newRollover"},"span":[{"_attrclass":{"_value":"js-rolloverHtml"},"_attrstyle":{"_value":"display: none;"},"strong":[{"_text":"ООО ФГБУ \"Спецмедснаб ФМАБ России\""}],"br":[{"_text":[null]}],"_text":"141400, Россия, г.Химки, МО, Вашутинское ш., д.23"}],"_text":"ООО ФГБУ \"Спецмедснаб ФМАБ России\""}]},{"_attrclass":{"_value":"more"},"span":[{"_attrclass":{"_value":"js-rollover b-newRollover"},"span":[{"_attrclass":{"_value":"js-rolloverHtml"},"_attrstyle":{"_value":"display: none;"},"strong":[{"_text":"ОАО \"Промышленный энергетический банк\""}],"br":[{"_text":[null]}],"_text":"160009, Россия, Вологда, Чехова, д. 30"}],"_text":"ОАО \"Промышленный энергетический банк\""}]},{"_attrclass":{"_value":"more"},"span":[{"_attrclass":{"_value":"js-rollover b-newRollover"},"a":[{"_attrhref":{"_value":"https://kad.arbitr.ru/Card/6a05b5d6-5c1e-47b0-9518-beb8b06c3c16"},"_attrtarget":{"_value":"_blank"},"_attrclass":{"_value":"num_case"},"_text":"Подробнее..."}],"span":[{"_attrclass":{"_value":"js-rolloverHtml"},"_attrstyle":{"_value":"display: none;"},"_text":"Для просмотра полного списка участников перейдите к карточке дела, нажав на эту ссылку"}]}]}]}]},{"_attrclass":{"_value":"respondent"},"div":[{"_attrclass":{"_value":"b-container"},"div":[{"_attrclass":{"_value":"b-button-container"},"div":[{"_attrclass":{"_value":"b-button"},"strong":[{"_text":17}],"i":[{"_attrclass":{"_value":"b-icon"},"i":[{"_text":[null]}]}]}]},{"span":[{"_attrclass":{"_value":"js-rollover b-newRollover"},"span":[{"_attrclass":{"_value":"js-rolloverHtml"},"_attrstyle":{"_value":"display: none;"},"strong":[{"_text":"КБ \"Мастер-Банк\" (ОАО)\""}],"br":[{"_text":[null]}],"_text":"109240, МОСКВА, ВЕРХНИЙ ТАГАНСКИЙ ТУПИК, 4"}],"_text":"КБ \"Мастер-Банк\" (ОАО)\""}]},{"span":[{"_attrclass":{"_value":"js-rollover b-newRollover"},"span":[{"_attrclass":{"_value":"js-rolloverHtml"},"_attrstyle":{"_value":"display: none;"},"strong":[{"_text":"КБ Мастер Банк в лице ГК АСВ"}],"br":[{"_text":[null]}],"_text":"Данные скрыты"}],"_text":"КБ Мастер Банк в лице ГК АСВ"}]},{"_attrclass":{"_value":"more"},"span":[{"_attrclass":{"_value":"js-rollover b-newRollover"},"span":[{"_attrclass":{"_value":"js-rolloverHtml"},"_attrstyle":{"_value":"display: none;"},"strong":[{"_text":"Левченко Е. В."}],"br":[{"_text":[null]}],"_text":"Данные скрыты"}],"_text":"Левченко Е. В."}]},{"_attrclass":{"_value":"more"},"span":[{"_attrclass":{"_value":"js-rollover b-newRollover"},"span":[{"_attrclass":{"_value":"js-rolloverHtml"},"_attrstyle":{"_value":"display: none;"},"strong":[{"_text":"К/У ГК \"Агенство по страхованию вкладов\""}],"br":[{"_text":[null]}],"_text":"109240, Россия, Москва, Верх.Таганский туп., , д. 4"}],"_text":"К/У ГК \"Агенство по страхованию вкладов\""}]},{"_attrclass":{"_value":"more"},"span":[{"_attrclass":{"_value":"js-rollover b-newRollover"},"span":[{"_attrclass":{"_value":"js-rolloverHtml"},"_attrstyle":{"_value":"display: none;"},"strong":[{"_text":"ОАО Конкурсный управляющий ОАО \"Мастер.Банк\""}],"br":[{"_text":[null]}],"_text":"115184, Россия, Москва, пер. Руновский, 12"}],"_text":"ОАО Конкурсный управляющий ОАО \"Мастер.Банк\""}]},{"_attrclass":{"_value":"more"},"span":[{"_attrclass":{"_value":"js-rollover b-newRollover"},"span":[{"_attrclass":{"_value":"js-rolloverHtml"},"_attrstyle":{"_value":"display: none;"},"strong":[{"_text":"К/у ООО \"Мастер-Банк\" Бельков А. О."}],"br":[{"_text":[null]}],"_text":"127055, Россия, Москва, ул. Лесная, д. 59, стр. 2"}],"_text":"К/у ООО \"Мастер-Банк\" Бельков А. О."}]},{"_attrclass":{"_value":"more"},"span":[{"_attrclass":{"_value":"js-rollover b-newRollover"},"span":[{"_attrclass":{"_value":"js-rolloverHtml"},"_attrstyle":{"_value":"display: none;"},"strong":[{"_text":"Конкурсный управляющий ОАО \"Мастер.Банк\" (ОАО)"}],"br":[{"_text":[null]}],"_text":"115184, Россия, Москва, пер. Руновский, 12"}],"_text":"Конкурсный управляющий ОАО \"Мастер.Банк\" (ОАО)"}]},{"_attrclass":{"_value":"more"},"span":[{"_attrclass":{"_value":"js-rollover b-newRollover"},"span":[{"_attrclass":{"_value":"js-rolloverHtml"},"_attrstyle":{"_value":"display: none;"},"strong":[{"_text":"ОАО КБ \"Мастер-Банк\" в лице к/у ГК \"Агентство по страхованию вкладов\""}],"br":[{"_text":[null]}],"_text":"127055, Россия, Москва, ул. Лесная, д. 59, стр. 2"}],"_text":"ОАО КБ \"Мастер-Банк\" в лице к/у ГК \"Агентство по страхованию вкладов\""}]},{"_attrclass":{"_value":"more"},"span":[{"_attrclass":{"_value":"js-rollover b-newRollover"},"span":[{"_attrclass":{"_value":"js-rolloverHtml"},"_attrstyle":{"_value":"display: none;"},"strong":[{"_text":"ГК КБ \"Мастер-Банк\" в лице \"Агентство по страхованию вкладов\""}],"br":[{"_text":[null]}],"_text":"109240, Россия, Москва, Верхн. Таганский туп., 4"}],"_text":"ГК КБ \"Мастер-Банк\" в лице \"Агентство по страхованию вкладов\""}]},{"_attrclass":{"_value":"more"},"span":[{"_attrclass":{"_value":"js-rollover b-newRollover"},"span":[{"_attrclass":{"_value":"js-rolloverHtml"},"_attrstyle":{"_value":"display: none;"},"strong":[{"_text":"ГК К/У \"Агенство по страхованию вкладов\""}],"br":[{"_text":[null]}],"_text":"109240, Россия, Москва, Верх.Таганский туп., , д. 4"}],"_text":"ГК К/У \"Агенство по страхованию вкладов\""}]},{"_attrclass":{"_value":"more"},"span":[{"_attrclass":{"_value":"js-rollover b-newRollover"},"span":[{"_attrclass":{"_value":"js-rolloverHtml"},"_attrstyle":{"_value":"display: none;"},"strong":[{"_text":"ОАО КУ КБ \"Мастер-Банк\""}],"br":[{"_text":[null]}],"_text":"115184, Россия, Москва, Руновский пер., 12"}],"_text":"ОАО КУ КБ \"Мастер-Банк\""}]},{"_attrclass":{"_value":"more"},"span":[{"_attrclass":{"_value":"js-rollover b-newRollover"},"span":[{"_attrclass":{"_value":"js-rolloverHtml"},"_attrstyle":{"_value":"display: none;"},"strong":[{"_text":"ООО К/у \"Мастер-Банк\" Бельков А.О."}],"br":[{"_text":[null]}],"_text":"127055, Россия, Москва, ул. Лесная, д. 59, стр. 2"}],"_text":"ООО К/у \"Мастер-Банк\" Бельков А.О."}]},{"_attrclass":{"_value":"more"},"span":[{"_attrclass":{"_value":"js-rollover b-newRollover"},"span":[{"_attrclass":{"_value":"js-rolloverHtml"},"_attrstyle":{"_value":"display: none;"},"strong":[{"_text":"Левченко Е.В."}],"br":[{"_text":[null]}],"_text":"Данные скрыты"}],"_text":"Левченко Е.В."}]},{"_attrclass":{"_value":"more"},"span":[{"_attrclass":{"_value":"js-rollover b-newRollover"},"span":[{"_attrclass":{"_value":"js-rolloverHtml"},"_attrstyle":{"_value":"display: none;"},"strong":[{"_text":"Булочник А.Б."}],"br":[{"_text":[null]}],"_text":"Данные скрыты"}],"_text":"Булочник А.Б."}]},{"_attrclass":{"_value":"more"},"span":[{"_attrclass":{"_value":"js-rollover b-newRollover"},"span":[{"_attrclass":{"_value":"js-rolloverHtml"},"_attrstyle":{"_value":"display: none;"},"strong":[{"_text":"Киселев А.Г."}],"br":[{"_text":[null]}],"_text":"Данные скрыты"}],"_text":"Киселев А.Г."}]},{"_attrclass":{"_value":"more"},"span":[{"_attrclass":{"_value":"js-rollover b-newRollover"},"span":[{"_attrclass":{"_value":"js-rolloverHtml"},"_attrstyle":{"_value":"display: none;"},"strong":[{"_text":"Орлов В.А."}],"br":[{"_text":[null]}],"_text":"Данные скрыты"}],"_text":"Орлов В.А."}]},{"_attrclass":{"_value":"more"},"span":[{"_attrclass":{"_value":"js-rollover b-newRollover"},"span":[{"_attrclass":{"_value":"js-rolloverHtml"},"_attrstyle":{"_value":"display: none;"},"strong":[{"_text":"НОПРИЗ"}],"br":[{"_text":[null]}],"_text":"119019, Россия, Москва, Н.Арбат, 21"}],"_text":"НОПРИЗ"}]}]}]}]}],"input":[{"_attrtype":{"_value":"hidden"},"_attrid":{"_value":"documentsPageSize"},"_attrvalue":{"_value":25},"_text":[null]},{"_attrtype":{"_value":"hidden"},"_attrid":{"_value":"documentsPage"},"_attrvalue":{"_value":1},"_text":[null]},{"_attrtype":{"_value":"hidden"},"_attrid":{"_value":"documentsTotalCount"},"_attrvalue":{"_value":1},"_text":[null]},{"_attrtype":{"_value":"hidden"},"_attrid":{"_value":"documentsPagesCount"},"_attrvalue":{"_value":1},"_text":[null]}]}]}
+*/
 
 /**
  * Проверка запуска окна в iframe
