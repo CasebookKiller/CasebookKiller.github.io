@@ -85,11 +85,11 @@
       }
       if (um=="") um=0
 
-      //if (/[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZабвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ]/.test(um) ) {
-      if (/[a-zA-Zа-яА-Я]/.test(um) ) {
+      if (/[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZабвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ]/.test(um) ) {
+      //if (/[a-zA-Zа-яА-Я]/.test(um) ) {
       
-        let reg=/\D*(\d+)\D+(\d*)\D*/	// игнорируем руб., коп. и т.п.
-        let abc=reg.exec(um)
+        var reg=/\D*(\d+)\D+(\d*)\D*/	// игнорируем руб., коп. и т.п.
+        var abc=reg.exec(um)
         if (abc[2]!="") um=abc[1]+"."+abc[2];
         else um=abc[1]
       }
