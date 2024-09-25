@@ -60,6 +60,29 @@
             top: 30px;
         }
     </style>
+
+<link rel='stylesheet' href='./css/css.css' type='text/css'>
+<style>
+	.inputсena {height:35px;width:200px;font-size:17px;text-align:right;}
+	.gpvivod {height:35px;font-size:20px;}
+	.tdgp {width: auto !important;} /* white-space:nowrap !important; width:1% !important; */
+	.td2 {padding-left:0px}
+	.labelgp {font-size:13px;color:#555555;}
+	.pokazvivod {width:700px;color:#555;padding-left:3px}
+	.fields {border-radius: 8px;padding: 15px 15px 25px 20px;}
+	.redhint {color:green;} /* 9b2d30 */
+	button {background: transparent;border: 0 !important;}
+	button:focus {
+        outline: none;
+    }
+	.imgcopy:hover {content: url("./img/copy-green16.png")}
+	.imgcopy:active {
+        -webkit-filter: sepia(1) hue-rotate(120deg) saturate(10);
+        filter: sepia(1) hue-rotate(120deg) saturate(10);  
+	}
+	
+</style>
+
 </head>
 
 <body>
@@ -89,11 +112,152 @@
         <button onclick="toggleMainButton();">Toggle Main Button</button>
     </main>
     
-    <iframe src="./gp.html" width="100%" title="Калькулятор государственной пошлины"></iframe>
-    
+    <div class='noprint2'>
+        <a name=top><h1>Калькулятор госпошлины в суд по новым правилам</h1></a>
+        <span class=explain>
+        Расчет государственной пошлины при обращении в суды по новым правилам, действующим с 9 сентября 2024 г., с учётом Федерального закона от 8 августа 2024 г. № 259-ФЗ.<br>
+        Размер пошлины рассчитывается при обращении в суд общей юрисдикции (мировому судье), в арбитражный суд, по общеисковому и приказному производству.
+        </span>
+        <span style="font-size:8px"><br></span>
+        
+        <div style="position:fixed;left:9999px;opacity:0;">
+          <img src="./img/copy-green16.png">
+        </div>
+        
+        <h3 style="color:#555">Суды общей юрисдикции, мировые судьи</h3>
+        <div class=tdgp>
+          <input type="text" id="obsh2" readonly style="border: #ffffff 0px solid;background-color:#ffffff;color:#999;display:none;width:0px;">
+          <span class="labelgp">цена иска</span>
+          <input type="text" id="obsh" onchange=funk() onkeyup=funk() onFocus="for13=true" onBlur="for13=false;gethuman(this)" onMouseOut=gethuman(this) class=inputсena> &#8381;
+        </div>
+        <div class='tdgp td2'>
+          <span class=labelgp>госпошлина <sup><span id=gpredhint class=redhint></span></sup></span>
+          <span id=vivod class=gpvivod></span><span id=sudprikazvivod class=labelgp></span>
+        </div>
+        <div class=labelgp>
+          <br><input type=checkbox id=lgota onclick='d.getElementById("lgota30procentov").checked=false;funk()'> -25 т.р. пошлины 
+          <input type="checkbox" id="tip1" class="tip-checkbox">
+        <label for="tip1" class="support"><em><abbr title='нажмите для просмотра комментария'>?</abbr></em></label>
+        <span class='tip-block'>
+          <span class="tip" style="width:680px; padding:20px; color:#555">
+            Эта льгота распространяется на следующие категории лиц:<br><br>
+            1) общественные организации инвалидов, выступающие в качестве истцов (административных истцов) или ответчиков (административных ответчиков);<br>
+            2) истцы (административные истцы) - инвалиды I или II группы, дети-инвалиды, инвалиды с детства;<br>
+            3) ветераны боевых действий, ветераны военной службы, обращающиеся за защитой своих прав, установленных законодательством о ветеранах;<br>
+            4) истцы - по искам, связанным с нарушением прав потребителей;<br>
+            5) истцы - пенсионеры, получающие пенсии, назначаемые в порядке, установленном пенсионным законодательством РФ, - по искам имущественного характера, по административным искам имущественного характера к Фонду пенсионного и социального страхования РФ, негосударственным пенсионным фондам либо к федеральным органам исполнительной власти, осуществляющим пенсионное обеспечение лиц, проходивших военную службу.<br><br>
+            п.2, п.3 ст.333.36 НК РФ
+            <label for="tip1" class="tip-close">X</label>
+          </span>
+        </span>
+        </div>
+        <div class=labelgp>
+          <input type=checkbox id=lgota30procentov onclick='d.getElementById("lgota").checked=false;funk()'> 30% от пошлины 
+          <input type="checkbox" id="tip2" class="tip-checkbox">
+        <label for="tip2" class="support"><em><abbr title='нажмите для просмотра комментария'>?</abbr></em></label>
+        <span class='tip-block'>
+          <span class="tip" style="width:670px; padding:20px; color:#555">
+              Пошлина 30% от пошлины по имущественным требованиям применяется при подаче заявлений:<br><br>
+              1) о выдаче исполнительных листов на принудительное исполнение решений третейского суда;<br>
+              2) о признании и об исполнении решения иностранного суда, иностранных третейских судов (арбитражей).<br><br>
+              Исходя из суммы, подтвержденной соответствующим решением.<br><br>
+              пп.10 п.1 ст.333.19 НК РФ
+              <label for="tip2" class="tip-close">X</label>
+          </span>
+        </span>            
+        </div>
+        <div class='labelgp td2'>
+          <br><a href=gpknetgp.htm title="категории лиц, освобожденных от уплаты госпошлины в суд (ГПК РФ)" target=_blank class=llink>освобождены от уплаты</a><br>
+          <a href=gpkgp.htm title="таблица госпошлин в суд по новым правилам (ГПК РФ)" target=_blank class=llink>таблица госпошлин</a>
+        </div>
+        <br>
+        <div id=gppokazhi class=pokazvivod></div><br>
+        &nbsp;<input type=button value='Ок' onClick=funk() title='Рассчитать госпошлину' class=mainbutton>&nbsp;&nbsp;<input type=button value='Очистить' onClick=clean() class=mainbutton>&nbsp;&nbsp;
+        <input type=hidden id=copygp1>
+        <input type=hidden id=copyprikaz1>
+        <br><br><br>
+        
+        
+        <h3 style="color:#555">Арбитражные суды</h3>
+        <div class=tdgp>
+          <input type=text id=arb2 readonly style="border: #ffffff 0px solid;background-color:#ffffff;color:#999;display:none;width:0px;">
+          <span class=labelgp>цена иска</span>
+          <input type=text id=arb onchange=funk2() onkeyup=funk2() onFocus="for13=true" onBlur="for13=false;gethuman(this)" onMouseOut=gethuman(this) class=inputсena> &#8381;
+        </div>
+        <div class='tdgp td2'>
+          <span class=labelgp>госпошлина <sup><span id=gpredhint2 class=redhint></span></sup></span>
+          <span id=vivod2 class=gpvivod></span><span id=sudprikazvivod2 class=labelgp></span>
+        </div>
+        <div class=labelgp>
+          <br><input type=checkbox id=lgota2 onclick='d.getElementById("lgota30procentov2").checked=d.getElementById("lgota50procentov2").checked=false;funk2()'> -55 т.р. пошлины 
+          <input type="checkbox" id="tip3" class="tip-checkbox">
+        <label for="tip3" class="support"><em><abbr title='нажмите для просмотра комментария'>?</abbr></em></label>
+        <span class='tip-block'>
+          <span class="tip" style="width:635px; padding:20px; color:#555">
+              Эта льгота распространяется на следующие категории лиц:<br><br>
+              1) общественные организации инвалидов, выступающие в качестве истцов или ответчиков;<br>
+              2) истцы - инвалиды I и II группы.<br><br>
+              п.2, п.3 ст.333.37 НК РФ
+              <label for="tip3" class="tip-close">X</label>
+          </span>
+        </span>
+        </div>
+        <div class=labelgp>
+          <input type=checkbox id=lgota30procentov2 onclick='d.getElementById("lgota2").checked=d.getElementById("lgota50procentov2").checked=false;funk2()'> 30% от пошлины 
+          <input type=checkbox id=tip4 class="tip-checkbox">
+        <label for=tip4 class=support><em><abbr title='нажмите для просмотра комментария'>?</abbr></em></label>
+        <span class='tip-block'>
+          <span class=tip style="width:670px; padding:20px; color:#555">
+              Пошлина 30% от пошлины по имущественным требованиям применяется при подаче заявлений:<br><br>
+              1) о выдаче исполнительных листов на принудительное исполнение решений третейского суда;<br>
+              2) о признании и приведении в исполнение решения иностранного суда, иностранного арбитражного решения.<br><br>
+              Исходя из суммы, подтвержденной соответствующим решением.<br><br>
+              пп.13 п.1 ст.333.21 НК РФ
+              <label for=tip4 class="tip-close">X</label>
+          </span>
+        </span>            
+        </div>
+        <div class=labelgp>
+          <input type=checkbox id=lgota50procentov2 onclick='d.getElementById("lgota2").checked=d.getElementById("lgota30procentov2").checked=false;funk2()'> 50% от пошлины 
+          <input type=checkbox id=tip5 class="tip-checkbox">
+        <label for=tip5 class=support><em><abbr title='нажмите для просмотра комментария'>?</abbr></em></label>
+        <span class='tip-block'>
+          <span class=tip style="width:670px; padding:20px; color:#555">
+              Пошлина 50% от пошлины, рассчитанной по общему правилу, применяется по заявлениям, требованиям и иным обособленным спорам, подлежащим рассмотрению в деле о банкротстве, исходя из существа заявленных требований (пп.9 п.1 ст.333.21 НК РФ).<br><br>
+              При этом:<br>
+              - кредиторы освобождены от уплаты госпошлины по включению требований в реестр требований кредиторов, если их требования подтверждены вступившим в силу судебным актом (пп.5 п.1 ст.333.37 НК РФ);<br>
+              - пошлина по заявлению кредитора о признании должника банкротом составляет 10 т.р. для кредитора - физ.лица и 100 т.р. для кредитора - юр.лица;  заявление должника о признании себя банкротом пошлиной не облагается (пп.8 п.1 ст.333.21 НК РФ).<br><br>
+              <i>Не выбирайте данную опцию для расчета госпошлины по заявлению о вынесении судебного приказа.</i>
+              <label for=tip5 class="tip-close">X</label>
+          </span>
+        </span>            
+        </div>
+        <div class='labelgp td2'>
+          <br><a href=apknetgp.htm title="категории лиц, освобожденных от уплаты госпошлины в суд (АПК РФ)" target=_blank class=llink>освобождены от уплаты</a><br>
+          <a href=apkgp.htm title="таблица госпошлин в арбитражный суд по новым правилам" target=_blank class=llink>таблица госпошлин</a>
+        </div>
+        
+        <br>
+        <div id=gppokazhi2 class=pokazvivod></div><br>
+        &nbsp;<input type=button value='Ок' onClick=funk2() title='Рассчитать госпошлину' class=mainbutton>&nbsp;&nbsp;<input type=button value='Очистить' onClick=clean2() class='mainbutton'>
+        <input type=hidden id=copygp2>
+        <input type=hidden id=copyprikaz2>
+        
+        
+        </div>
+        
+        
+        
+        
+        </div>
+            
     <div id="viewport"></div>
     <div id="viewport-params-size"></div>
     <div id="viewport-params-expand"></div>
+
+
+
+    
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
         // Init TWA
