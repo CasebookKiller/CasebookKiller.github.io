@@ -156,7 +156,7 @@
     }
 
     function changeimg(obj) {
-        let collectionbyclass = d.querySelectorAll('.imgcopy')
+        let collectionbyclass = document.querySelectorAll('.imgcopy')
         for (let i = 0; i < collectionbyclass.length; i++) {
             collectionbyclass[i].src = "./img/copy-brown16.png";
             collectionbyclass[i].title = "скопировать в буфер обмена"
@@ -166,19 +166,19 @@
     }
 
     function funk() {
-      sum=d.getElementById('obsh').value
-      d.getElementById('obsh2').value=""
-      lgota = d.getElementById('lgota').checked
-      lgota30procentov = d.getElementById('lgota30procentov').checked
+      sum=document.getElementById('obsh').value
+      document.getElementById('obsh2').value=""
+      lgota = document.getElementById('lgota').checked
+      lgota30procentov = document.getElementById('lgota30procentov').checked
       gosp1=0;
       
-      if (lgota) d.getElementById('gpredhint').innerHTML = '(-25 т.р. пошлины)';
-      else if (lgota30procentov) d.getElementById('gpredhint').innerHTML = '(30% от пошлины)';
-      else d.getElementById('gpredhint').innerHTML = ''
+      if (lgota) document.getElementById('gpredhint').innerHTML = '(-25 т.р. пошлины)';
+      else if (lgota30procentov) document.getElementById('gpredhint').innerHTML = '(30% от пошлины)';
+      else document.getElementById('gpredhint').innerHTML = ''
 
       if (check) punk(sum)
 
-      if (sum.indexOf('+')!=-1 || sum.indexOf('-')!=-1 || sum.indexOf('/')!=-1 || sum.indexOf('*')!=-1) d.getElementById('obsh2').value=human(okrugl(eval(um)))
+      if (sum.indexOf('+')!=-1 || sum.indexOf('-')!=-1 || sum.indexOf('/')!=-1 || sum.indexOf('*')!=-1) document.getElementById('obsh2').value=human(okrugl(eval(um)))
 
       sum=eval(um)
 
@@ -195,8 +195,8 @@
       if (gosp1>900000) gosp1=900000;
       
       if (lgota) {
-          if (gosp1>25000) gosp1lgota=gosp1-25000;
-          else gosp1lgota=0;
+        if (gosp1>25000) gosp1lgota=gosp1-25000;
+        else gosp1lgota=0;
       }
       
       gosp1okrugl=okrugl2(gosp1)
@@ -210,7 +210,7 @@
       else okruglenno = "";
       
       if (opis==1) {
-            pokaz+="до 100 000 руб. госпошлина составляет 4000 руб. (пп.1 п.1 ст.333.19 НК РФ), а для судебного приказа - 2000 руб. (пп.2 п.1 ст.333.19 НК РФ)"
+        pokaz+="до 100 000 руб. госпошлина составляет 4000 руб. (пп.1 п.1 ст.333.19 НК РФ), а для судебного приказа - 2000 руб. (пп.2 п.1 ст.333.19 НК РФ)"
         if (sum==0) pokaz="Сперва необходимо ввести цену иска"
       }
       if (opis==2) {
@@ -251,62 +251,60 @@
         if ((sum-100000000)/100*0.15+314000>900000) pokaz+=", но поскольку эта сумма превышает 900 000 руб., госпошлина = 900 000 руб."
       }
       if (lgota) {
-          gosp1 = gosp1lgota
-          gosp1okrugl = okrugl2(gosp1lgota)
-          if (sum!=0) pokaz+=", для льготных категорий по п.2 ст. 333.36 НК РФ: " + human(gosp1okrugl) + " руб."
+        gosp1 = gosp1lgota
+        gosp1okrugl = okrugl2(gosp1lgota)
+        if (sum!=0) pokaz+=", для льготных категорий по п.2 ст. 333.36 НК РФ: " + human(gosp1okrugl) + " руб."
       } else if (lgota30procentov) {
-          gosp1okrugl = okrugl2(gosp1*0.3)
-          if (sum!=0) pokaz+=", при подаче заявлений о выдаче исполнительных листов на принудительное исполнение решений третейского суда, о признании и об исполнении решения иностранного суда, иностранных третейских судов (арбитражей): " + human(gosp1okrugl) + " руб."
+        gosp1okrugl = okrugl2(gosp1*0.3)
+        if (sum!=0) pokaz+=", при подаче заявлений о выдаче исполнительных листов на принудительное исполнение решений третейского суда, о признании и об исполнении решения иностранного суда, иностранных третейских судов (арбитражей): " + human(gosp1okrugl) + " руб."
       }
       
-      d.getElementById('copygp1').value = human(gosp1okrugl)
+      document.getElementById('copygp1').value = human(gosp1okrugl)
         
-      d.getElementById('vivod').innerHTML = human(gosp1okrugl) + ' &#8381;<button id=buttoncopygp1><img src="./img/copy-brown16.png" title="скопировать в буфер обмена" onClick=changeimg(this) class=imgcopy></button>'
+      document.getElementById('vivod').innerHTML = human(gosp1okrugl) + ' &#8381;<button id=buttoncopygp1><img src="./img/copy-brown16.png" title="скопировать в буфер обмена" onClick=changeimg(this) class=imgcopy></button>'
       
-      d.querySelector('#buttoncopygp1').addEventListener('click', function(event) {
-            navigator.clipboard.writeText(d.getElementById('copygp1').value);
-        })
+      document.querySelector('#buttoncopygp1').addEventListener('click', function(event) {
+        navigator.clipboard.writeText(document.getElementById('copygp1').value);
+      })
 
-        d.querySelector('#buttoncopygp1').addEventListener('mouseover', function() {
-            d.querySelector('#buttoncopygp1').focus();
-        })
+      document.querySelector('#buttoncopygp1').addEventListener('mouseover', function() {
+        document.querySelector('#buttoncopygp1').focus();
+      })
 
       if (sum<=500000 && !lgota30procentov) {
-          d.getElementById('copyprikaz1').value = human(okrugl2(gosp1/2))
-          d.getElementById('sudprikazvivod').innerHTML = '(для судебного приказа: ' + human(okrugl2(gosp1/2)) + ' &#8381;<button id=buttoncopyprikaz1><img src="./img/copy-brown16.png" title="скопировать в буфер обмена" onClick=changeimg(this) class=imgcopy></button>)'
-          d.querySelector('#buttoncopyprikaz1').addEventListener('click', function(event) {
-                navigator.clipboard.writeText(d.getElementById('copyprikaz1').value);
-            })
-            d.querySelector('#buttoncopyprikaz1').addEventListener('mouseover', function() {
-                d.querySelector('#buttoncopyprikaz1').focus();
-            })
+        document.getElementById('copyprikaz1').value = human(okrugl2(gosp1/2))
+        document.getElementById('sudprikazvivod').innerHTML = '(для судебного приказа: ' + human(okrugl2(gosp1/2)) + ' &#8381;<button id=buttoncopyprikaz1><img src="./img/copy-brown16.png" title="скопировать в буфер обмена" onClick=changeimg(this) class=imgcopy></button>)'
+        document.querySelector('#buttoncopyprikaz1').addEventListener('click', function(event) {
+          navigator.clipboard.writeText(document.getElementById('copyprikaz1').value);
+        })
+        document.querySelector('#buttoncopyprikaz1').addEventListener('mouseover', function() {
+          document.querySelector('#buttoncopyprikaz1').focus();
+        })
       } else {
-          d.getElementById('sudprikazvivod').innerHTML = ''
+        document.getElementById('sudprikazvivod').innerHTML = ''
       }
       
-
-      
-      d.getElementById('gppokazhi').innerHTML = '<fieldset class=fields><legend align=right>&nbsp;&nbsp;пояснение&nbsp;&nbsp;</legend>'+pokaz+'</fieldset>'
+      document.getElementById('gppokazhi').innerHTML = '<fieldset class=fields><legend align=right>&nbsp;&nbsp;пояснение&nbsp;&nbsp;</legend>'+pokaz+'</fieldset>'
       
       check=true
     //	sharelink()
     }
 
     function funk2() {
-      sum=d.getElementById('arb').value
-      d.getElementById('arb2').value=""
-      lgota2 = d.getElementById('lgota2').checked
-      lgota30procentov2 = d.getElementById('lgota30procentov2').checked
-      lgota50procentov2 = d.getElementById('lgota50procentov2').checked
+      sum=document.getElementById('arb').value
+      document.getElementById('arb2').value=""
+      lgota2 = document.getElementById('lgota2').checked
+      lgota30procentov2 = document.getElementById('lgota30procentov2').checked
+      lgota50procentov2 = document.getElementById('lgota50procentov2').checked
       
-      if (lgota2) d.getElementById('gpredhint2').innerHTML = '(-55 т.р. пошлины)';
-      else if (lgota30procentov2) d.getElementById('gpredhint2').innerHTML = '(30% от пошлины)';
-      else if (lgota50procentov2) d.getElementById('gpredhint2').innerHTML = '(50% от пошлины)';
-      else d.getElementById('gpredhint2').innerHTML = ''
+      if (lgota2) document.getElementById('gpredhint2').innerHTML = '(-55 т.р. пошлины)';
+      else if (lgota30procentov2) document.getElementById('gpredhint2').innerHTML = '(30% от пошлины)';
+      else if (lgota50procentov2) document.getElementById('gpredhint2').innerHTML = '(50% от пошлины)';
+      else document.getElementById('gpredhint2').innerHTML = ''
 
       if (check) punk(sum)
 
-      if (sum.indexOf('+')!=-1 || sum.indexOf('-')!=-1 || sum.indexOf('/')!=-1 || sum.indexOf('*')!=-1) d.getElementById('arb2').value=human(okrugl(eval(um)))
+      if (sum.indexOf('+')!=-1 || sum.indexOf('-')!=-1 || sum.indexOf('/')!=-1 || sum.indexOf('*')!=-1) document.getElementById('arb2').value=human(okrugl(eval(um)))
 
       sum=eval(um)
       
@@ -318,8 +316,8 @@
       if (gosp2>10000000) gosp2=10000000
       
       if (lgota2) {
-          if (gosp2>55000) gosp2lgota=gosp2-55000;
-          else gosp2lgota=0
+        if (gosp2>55000) gosp2lgota=gosp2-55000;
+        else gosp2lgota=0
       }
       
       gosp2okrugl=okrugl2(gosp2)
@@ -327,18 +325,18 @@
       sumtxt = human(okrugl(sum))
       pokaz="При цене иска "
       if (sum>750000 && !lgota30procentov2 && !lgota50procentov2) {
-          oraz2 = "<br><br>C заявлением о вынесении судебного приказа нельзя обратиться при цене иска свыше 750 000 руб. или (при взыскании обязательных платежей и санкций) свыше 100 000 руб. (ст.229.2 АПК РФ)"
+        oraz2 = "<br><br>C заявлением о вынесении судебного приказа нельзя обратиться при цене иска свыше 750 000 руб. или (при взыскании обязательных платежей и санкций) свыше 100 000 руб. (ст.229.2 АПК РФ)"
       } else if (!lgota30procentov2 && !lgota50procentov2) {
-          oraz2 = ", а для судебного приказа - 50% от указанной суммы пошлины" + ((gosp2okrugl<16000) ? ', но не менее 8000 руб.' : '') + " (пп.3 п.1 ст.333.21 НК РФ)"
+        oraz2 = ", а для судебного приказа - 50% от указанной суммы пошлины" + ((gosp2okrugl<16000) ? ', но не менее 8000 руб.' : '') + " (пп.3 п.1 ст.333.21 НК РФ)"
       } else {
-          oraz2 = ""
+        oraz2 = ""
       }
       sudprikaz=" (пп.1 п.1 ст.333.21 НК РФ)" + oraz2
       let oraz=((lgota2) ? '<br><br>Для льготных категорий по п.2 ст.333.37 НК РФ госпошлина до 55 000 руб. по имущественным требованиям не уплачивается, свыше 55 000 руб. уменьшается на 55 000 руб. (п.3 ст. 333.37 НК РФ)' : '') + ((lgota30procentov2) ? '<br><br>Пошлина 30% от пошлины по имущественным требованиям применяется при подаче заявлений о выдаче исполнительных листов на принудительное исполнение решений третейского суда, о признании и приведении в исполнение решения иностранного суда, иностранного арбитражного решения, исходя из суммы, подтвержденной соответствующим решением (пп.13 п.1 ст.333.21 НК РФ)' : '') + ((lgota50procentov2) ? '<br><br>Пошлина 50% от пошлины, рассчитанной по общему правилу, применяется по заявлениям, требованиям и иным обособленным спорам, подлежащим рассмотрению в деле о банкротстве, исходя из существа заявленных требований (пп.9 п.1 ст.333.21 НК РФ).<br>Кредиторы освобождены от уплаты госпошлины по включению требований в реестр требований кредиторов, если их требования подтверждены вступившим в силу судебным актом (пп.5 п.1 ст.333.37 НК РФ)' : '') + "<br><br>Менее 50 коп. пошлины отбрасываются, 50 коп. и более увеличиваются до рубля (п.4 постановления Пленума ВАС РФ от 11.07.2014 №46)<br><br>При цене иска " + sumtxt + " руб. госпошлина составляет:<br>"
       if (okrugl(gosp2)!=okrugl2(gosp2)) okruglenno = " округленно "; else okruglenno = "";
       
       if (opis==1) {
-            pokaz+="до 100 000 руб. госпошлина составляет 10 000 руб. (пп.1 п.1 ст.333.21 НК РФ), а для судебного приказа - 8000 руб. (пп.3 п.1 ст.333.21 НК РФ)"
+        pokaz+="до 100 000 руб. госпошлина составляет 10 000 руб. (пп.1 п.1 ст.333.21 НК РФ), а для судебного приказа - 8000 руб. (пп.3 п.1 ст.333.21 НК РФ)"
         if (sum==0) pokaz="Сперва необходимо ввести цену иска"
       }
       if (opis==2) {
@@ -360,51 +358,51 @@
       }
       
       if (lgota2) {
-          gosp2 = gosp2lgota
-          gosp2okrugl = okrugl2(gosp2lgota)
-          if (sum!=0) pokaz+=", для льготных категорий по п.2 ст.333.37 НК РФ: " + human(gosp2okrugl) + " руб."
+        gosp2 = gosp2lgota
+        gosp2okrugl = okrugl2(gosp2lgota)
+        if (sum!=0) pokaz+=", для льготных категорий по п.2 ст.333.37 НК РФ: " + human(gosp2okrugl) + " руб."
       } else if (lgota30procentov2) {
-          gosp2okrugl = okrugl2(gosp2*0.3)
-          if (sum!=0) pokaz+=", при подаче заявлений о выдаче исполнительных листов на принудительное исполнение решений третейского суда, о признании и приведении в исполнение решения иностранного суда, иностранного арбитражного решения: " + human(gosp2okrugl) + " руб."
+        gosp2okrugl = okrugl2(gosp2*0.3)
+        if (sum!=0) pokaz+=", при подаче заявлений о выдаче исполнительных листов на принудительное исполнение решений третейского суда, о признании и приведении в исполнение решения иностранного суда, иностранного арбитражного решения: " + human(gosp2okrugl) + " руб."
       } else if (lgota50procentov2) {
-          gosp2okrugl = okrugl2(gosp2*0.5)
-          if (sum!=0) pokaz+=", по заявлениям, требованиям и иным обособленным спорам, подлежащим рассмотрению в деле о банкротстве, исходя из существа заявленных требований, кроме требований кредиторов, подтвержденных вступившим в силу судебным актом: " + human(gosp2okrugl) + " руб."	    
+        gosp2okrugl = okrugl2(gosp2*0.5)
+        if (sum!=0) pokaz+=", по заявлениям, требованиям и иным обособленным спорам, подлежащим рассмотрению в деле о банкротстве, исходя из существа заявленных требований, кроме требований кредиторов, подтвержденных вступившим в силу судебным актом: " + human(gosp2okrugl) + " руб."	    
       }
 
       gpsudprikaz = okrugl2(gosp2/2)
       if (gpsudprikaz<8000 && !lgota2) gpsudprikaz=8000
       
-      d.getElementById('copygp2').value = human(gosp2okrugl)
+      document.getElementById('copygp2').value = human(gosp2okrugl)
       
-      d.getElementById('vivod2').innerHTML = human(gosp2okrugl) + ' &#8381;<button id=buttoncopygp2><img src="./img/copy-brown16.png" title="скопировать в буфер обмена" onClick=changeimg(this) class=imgcopy></button>'
+      document.getElementById('vivod2').innerHTML = human(gosp2okrugl) + ' &#8381;<button id=buttoncopygp2><img src="./img/copy-brown16.png" title="скопировать в буфер обмена" onClick=changeimg(this) class=imgcopy></button>'
 
-      d.querySelector('#buttoncopygp2').addEventListener('click', function(event) {
-            navigator.clipboard.writeText(d.getElementById('copygp2').value);
+      document.querySelector('#buttoncopygp2').addEventListener('click', function(event) {
+          navigator.clipboard.writeText(document.getElementById('copygp2').value);
         })
-        d.querySelector('#buttoncopygp2').addEventListener('mouseover', function() {
-            d.querySelector('#buttoncopygp2').focus();
+        document.querySelector('#buttoncopygp2').addEventListener('mouseover', function() {
+          document.querySelector('#buttoncopygp2').focus();
         })
 
       if (sum<=750000  && !lgota30procentov2 && !lgota50procentov2) {
-          d.getElementById('copyprikaz2').value = human(gpsudprikaz)
-          d.getElementById('sudprikazvivod2').innerHTML = '(для судебного приказа: ' + human(gpsudprikaz) + ' &#8381;<button id=buttoncopyprikaz2><img src="./img/copy-brown16.png" title="скопировать в буфер обмена" onClick=changeimg(this) class=imgcopy></button>)'
-          d.querySelector('#buttoncopyprikaz2').addEventListener('click', function(event) {
-                navigator.clipboard.writeText(d.getElementById('copyprikaz2').value);
-            })
-            d.querySelector('#buttoncopyprikaz2').addEventListener('mouseover', function() {
-                d.querySelector('#buttoncopyprikaz2').focus();
-            })
+        document.getElementById('copyprikaz2').value = human(gpsudprikaz)
+        document.getElementById('sudprikazvivod2').innerHTML = '(для судебного приказа: ' + human(gpsudprikaz) + ' &#8381;<button id=buttoncopyprikaz2><img src="./img/copy-brown16.png" title="скопировать в буфер обмена" onClick=changeimg(this) class=imgcopy></button>)'
+        document.querySelector('#buttoncopyprikaz2').addEventListener('click', function(event) {
+          navigator.clipboard.writeText(document.getElementById('copyprikaz2').value);
+        })
+        document.querySelector('#buttoncopyprikaz2').addEventListener('mouseover', function() {
+          document.querySelector('#buttoncopyprikaz2').focus();
+        })
       } else {
-          d.getElementById('sudprikazvivod2').innerHTML = ''
+        document.getElementById('sudprikazvivod2').innerHTML = ''
       }
       
-      d.getElementById('gppokazhi2').innerHTML = '<fieldset class=fields><legend align=right>&nbsp;&nbsp;пояснение&nbsp;&nbsp;</legend>'+pokaz+'</fieldset>'
+      document.getElementById('gppokazhi2').innerHTML = '<fieldset class=fields><legend align=right>&nbsp;&nbsp;пояснение&nbsp;&nbsp;</legend>'+pokaz+'</fieldset>'
 
       check=true
   }
 
     function pastetoish(id) {
-      d.getElementById(id).value=""; d.getElementById(id).focus(); d.selection.createRange().text = window.clipboardData.getData("Text"); d.selection.createRange().select();d.getElementById(id).blur()
+      document.getElementById(id).value=""; document.getElementById(id).focus(); document.selection.createRange().text = window.clipboardData.getData("Text"); document.selection.createRange().select();document.getElementById(id).blur()
     }
 
     // ------------- цена иска в адресе
@@ -421,26 +419,26 @@
     */
 
     function clean() {
-      d.getElementById('obsh').value=''
-      d.getElementById('obsh2').value=''
-      d.getElementById('vivod').innerHTML=''
-      d.getElementById('lgota').checked=false
-      d.getElementById('lgota30procentov').checked=false
-      d.getElementById('gpredhint').innerHTML=''
-      d.getElementById('sudprikazvivod').innerHTML=''
-      d.getElementById('gppokazhi').innerHTML = ''
+      document.getElementById('obsh').value=''
+      document.getElementById('obsh2').value=''
+      document.getElementById('vivod').innerHTML=''
+      document.getElementById('lgota').checked=false
+      document.getElementById('lgota30procentov').checked=false
+      document.getElementById('gpredhint').innerHTML=''
+      document.getElementById('sudprikazvivod').innerHTML=''
+      document.getElementById('gppokazhi').innerHTML = ''
     }
 
     function clean2() {
-      d.getElementById('arb').value=''
-      d.getElementById('arb2').value=''
-      d.getElementById('vivod2').innerHTML=''
-      d.getElementById('lgota2').checked=false
-      d.getElementById('lgota30procentov2').checked=false
-      d.getElementById('lgota50procentov2').checked=false
-      d.getElementById('gpredhint2').innerHTML=''
-      d.getElementById('sudprikazvivod2').innerHTML=''
-      d.getElementById('gppokazhi2').innerHTML = ''
+      document.getElementById('arb').value=''
+      document.getElementById('arb2').value=''
+      document.getElementById('vivod2').innerHTML=''
+      document.getElementById('lgota2').checked=false
+      document.getElementById('lgota30procentov2').checked=false
+      document.getElementById('lgota50procentov2').checked=false
+      document.getElementById('gpredhint2').innerHTML=''
+      document.getElementById('sudprikazvivod2').innerHTML=''
+      document.getElementById('gppokazhi2').innerHTML = ''
     }
   </script>
 
@@ -591,7 +589,7 @@
       <span id=vivod class=gpvivod></span><span id=sudprikazvivod class=labelgp></span>
     </div>
     <div class=labelgp>
-      <br><input type=checkbox id=lgota onclick='d.getElementById("lgota30procentov").checked=false;funk()'> -25 т.р. пошлины 
+      <br><input type=checkbox id=lgota onclick='document.getElementById("lgota30procentov").checked=false;funk()'> -25 т.р. пошлины 
       <input type="checkbox" id="tip1" class="tip-checkbox">
     <label for="tip1" class="support"><em><abbr title='нажмите для просмотра комментария'>?</abbr></em></label>
     <span class='tip-block'>
@@ -608,7 +606,7 @@
     </span>
     </div>
     <div class=labelgp>
-      <input type=checkbox id=lgota30procentov onclick='d.getElementById("lgota").checked=false;funk()'> 30% от пошлины 
+      <input type=checkbox id=lgota30procentov onclick='document.getElementById("lgota").checked=false;funk()'> 30% от пошлины 
       <input type="checkbox" id="tip2" class="tip-checkbox">
     <label for="tip2" class="support"><em><abbr title='нажмите для просмотра комментария'>?</abbr></em></label>
     <span class='tip-block'>
@@ -645,7 +643,7 @@
       <span id=vivod2 class=gpvivod></span><span id=sudprikazvivod2 class=labelgp></span>
     </div>
     <div class=labelgp>
-      <br><input type=checkbox id=lgota2 onclick='d.getElementById("lgota30procentov2").checked=d.getElementById("lgota50procentov2").checked=false;funk2()'> -55 т.р. пошлины 
+      <br><input type=checkbox id=lgota2 onclick='document.getElementById("lgota30procentov2").checked=document.getElementById("lgota50procentov2").checked=false;funk2()'> -55 т.р. пошлины 
       <input type="checkbox" id="tip3" class="tip-checkbox">
     <label for="tip3" class="support"><em><abbr title='нажмите для просмотра комментария'>?</abbr></em></label>
     <span class='tip-block'>
@@ -659,7 +657,7 @@
     </span>
     </div>
     <div class=labelgp>
-      <input type=checkbox id=lgota30procentov2 onclick='d.getElementById("lgota2").checked=d.getElementById("lgota50procentov2").checked=false;funk2()'> 30% от пошлины 
+      <input type=checkbox id=lgota30procentov2 onclick='document.getElementById("lgota2").checked=document.getElementById("lgota50procentov2").checked=false;funk2()'> 30% от пошлины 
       <input type=checkbox id=tip4 class="tip-checkbox">
     <label for=tip4 class=support><em><abbr title='нажмите для просмотра комментария'>?</abbr></em></label>
     <span class='tip-block'>
@@ -674,7 +672,7 @@
     </span>            
     </div>
     <div class=labelgp>
-      <input type=checkbox id=lgota50procentov2 onclick='d.getElementById("lgota2").checked=d.getElementById("lgota30procentov2").checked=false;funk2()'> 50% от пошлины 
+      <input type=checkbox id=lgota50procentov2 onclick='document.getElementById("lgota2").checked=document.getElementById("lgota30procentov2").checked=false;funk2()'> 50% от пошлины 
       <input type=checkbox id=tip5 class="tip-checkbox">
     <label for=tip5 class=support><em><abbr title='нажмите для просмотра комментария'>?</abbr></em></label>
     <span class='tip-block'>
