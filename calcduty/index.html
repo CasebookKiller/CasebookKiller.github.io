@@ -61,19 +61,21 @@
     }
   </style>
   <script>
-    d=document
-    catcherror=true;
-    check=true;
-    calcul=1; //доработать
+    let d=document;
+    let catcherror=true;
+    let check=true;
+    let calcul=1; //доработать
 
     function CatchScriptErrors() {if (catcherror) {window.location.reload(); catcherror=true}}
 
     //----------------------------
     function punk (dosum) {
-      um=""; lastletter=dosum.charAt(dosum.length-1); skoba1=skoba2=0;
+      let um=""; 
+      let lastletter=dosum.charAt(dosum.length-1); 
+      let skoba1=skoba2=0;
 
-      for (i=0; i<=dosum.length; i++) { // удаляем пробелы в сумме, заменяем зпт на тчк
-        a=dosum.charAt(i);
+      for (let i=0; i<=dosum.length; i++) { // удаляем пробелы в сумме, заменяем зпт на тчк
+        let a=dosum.charAt(i);
         if (a==" ") um+="";
         else if (a=="," || a=="?") um+=".";
         else um+=a
@@ -83,9 +85,11 @@
       }
       if (um=="") um=0
 
-      if (/[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZабвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ]/.test(um) ) {
-        var reg=/\D*(\d+)\D+(\d*)\D*/	// игнорируем руб., коп. и т.п.
-        var abc=reg.exec(um)
+      //if (/[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZабвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ]/.test(um) ) {
+      if (/[a-zA-Zа-яА-Я]/.test(um) ) {
+      
+        let reg=/\D*(\d+)\D+(\d*)\D*/	// игнорируем руб., коп. и т.п.
+        let abc=reg.exec(um)
         if (abc[2]!="") um=abc[1]+"."+abc[2];
         else um=abc[1]
       }
