@@ -69,6 +69,12 @@
     function CatchScriptErrors() {if (catcherror) {window.location.reload(); catcherror=true}}
 
     //----------------------------
+    function proverka(val) {
+      var reg = [/^\D+/,/[^.,\d]+/g,/[\.,]+/,/(\d+\.\d{2}).*$/],
+      ch = val.replace(reg[0], '').replace(reg[1], '').replace(reg[2], '.').replace(reg[3], '$1');
+      return ch;
+    };
+
     function punk (dosum) {
       um=""; lastletter=dosum.charAt(dosum.length-1); skoba1=skoba2=0;
 
@@ -86,7 +92,6 @@
       if (/[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZабвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ]/.test(um) ) {
         var reg=/\D*(\d+)\D+(\d*)\D*/	// игнорируем руб., коп. и т.п.
         var abc=reg.exec(um)
-        console.log('abc: ',abc)
         if (abc[2]!="") um=abc[1]+"."+abc[2];
         else um=abc[1]
       }
@@ -144,9 +149,9 @@
         var b=sum.substr(sum.indexOf(","),sum.length)
         if (b.length==2) sum+="0"
       }
-      sum = sum.replace(/^00\./,'0,') // меняем 00. на 0,
-      sum = sum.replace(/^00,/,'0,')
-      sum = sum.replace(/\./g,',') // меняем тчк на зпт
+      sum = sum.replace(/^00\./,'0.') // меняем 00. на 0,
+      sum = sum.replace(/^00,/,'0.')
+      sum = sum.replace(/\./g,'.') // меняем тчк на зпт
       return sum
     }
 
@@ -583,7 +588,7 @@
     <div class=tdgp>
       <input type="text" id="obsh2" readonly style="border: #ffffff 0px solid;background-color:#ffffff;color:#999;display:none;width:0px;">
       <span class="labelgp">цена иска</span>
-      <input type="text" id="obsh" onchange=funk() onkeyup=funk() onFocus="for13=true" onBlur="for13=false;gethuman(this)" onMouseOut=gethuman(this) class=inputсena> &#8381;
+      <input type="text" id="obsh" oninput="this.value=proverka(this.value)" onchange=funk() onkeyup=funk() onFocus="for13=true" onBlur="for13=false;gethuman(this)" onMouseOut=gethuman(this) class=inputсena> &#8381;
     </div>
     <div class='tdgp td2'>
       <span class=labelgp>госпошлина <sup><span id=gpredhint class=redhint></span></sup></span>
@@ -637,7 +642,7 @@
     <div class=tdgp>
       <input type=text id=arb2 readonly style="border: #ffffff 0px solid;background-color:#ffffff;color:#999;display:none;width:0px;">
       <span class=labelgp>цена иска</span>
-      <input type=text id=arb onchange=funk2() onkeyup=funk2() onFocus="for13=true" onBlur="for13=false;gethuman(this)" onMouseOut=gethuman(this) class=inputсena> &#8381;
+      <input type="text" id="arb" oninput="this.value=proverka(this.value)" onchange=funk2() onkeyup=funk2() onFocus="for13=true" onBlur="for13=false;gethuman(this)" onMouseOut=gethuman(this) class=inputсena> &#8381;
     </div>
     <div class='tdgp td2'>
       <span class=labelgp>госпошлина <sup><span id=gpredhint2 class=redhint></span></sup></span>
